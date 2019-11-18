@@ -44,8 +44,10 @@ bool j1Snake::Start()
 		spritesheet = App->tex->Load(snakeinfo.Texture.GetString());
 	}
 
-	Position.x = 0;
-	Position.y = 0;
+	Position.x = 100;
+	Position.y = 630;
+
+	Snake_Initial_Position = Position;
 
 	return true;
 }

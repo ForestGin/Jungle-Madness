@@ -66,6 +66,8 @@ class j1Snake : public j1Entity
 		bool Snakecolliding = false;
 	
 		SnakeData snakeinfo;
+
+		fPoint Snake_Initial_Position;
 	
 };
 	
