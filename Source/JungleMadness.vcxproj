@@ -122,8 +122,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="j1Bat.h" />
+    <ClInclude Include="j1Entity.h" />
     <ClInclude Include="j1EntityManager.h" />
     <ClInclude Include="j1Pathfinding.h" />
+    <ClInclude Include="j1PerfTimer.h" />
     <ClInclude Include="j1Player.h" />
     <ClInclude Include="j1App.h" />
     <ClInclude Include="j1Audio.h" />
@@ -133,7 +136,9 @@
     <ClInclude Include="j1Module.h" />
     <ClInclude Include="j1Render.h" />
     <ClInclude Include="j1Scene.h" />
+    <ClInclude Include="j1Snake.h" />
     <ClInclude Include="j1Textures.h" />
+    <ClInclude Include="j1Timer.h" />
     <ClInclude Include="j1Window.h" />
     <ClInclude Include="MemLeaks.h" />
     <ClInclude Include="p2Defs.h" />
@@ -146,6 +151,7 @@
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="j1Bat.cpp" />
     <ClCompile Include="j1EntityManager.cpp" />
     <ClCompile Include="j1App.cpp" />
     <ClCompile Include="j1Audio.cpp" />
@@ -154,10 +160,13 @@
     <ClCompile Include="j1Main.cpp" />
     <ClCompile Include="j1Map.cpp" />
     <ClCompile Include="j1Pathfinding.cpp" />
+    <ClCompile Include="j1PerfTimer.cpp" />
     <ClCompile Include="j1Player.cpp" />
     <ClCompile Include="j1Render.cpp" />
     <ClCompile Include="j1Scene.cpp" />
+    <ClCompile Include="j1Snake.cpp" />
     <ClCompile Include="j1Textures.cpp" />
+    <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="j1Window.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />

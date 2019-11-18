@@ -27,7 +27,8 @@ bool j1Render::Awake(pugi::xml_node& config)
 	// load flags
 	Uint32 flags = SDL_RENDERER_ACCELERATED;
 
-	if (config.child("vsync").attribute("value").as_bool(true) == true)
+	Vsync = config.child("vsync").attribute("value").as_bool();
+	if (Vsync)
 	{
 		flags |= SDL_RENDERER_PRESENTVSYNC;
 		LOG("Using vsync");
@@ -77,7 +78,7 @@ bool j1Render::Update(float dt)
 	return true;
 }
 
-bool j1Render::PostUpdate()
+bool j1Render::PostUpdate(float dt)
 {
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);

@@ -3,6 +3,8 @@
 
 #include "p2List.h"
 #include "j1Module.h"
+#include "j1PerfTimer.h"
+#include "j1Timer.h"
 #include "PugiXml\src\pugixml.hpp"
 
 // Modules
@@ -14,7 +16,6 @@ class j1Audio;
 class j1Scene;
 class j1Map;
 class j1Collision;
-class j1Player;//HASTOBEDELETED
 class j1PathFinding;
 class j1EntityManager;
 
@@ -88,15 +89,16 @@ public:
 	j1Scene*			scene;
 	j1Map*				map;
 	j1Collision*		col;
-	j1Player*			player;//HASTOBEDELETED
 	j1PathFinding*		pathfinding;
 	j1EntityManager*    entities;
+
+	uint32              framerate_cap;
+	float			    capped_ms = -1.0f;
+	bool                cap_on = true;
 
 private:
 
 	p2List<j1Module*>	modules;
-	uint				frames;
-	float				dt;
 	int					argc;
 	char**				args;
 
@@ -108,6 +110,16 @@ private:
 	
 	p2SString			load_game;
 	mutable p2SString	save_game;
+
+	j1PerfTimer			ptimer;
+	uint64				frame_count = 0;
+	j1Timer				startup_time;
+	j1Timer				frame_time;
+	j1Timer				last_sec_frame_time;
+	uint32				last_sec_frame_count = 0;
+	uint32				prev_last_sec_frame_count = 0;
+
+	float				dt = 0.0f;
 };
 
 extern j1App* App; // No student is asking me about that ... odd :-S
