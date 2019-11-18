@@ -126,6 +126,115 @@ void j1Snake::LogicUpdate(float dt)
 
 void j1Snake::OnCollision(Collider * c1, Collider * c2)
 {
+	{
+		bool lateralcollision = true;
+
+		if (c1->rect.y + c1->rect.h == c2->rect.y)
+		{
+			lateralcollision = false;
+		}
+
+		float aux = c1->rect.y; //pos.y
+
+		if (c2->type == COLLIDER_FLOOR && dead == false)
+		{
+			if ((going_left || going_right) && must_fall)
+			{
+				if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x + c1->rect.w <= c2->rect.x + snakeinfo.Initial_Velocity_x)
+				{
+					Velocity.x = 0.0f;
+					c1->rect.x = c2->rect.x - c1->rect.w - colliding_offset;
+				}
+
+				if (c1->rect.x >= c2->rect.x + c2->rect.w - snakeinfo.Initial_Velocity_x && c1->rect.x <= c2->rect.x + c2->rect.w)
+				{
+					Velocity.x = 0.0f;
+					c1->rect.x = c2->rect.x + c2->rect.w + colliding_offset;
+				}
+
+				if (lateralcollision == true)
+				{
+
+					if (going_left)
+						c1->rect.x += colliding_offset;
+					else
+						c1->rect.x -= colliding_offset;
+
+
+					must_fall = true;
+				}
+				else
+				{
+					must_fall = false;
+				}
+
+			}
+			else
+			{
+
+				if (going_right)
+				{
+
+					//stopping player if lateral collision
+
+					if (lateralcollision)
+					{
+
+						if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x + c1->rect.w <= c2->rect.x + snakeinfo.Initial_Velocity_x)
+						{
+							Velocity.x = 0.0f;
+							if (Entity_State != JUMPING)
+								c1->rect.y = aux;
+							c1->rect.x = c2->rect.x - c1->rect.w - colliding_offset;
+						}
+
+
+					}
+					else if (!lateralcollision && must_fall == false)
+						Entity_State = IDLE;
+
+					if ((going_left || going_right) && must_fall)
+					{
+						c1->rect.x = c2->rect.x + c2->rect.w - colliding_offset;
+					}
+				}
+
+				//going left
+				if (going_left)
+				{
+
+					if (lateralcollision)
+					{
+
+						if (c1->rect.x >= c2->rect.x + c2->rect.w - snakeinfo.Initial_Velocity_x && c1->rect.x <= c2->rect.x + c2->rect.w)
+						{
+							Velocity.x = 0.0f;
+							if (Entity_State != JUMPING)
+								c1->rect.y = aux;
+							c1->rect.x = c2->rect.x + c2->rect.w + colliding_offset;
+						}
+
+
+					}
+					else if (!lateralcollision && must_fall == false)
+						Entity_State = IDLE;
+
+					if ((going_left || going_right) && must_fall)
+					{
+						c1->rect.x = c2->rect.x + c2->rect.w + colliding_offset;
+					}
+				}
+
+				must_fall = false;
+
+			}
+		}
+
+
+
+		Position.x = c1->rect.x;
+		Position.y = c1->rect.y;
+	}
 }
 
 bool j1Snake::Load(pugi::xml_node &config)
@@ -134,6 +243,7 @@ bool j1Snake::Load(pugi::xml_node &config)
 
 	Position.x = config.child("Snake").child("Playerx").attribute("value").as_float();
 	Position.y = config.child("Snake").child("Playery").attribute("value").as_float();
+	return ret;
 }
 
 bool j1Snake::Save(pugi::xml_node &config) const

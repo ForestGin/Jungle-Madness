@@ -2,7 +2,7 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1EntityManager.h"
-#include "j1Entity.h"
+
 
 j1EntityManager::j1EntityManager() : j1Module(), logic_updates_per_second(DEFAULT_LPS), accumulated_time(0.0f)
 {
@@ -205,9 +205,9 @@ j1Entity* const j1EntityManager::EntityCreation(const char* entname, entity_type
 	case entity_type::SNAKE:
 		entity = new j1Snake();
 		break;
-	case entity_type::BAT:
-		entity = new j1Bat();
-		break;
+	//case entity_type::BAT:
+	//	entity = new j1Bat();
+	//	break;
 		
 	}
 

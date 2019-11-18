@@ -5,7 +5,6 @@
 #include "j1Module.h"
 #include "j1Entity.h"
 #include "j1Player.h"
-#include "j1Bat.h"
 #include "j1Snake.h"
 
 #define DEFAULT_LPS 60//(LOGIC PER SEC)
@@ -44,7 +43,7 @@ public:
 	Animation* LoadAnimation(const char* animationPath, const char* animationName);
 	
 	PlayerData& GetPlayerData() { return playerinfo; }//player info
-	BatData& GetBatData() { return batinfo; }
+	/*BatData& GetBatData() { return batinfo; }*/
 	SnakeData& GetSnakeData() { return snakeinfo; }
 
 
@@ -63,7 +62,7 @@ public:
 
 private:
 	PlayerData playerinfo;
-	BatData batinfo;
+	/*BatData batinfo;*/
 	SnakeData snakeinfo;
 };
 
