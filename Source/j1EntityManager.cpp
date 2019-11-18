@@ -70,6 +70,31 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 
 	playerinfo.Death->loop = false;
 
+	//SNAKE 
+	pugi::xml_node snakenode = config.child("snake");
+
+	snakeinfo.folder.create(snakenode.child("folder").child_value());
+	snakeinfo.Texture.create(snakenode.child("texture").child_value());
+
+	x = snakenode.child("collider").attribute("x").as_int();
+	y = snakenode.child("collider").attribute("y").as_int();
+	w = snakenode.child("collider").attribute("width").as_int();
+	h = snakenode.child("collider").attribute("height").as_int();
+	snakeinfo.Snake_Collider_Rect = { x,y,w,h };
+
+
+	snakeinfo.Move = LoadAnimation(snakeinfo.folder.GetString(), "Move");
+	
+
+	snakeinfo.Gravity = playernode.child("gravity").attribute("value").as_float();
+	snakeinfo.Velocity.x = playernode.child("velocity").attribute("x").as_float();
+	snakeinfo.Velocity.y = playernode.child("velocity").attribute("y").as_float();
+	snakeinfo.Max_Speed_y = playernode.child("velocity").attribute("max_speed_y").as_float();
+	snakeinfo.Initial_Velocity_x = playernode.child("velocity").attribute("initalVx").as_float();
+	snakeinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
+
+	snakeinfo.Move->speed = 0.15f;
+
 	return ret;
 }
 
@@ -177,7 +202,15 @@ j1Entity* const j1EntityManager::EntityCreation(const char* entname, entity_type
 	case entity_type::PLAYER:
 		entity = new j1Player();
 		break;
+	case entity_type::SNAKE:
+		entity = new j1Snake();
+		break;
+	case entity_type::BAT:
+		entity = new j1Bat();
+		break;
+		
 	}
+
 
 	entity->Init(this);
 	entity->Start();

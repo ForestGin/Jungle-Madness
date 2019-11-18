@@ -62,11 +62,11 @@
       <colliding_offset value="0" />
     </player>
 
-    <snek>
-    </snek>
-
-    <bat>
-    </bat>
+    <snake>
+      <folder>animations/Snek.tmx</folder>
+      <texture>Sprites/Cobra_SpriteSheet2x.png</texture>
+      <collider x="0" y="0" width="20" height="20"/>
+    </snake>
     
   </entities>
 

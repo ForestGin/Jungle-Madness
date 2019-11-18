@@ -46,6 +46,6 @@
   <object id="283" x="8" y="35.9375" width="32" height="27.9524"/>
  </objectgroup>
  <imagelayer id="3" name="Sprites">
-  <image source="../Sprites/Cobra Sprite Sheet2x.png" width="384" height="384"/>
+  <image source="../Sprites/Cobra _Sprite Sheet2x.png" width="384" height="384"/>
  </imagelayer>
 </map>

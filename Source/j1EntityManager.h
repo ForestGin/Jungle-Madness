@@ -45,7 +45,7 @@ public:
 	
 	PlayerData& GetPlayerData() { return playerinfo; }//player info
 	BatData& GetBatData() { return batinfo; }
-	SnakeData& GetSlimeData() { return snakeinfo; }
+	SnakeData& GetSnakeData() { return snakeinfo; }
 
 
 	bool Load(pugi::xml_node&);

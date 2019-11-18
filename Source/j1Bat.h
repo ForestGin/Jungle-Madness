@@ -21,8 +21,8 @@ struct BatData {
 
 	float           Gravity = 0;
 	float			Initial_Velocity_x = 0;
+	float			Max_Speed_y = 0;
 	float			Colliding_Offset = 0;
-	float			Animation_Speed = 0;
 
 	int				Area_Of_Action = 0;
 	iPoint			Reference_ID = { 0,0 };
@@ -63,7 +63,7 @@ public:
 
 	bool batcolliding = false;
 
-	BatData BatInfo;
+	BatData batinfo;
 
 	//Pathfinding stuff here
 

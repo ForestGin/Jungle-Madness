@@ -1,11 +1,15 @@
 #ifndef __j1SNAKE_H__
 #define __j1SNAKE_H__
 
+#include "j1Module.h"
+#include "p2Point.h"
+#include "Animation.h"
 #include "j1Entity.h"
 
 struct SDL_Texture;
 struct Collider;
 struct PathInfo;
+
 
 struct SnakeData {
 
@@ -14,15 +18,15 @@ struct SnakeData {
 	p2SString folder = nullptr;
 	p2SString Texture = nullptr;
 
-	SDL_Rect		Sanke_Collider_Rect = { 0,0,0,0 };
+	SDL_Rect		Snake_Collider_Rect = { 0,0,0,0 };
 	fPoint          Velocity = { 0,0 };
 	fPoint          Velocity_Aux = { 0,0 };
 	iPoint			Print_offset = { 0,0 };
 
 	float           Gravity = 0;
 	float			Initial_Velocity_x = 0;
+	float			Max_Speed_y = 0;
 	float			Colliding_Offset = 0;
-	float			Animation_Speed = 0;
 
 	int				Area_Of_Action = 0;
 	iPoint			Reference_ID = { 0,0 };
@@ -49,8 +53,8 @@ public:
 
 	void OnCollision(Collider* c1, Collider* c2);
 
-	bool Load(pugi::xml_node&);
-	bool Save(pugi::xml_node&) const;
+	bool Load(pugi::xml_node &config);
+	bool Save(pugi::xml_node &config) const;
 
 	//Pathfinding functions here
 
@@ -63,7 +67,7 @@ public:
 
 	bool Snakecolliding = false;
 
-	SnakeData SnakeInfo;
+	SnakeData snakeinfo;
 
 	//Pathfinding stuff here
 

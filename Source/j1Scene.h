@@ -6,6 +6,8 @@
 struct SDL_Texture;
 class Collider;
 class j1Player;
+class j1Snake;
+class j1Bat;
 
 class j1Scene : public j1Module
 {
@@ -53,9 +55,10 @@ public:
 	bool scene1Loaded = false;
 	bool scene2Loaded = false;
 
+	//Entities
 	j1Player*           player = nullptr;
-
-	
+	j1Snake*			snake = nullptr;
+	j1Bat*				bat = nullptr;
 };
 
 #endif // __j1SCENE_H__

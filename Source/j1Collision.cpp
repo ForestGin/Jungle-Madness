@@ -45,6 +45,8 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_PLAYER][COLLIDER_ROOF] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER] = false;
 	matrix[COLLIDER_PLAYER][COLLIDER_CHECKPOINT] = true;
+	matrix[COLLIDER_PLAYER][COLLIDER_BAT] = true;
+	matrix[COLLIDER_PLAYER][COLLIDER_SNAKE] = true;
 
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_FLOOR] = false;
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_DEADLY] = false;
@@ -232,6 +234,12 @@ void j1Collision::DebugDraw()
 			App->render->DrawQuad(item->data->rect, 255, 0, 128, alpha);
 			break;
 		case COLLIDER_CHECKPOINT: // cyan
+			App->render->DrawQuad(item->data->rect, 0, 255, 255, alpha);
+			break;
+		case COLLIDER_SNAKE: // cyan
+			App->render->DrawQuad(item->data->rect, 0, 255, 255, alpha);
+			break;
+		case COLLIDER_BAT: // cyan
 			App->render->DrawQuad(item->data->rect, 0, 255, 255, alpha);
 			break;
 		}

@@ -10,6 +10,8 @@
 #include "j1Scene.h"
 #include "j1Collision.h"
 #include "j1Player.h"
+#include "j1Snake.h"
+#include "j1Bat.h"
 #include "j1EntityManager.h"
 
 j1Scene::j1Scene() : j1Module()
@@ -59,6 +61,7 @@ bool j1Scene::Start()
 	bool ret = true;
 
 	player = (j1Player*)App->entities->EntityCreation("player", entity_type::PLAYER);
+	snake = (j1Snake*)App->entities->EntityCreation("snake", entity_type::SNAKE);
 	//Loading both scenes(maps/levels)
 
 	p2List_item<p2SString*>* sceneListItem;
