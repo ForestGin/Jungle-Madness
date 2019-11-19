@@ -64,8 +64,11 @@ bool j1Scene::Start()
 
 	player = (j1Player*)App->entities->EntityCreation("player", entity_type::PLAYER);
 
-	if(currentscene == scenes.start->data->GetString())
+	if (currentscene == scenes.start->data->GetString())
+	{
 		snake = (j1Snake*)App->entities->EntityCreation("snake", entity_type::SNAKE);
+		bat = (j1Bat*)App->entities->EntityCreation("bat", entity_type::BAT);
+	}
 	
 
 

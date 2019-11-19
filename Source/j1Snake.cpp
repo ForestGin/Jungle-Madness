@@ -44,7 +44,7 @@ bool j1Snake::Start()
 		spritesheet = App->tex->Load(snakeinfo.Texture.GetString());
 	}
 
-	Position.x = 100;
+	Position.x = 300;
 	Position.y = 630;
 
 	Snake_Initial_Position = Position;
@@ -75,6 +75,7 @@ bool j1Snake::Update(float dt)
 		Position.x = App->map->data.width*App->map->data.tile_width;
 	}
 
+	
 	
 
 	return true;

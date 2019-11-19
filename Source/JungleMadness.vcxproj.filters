@@ -10,6 +10,9 @@
     <Filter Include="Entities">
       <UniqueIdentifier>{183d96f7-c926-4a4e-a3d6-478dfa2bdb1e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities\Enemies">
+      <UniqueIdentifier>{f9bd744d-b801-447e-b2ea-90eaed6b7ba1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -65,10 +68,10 @@
     <ClInclude Include="j1Timer.h" />
     <ClInclude Include="j1PerfTimer.h" />
     <ClInclude Include="j1Bat.h">
-      <Filter>Entities</Filter>
+      <Filter>Entities\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="j1Snake.h">
-      <Filter>Entities</Filter>
+      <Filter>Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -98,10 +101,10 @@
     <ClCompile Include="j1Timer.cpp" />
     <ClCompile Include="j1PerfTimer.cpp" />
     <ClCompile Include="j1Bat.cpp">
-      <Filter>Entities</Filter>
+      <Filter>Entities\Enemies</Filter>
     </ClCompile>
     <ClCompile Include="j1Snake.cpp">
-      <Filter>Entities</Filter>
+      <Filter>Entities\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

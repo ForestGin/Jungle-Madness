@@ -67,6 +67,12 @@
       <texture>Sprites/Cobra_SpriteSheet2x.png</texture>
       <collider x="0" y="0" width="30" height="40"/>
     </snake>
+
+    <bat>
+      <folder>animations/Bat.tmx</folder>
+      <texture>Sprites/Bat_Sprite_Sheet2x.png</texture>
+      <collider x="0" y="0" width="30" height="20"/>
+    </bat>
     
   </entities>
 
