@@ -46,10 +46,10 @@ bool j1Bat::Start()
 		spritesheet = App->tex->Load(batinfo.Texture.GetString());
 	}
 
-	Position.x = 400;
-	Position.y = 630;
+	/*Position.x = App->map->data.Bat1.x;
+	Position.y = App->map->data.Bat1.y;*/
 
-	Bat_Initial_Position = Position;
+
 
 
 	return true;

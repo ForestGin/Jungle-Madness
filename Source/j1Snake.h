@@ -68,7 +68,7 @@ class j1Snake : public j1Entity
 	
 		SnakeData snakeinfo;
 
-		fPoint Snake_Initial_Position;
+		
 		fPoint Snake_Collider_Margin = { 26, 28 };
 };
 	

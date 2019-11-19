@@ -102,16 +102,18 @@ bool j1Scene::Start()
 		App->render->camera.y = CamScene1.y;
 
 		//Entities position Loaded from map
-		player->Position.x = App->map->data.StartPoint.x;
+		/*player->Position.x = App->map->data.StartPoint.x;
 		player->Position.y = App->map->data.StartPoint.y;
 		snake->Position.x = App->map->data.Snake1.x;
-		snake->Position.y = App->map->data.Snake1.y;
+		snake->Position.y = App->map->data.Snake1.y;*/
+		
 
 		scene1 = true;
 		scene2 = false;
 
 		currentscene = scenes.start->data->GetString();
-		
+
+		EntityPosition(currentscene.GetString());
 	}
 	
 	
@@ -353,6 +355,7 @@ bool j1Scene::SceneChange(const char* scene) {
 		App->audio->PlayMusic(stageMusic.GetString());
 
 		player->Entity_State = FALLING;
+		
 	}
 	else if (currentscene == scenes.start->next->data->GetString()) 
 	{
@@ -366,6 +369,7 @@ bool j1Scene::SceneChange(const char* scene) {
 		App->audio->PlayMusic(stageMusic.GetString());
 
 		player->Entity_State = FALLING;
+		
 	}
 
 	
@@ -384,6 +388,12 @@ void j1Scene::EntityPosition(const char* scene)
 		player->Position.y = App->map->data.StartPoint.y;
 		snake->Position.x = App->map->data.Snake1.x;
 		snake->Position.y = App->map->data.Snake1.y;
+		bat->Position.x = App->map->data.Bat1.x;
+		bat->Position.y = App->map->data.Bat1.y;
+	}
+	else
+	{
+		App->entities->KillEntity(snake);
 	}
 	
 
@@ -392,8 +402,11 @@ void j1Scene::EntityPosition(const char* scene)
 	player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
 	snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
 	snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
+	bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
+	bat->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
 	
-	
+	//variables reset
+	snake->must_fall = true;
 	
 }
 

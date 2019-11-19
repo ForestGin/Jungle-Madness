@@ -69,7 +69,7 @@ class j1Bat : public j1Entity
 	
 		BatData batinfo;
 	
-		fPoint Bat_Initial_Position;
+		
 		fPoint Bat_Collider_Margin = { 0, 5 };
 };
 
