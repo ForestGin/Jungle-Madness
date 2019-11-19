@@ -65,7 +65,6 @@ bool j1Bat::Update(float dt)
 
 	//no falling, flying enemy
 	
-
 	if (Position.x < 0)
 	{
 		Position.x = 0;

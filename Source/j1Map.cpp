@@ -462,6 +462,14 @@ bool j1Map::LoadMap(MapData& data)
 			data.StartPoint.x = map.child("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
 			data.StartPoint.y = map.child("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
 		}
+
+		p2SString obj3(map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").attribute("name").as_string());
+
+		if (obj3 == "SnakeSpawn1")
+		{
+			data.Snake1.x = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
+			data.Snake1.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
+		}
 	}
 
 	return ret;

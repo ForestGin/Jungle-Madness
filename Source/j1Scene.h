@@ -40,6 +40,8 @@ public:
 	bool Save(pugi::xml_node&config) const;
 	bool Load(pugi::xml_node&config);
 
+	void EntityPosition(const char* scene);
+
 public:
 
 	fPoint camera_displacement;
