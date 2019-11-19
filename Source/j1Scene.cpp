@@ -341,12 +341,14 @@ bool j1Scene::SceneChange(const char* scene) {
 
 	App->col->CleanUp();
 	player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_PLAYER, App->entities);
+	player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
 	snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_SNAKE, App->entities);
+	snake->Entity_Collider->SetPos(snake->Position.x, player->Position.y);
 
 	if (currentscene == scenes.start->data->GetString())
 	{
 		App->map->MapCollisions(App->map->data);
-		snake = (j1Snake*)App->entities->EntityCreation("snake", entity_type::SNAKE);
+		
 		//TODO: Initial position
 		player->Position.x = App->map->data.StartPoint.x;
 		player->Position.y = App->map->data.StartPoint.y;
@@ -362,7 +364,7 @@ bool j1Scene::SceneChange(const char* scene) {
 	else if (currentscene == scenes.start->next->data->GetString()) 
 	{
 		App->map->MapCollisions(App->map->data2);
-		App->entities->KillEntity(snake);
+		
 		//TODO: Initial position
 		player->Position.x = App->map->data2.StartPoint.x;
 		player->Position.y = App->map->data2.StartPoint.y;
