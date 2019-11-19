@@ -283,7 +283,7 @@ bool j1Player::Update(float dt)
 	}
 
 	//Player collider adjustment to sprites
-	Entity_Collider->SetPos(Position.x/* + Player_Collider_Margin.x*/, Position.y /*+ Player_Collider_Margin.y*/);
+	Entity_Collider->SetPos(Position.x /* + Player_Collider_Margin.x*/, Position.y /*+ Player_Collider_Margin.y*/);
 
 	/*App->col->Update(1.0f);
 
@@ -337,12 +337,12 @@ bool j1Player::PostUpdate(float dt)
 	//Blitting player
 	if (Was_Right == true)
 	{
-		App->render->Blit(spritesheet, Position.x, Position.y, &CurrentAnimation->GetCurrentFrame());
+		App->render->Blit(spritesheet, Position.x - Player_Collider_Margin.x, Position.y - Player_Collider_Margin.y, &CurrentAnimation->GetCurrentFrame());
 	}
 	
 	else
 	{
-		App->render->Blit(spritesheet, Position.x, Position.y, &CurrentAnimation->GetCurrentFrame(), SDL_FLIP_HORIZONTAL);
+		App->render->Blit(spritesheet, Position.x - Player_Collider_Margin.x, Position.y - Player_Collider_Margin.y, &CurrentAnimation->GetCurrentFrame(), SDL_FLIP_HORIZONTAL);
 	}
 
 

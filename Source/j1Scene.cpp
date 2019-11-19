@@ -60,8 +60,15 @@ bool j1Scene::Start()
 {
 	bool ret = true;
 
+	currentscene = "Map_Beta.tmx";
+
 	player = (j1Player*)App->entities->EntityCreation("player", entity_type::PLAYER);
-	snake = (j1Snake*)App->entities->EntityCreation("snake", entity_type::SNAKE);
+
+	if(currentscene == scenes.start->data->GetString())
+		snake = (j1Snake*)App->entities->EntityCreation("snake", entity_type::SNAKE);
+	
+
+
 	//Loading both scenes(maps/levels)
 
 	p2List_item<p2SString*>* sceneListItem;
@@ -102,29 +109,9 @@ bool j1Scene::Start()
 		scene2 = false;
 
 		currentscene = scenes.start->data->GetString();
-		//load different music samples
-		/*p2SString SceneMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->data->GetString());
-		App->audio->PlayMusic(SceneMusic.GetString());*/
+		
 	}
-	//else if(currentscene == "Map_alpha.tmx")
-	//{
-
-	//	App->render->camera.x = CamScene2.x;
-	//	App->render->camera.y = CamScene2.y;
-
-	//	App->player->Position.x = App->map->data2.StartPoint.x;
-	//	App->player->Position.y = App->map->data2.StartPoint.y;
-	//	//Player position Loaded from map
-	//	/*App->player->Player_Initial_Position.x = App->map->data2.StartPoint.x;
-	//	App->player->Player_Initial_Position.y = App->map->data2.FinishPoint.y;
-	//	App->player->Player_Initial_Position.x = App->player->Position.x;
-	//	App->player->Player_Initial_Position.y = App->player->Position.y;*/
-
-	//	//load different music samples
-	//	/*p2SString SceneMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->next->data->GetString());
-	//	App->audio->PlayMusic(SceneMusic.GetString());*/
-	//}
-
+	
 	
 	p2SString SceneMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->data->GetString());
 	App->audio->PlayMusic(SceneMusic.GetString());
@@ -213,6 +200,7 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && scene2 == false)//SECOND
 	{
+		
 		currentscene = scenes.start->next->data->GetString();
 		SceneChange(scenes.start->next->data->GetString());
 		scene1 = false;
@@ -231,6 +219,7 @@ bool j1Scene::Update(float dt)
 			SceneChange(scenes.start->data->GetString());
 			scene1 = true;
 			scene2 = false;
+			
 		}
 		else if (scene2)
 		{
@@ -343,20 +332,22 @@ bool j1Scene::SceneChange(const char* scene) {
 	//App->map->CleanUp();
 	//App->map->Load(scene);
 
+
 	player->Initial_Moment = true;
 	player->First_Move = false;
 
 	App->col->CleanUp();
 	player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_PLAYER, App->entities);
+	snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_SNAKE, App->entities);
 
 	if (currentscene == scenes.start->data->GetString())
 	{
 		App->map->MapCollisions(App->map->data);
-
+		snake = (j1Snake*)App->entities->EntityCreation("snake", entity_type::SNAKE);
 		//TODO: Initial position
 		player->Position.x = App->map->data.StartPoint.x;
 		player->Position.y = App->map->data.StartPoint.y;
-
+		
 		App->render->camera.x = CamScene1.x;
 		App->render->camera.y = CamScene1.y;
 
@@ -368,7 +359,7 @@ bool j1Scene::SceneChange(const char* scene) {
 	else if (currentscene == scenes.start->next->data->GetString()) 
 	{
 		App->map->MapCollisions(App->map->data2);
-		
+		App->entities->KillEntity(snake);
 		//TODO: Initial position
 		player->Position.x = App->map->data2.StartPoint.x;
 		player->Position.y = App->map->data2.StartPoint.y;

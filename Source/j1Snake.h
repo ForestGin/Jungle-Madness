@@ -57,6 +57,7 @@ class j1Snake : public j1Entity
 		//Pathfinding functions here
 	
 	public:
+
 		bool dead = false;
 		bool going_right = false;
 		bool going_left = false;
@@ -68,7 +69,7 @@ class j1Snake : public j1Entity
 		SnakeData snakeinfo;
 
 		fPoint Snake_Initial_Position;
-	
+		fPoint Snake_Collider_Margin = { 26, 28 };
 };
 	
 #endif

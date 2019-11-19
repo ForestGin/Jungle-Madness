@@ -65,7 +65,7 @@
     <snake>
       <folder>animations/Snek.tmx</folder>
       <texture>Sprites/Cobra_SpriteSheet2x.png</texture>
-      <collider x="0" y="0" width="20" height="20"/>
+      <collider x="0" y="0" width="30" height="40"/>
     </snake>
     
   </entities>
