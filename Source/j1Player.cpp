@@ -12,8 +12,6 @@
 
 j1Player::j1Player() : j1Entity("player", entity_type::PLAYER)
 {
-
-
 }
 
 j1Player::~j1Player()
@@ -101,28 +99,23 @@ bool j1Player::Update(float dt)
 
 		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		{
-
-			Velocity.y = playerinfo.Initial_Velocity_x;
-			Position.y = Position.y - Velocity.y;
+			Position.y = (Position.y - playerinfo.Initial_Velocity_x*dt);
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 		{
-			Velocity.y = playerinfo.Initial_Velocity_x;
-			Position.y = Position.y + Velocity.y;;
+			Position.y = (Position.y + playerinfo.Initial_Velocity_x*dt);
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		{
-			Velocity.x = playerinfo.Initial_Velocity_x;
-			Position.x = Position.x - Velocity.x;
+			Position.x = (Position.x - playerinfo.Initial_Velocity_x*dt);
 			Was_Right = false;
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		{
-			Velocity.x = playerinfo.Initial_Velocity_x;
-			Position.x = Position.x + Velocity.x;
+			Position.x = (Position.x + playerinfo.Initial_Velocity_x*dt);
 			Was_Right = true;
 		}
 
@@ -261,7 +254,7 @@ bool j1Player::Update(float dt)
 
 			}
 
-			/*if (Entity_State == FALLING && !Player_Colliding)
+			if (Entity_State == FALLING && !Player_Colliding)
 			{
 				Must_Fall = false;
 
@@ -276,7 +269,7 @@ bool j1Player::Update(float dt)
 
 				Velocity.y += ceil(playerinfo.Gravity / 2)*dt;
 				Position.y -= ceil((Velocity.y))*dt;
-			}*/
+			}
 		}
 	}
 
