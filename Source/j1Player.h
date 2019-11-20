@@ -80,7 +80,7 @@ public:
 	
 
 	bool Player_Colliding;
-	bool Colliding_Roof;
+	bool Colliding_Floor;
 
 	bool Double_Jump;
 	bool Must_Fall;
