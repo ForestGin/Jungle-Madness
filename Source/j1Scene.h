@@ -57,6 +57,9 @@ public:
 	bool scene1Loaded = false;
 	bool scene2Loaded = false;
 
+	//Used on module collision
+	int area_of_collision = 0;
+
 	//Entities
 	j1Player*           player = nullptr;
 	j1Snake*			snake = nullptr;
