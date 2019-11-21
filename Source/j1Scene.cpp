@@ -109,8 +109,8 @@ bool j1Scene::Start()
 		bat->Position.x = App->map->data.Bat1.x;
 		bat->Position.y = App->map->data.Bat1.y;
 
-		player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
-		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
+		/*player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
+		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);*/
 		snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
 		snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
 		bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
@@ -135,8 +135,8 @@ bool j1Scene::Start()
 		bat->Position.x = App->map->data2.Bat1.x;
 		bat->Position.y = App->map->data2.Bat1.y;
 
-		player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
-		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
+		/*player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
+		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);*/
 		snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
 		snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
 		bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
@@ -359,9 +359,7 @@ bool j1Scene::CleanUp()
 bool j1Scene::SceneChange(const char* scene) {
 	bool ret = true;
 
-	//THIS WAS CAUSING MEMORY LEAKS LIKE A BOSS
-	//App->map->CleanUp();
-	//App->map->Load(scene);
+
 
 
 	player->Initial_Moment = true;
