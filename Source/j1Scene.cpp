@@ -51,6 +51,7 @@ bool j1Scene::Awake(pugi::xml_node& config)
 	CamScene2.y = config.child("secondcamera").attribute("y").as_int();
 
 	
+	area_of_collision = config.child("collisionarea").attribute("value").as_int();
 
 	return ret;
 }
