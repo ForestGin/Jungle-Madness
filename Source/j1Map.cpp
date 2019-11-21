@@ -753,3 +753,51 @@ p2SString Properties::GetProperties(const char * request)
 
 	return tmp;
 }
+
+bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer, MapData& Data) const
+{
+	bool ret = false;
+	p2List_item<MapLayer*>* item;
+	//item = Data.layers.start;
+
+	for (item = Data.layers.start; item != NULL; item = item->next)
+	{
+		MapLayer* layer = item->data;
+
+		if (layer->properties_lay.GetProperties("Navigation") == 0)
+			continue;
+
+		uchar* map = new uchar[layer->width*layer->height];
+		memset(map, 1, layer->width*layer->height);
+
+		for (int y = 0; y < Data.height; ++y)
+		{
+			for (int x = 0; x < Data.width; ++x)
+			{
+				int i = (y*layer->width) + x;
+
+				int tile_id = layer->Get(x, y);
+				TileSet* tileset = (tile_id > 0) ? TileId(tile_id, Data) : NULL;
+
+				if (tileset != NULL)
+				{
+					map[i] = (tile_id - tileset->firstgid) > 0 ? 0 : 1;
+					/*TileType* ts = tileset->GetTileType(tile_id);
+					if(ts != NULL)
+					{
+					map[i] = ts->properties.Get("walkable", 1);
+					}*/
+				}
+			}
+		}
+
+		*buffer = map;
+		width = Data.width;
+		height = Data.height;
+		ret = true;
+
+		break;
+	}
+
+	return ret;
+}

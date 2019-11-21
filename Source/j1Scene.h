@@ -4,6 +4,7 @@
 #include "j1Module.h"
 
 struct SDL_Texture;
+class SDL_Rect;
 class Collider;
 class j1Player;
 class j1Snake;
@@ -63,6 +64,9 @@ public:
 	j1Player*           player = nullptr;
 	j1Snake*			snake = nullptr;
 	j1Bat*				bat = nullptr;
+
+	//pathfind
+	SDL_Rect debug_Tex_rect = { 96,0,16,16 };
 };
 
 #endif // __j1SCENE_H__

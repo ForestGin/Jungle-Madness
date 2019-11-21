@@ -13,6 +13,7 @@
 #include "j1Snake.h"
 #include "j1Bat.h"
 #include "j1EntityManager.h"
+#include "j1PathFinding.h"
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -123,6 +124,13 @@ bool j1Scene::Start()
 
 		currentscene = scenes.start->data->GetString();*/
 
+		// --- Pathfinding walkability map 1 ---
+		int w, h;
+		uchar* buffer_data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &buffer_data, App->map->data))
+			App->pathfinding->SetMap(w, h, buffer_data);
+
+		RELEASE_ARRAY(buffer_data);
 		
 	}
 	else
@@ -142,6 +150,15 @@ bool j1Scene::Start()
 		snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
 		bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
 		bat->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
+
+		// --- Pathfinding walkability map 2 ---
+
+		int w, h;
+		uchar* buffer_data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &buffer_data, App->map->data2))
+			App->pathfinding->SetMap(w, h, buffer_data);
+
+		RELEASE_ARRAY(buffer_data);
 	}
 	
 	
@@ -151,12 +168,42 @@ bool j1Scene::Start()
 	//colliders from tiled
 	App->map->MapCollisions(App->map->data);
 
+	
 	return ret;
 }
 
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
+	// debug pathfing ------------------
+	static iPoint origin;
+	static bool origin_selected = false;
+
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint p = App->render->ScreenToWorld(x, y);
+	if (scene1)
+	{
+		p = App->map->WorldToMap(p.x, p.y, App->map->data);
+	}
+	else
+	{
+		p = App->map->WorldToMap(p.x, p.y, App->map->data2);
+	}
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		if (origin_selected == true)
+		{
+			App->pathfinding->CreatePath(origin, p);
+			origin_selected = false;
+		}
+		else
+		{
+			origin = p;
+			origin_selected = true;
+		}
+	}
+
 	//TODO: Win condition
 
 	if (scene1 && (player->Position.x >= App->map->data.FinishPoint.x))
@@ -322,7 +369,42 @@ bool j1Scene::Update(float dt)
 		//App->win->SetTitle(title.GetString());
 	}
 
-	
+	// --- Debug Pathfinding
+	if (App->col->debug)
+	{
+		iPoint p = App->render->ScreenToWorld(x, y);
+		if (scene1)
+		{
+			p = App->map->WorldToMap(p.x, p.y, App->map->data);
+			p = App->map->MapToWorld(p.x, p.y, App->map->data);
+			App->render->Blit(App->map->data.tilesets.start->next->next->data->texture, p.x, p.y, &debug_Tex_rect);
+		}
+		else
+		{
+			p = App->map->WorldToMap(p.x, p.y, App->map->data2);
+			p = App->map->MapToWorld(p.x, p.y, App->map->data2);
+			App->render->Blit(App->map->data2.tilesets.start->next->next->data->texture, p.x, p.y, &debug_Tex_rect);
+		}
+
+		const p2DynArray<iPoint>* path = App->pathfinding->GetLastPath();
+
+		for (uint i = 0; i < path->Count(); ++i)
+		{
+			if (scene1)
+			{
+				iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y, App->map->data);
+				App->render->Blit(App->map->data.tilesets.start->next->next->data->texture, pos.x, pos.y, &debug_Tex_rect);
+			}
+			else
+			{
+				iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y, App->map->data2);
+				App->render->Blit(App->map->data2.tilesets.start->next->next->data->texture, pos.x, pos.y, &debug_Tex_rect);
+			}
+
+
+		}
+	}
+		
 	return true;
 }
 
@@ -381,6 +463,14 @@ bool j1Scene::SceneChange(const char* scene) {
 		App->audio->PlayMusic(stageMusic.GetString());
 
 		player->Entity_State = FALLING;
+
+		//pathfinding map1
+		int w, h;
+		uchar* buffer_data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &buffer_data, App->map->data))
+			App->pathfinding->SetMap(w, h, buffer_data);
+
+		RELEASE_ARRAY(buffer_data);
 		
 	}
 	else if (currentscene == scenes.start->next->data->GetString()) 
@@ -395,6 +485,14 @@ bool j1Scene::SceneChange(const char* scene) {
 		App->audio->PlayMusic(stageMusic.GetString());
 
 		player->Entity_State = FALLING;
+
+		//pathfinding map2
+		int w, h;
+		uchar* buffer_data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &buffer_data, App->map->data2))
+			App->pathfinding->SetMap(w, h, buffer_data);
+
+		RELEASE_ARRAY(buffer_data);
 		
 	}
 

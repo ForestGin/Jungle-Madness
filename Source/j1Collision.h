@@ -62,11 +62,11 @@ public:
 
 	p2List<Collider*> colliders;
 	int Player_Touch;
-
+	bool debug = false;
 private:
 
 	bool matrix[COLLIDER_MAX][COLLIDER_MAX];
-	bool debug = false;
+	
 };
 
 #endif // __j1Collision_H__

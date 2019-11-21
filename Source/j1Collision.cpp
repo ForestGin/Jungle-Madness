@@ -56,7 +56,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_PLAYER] = false;
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_CHECKPOINT] = false;
 
-	matrix[COLLIDER_SNAKE][COLLIDER_FLOOR] = false;
+	matrix[COLLIDER_SNAKE][COLLIDER_FLOOR] = true;
 	matrix[COLLIDER_SNAKE][COLLIDER_DEADLY] = false;
 	matrix[COLLIDER_SNAKE][COLLIDER_PLATFORM] = false;
 	matrix[COLLIDER_SNAKE][COLLIDER_ROOF] = false;
@@ -65,7 +65,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_SNAKE][COLLIDER_SNAKE] = false;
 	matrix[COLLIDER_SNAKE][COLLIDER_BAT] = false;
 
-	matrix[COLLIDER_BAT][COLLIDER_FLOOR] = false;
+	matrix[COLLIDER_BAT][COLLIDER_FLOOR] = true;
 	matrix[COLLIDER_BAT][COLLIDER_DEADLY] = false;
 	matrix[COLLIDER_BAT][COLLIDER_PLATFORM] = false;
 	matrix[COLLIDER_BAT][COLLIDER_ROOF] = false;
