@@ -61,12 +61,13 @@ public:
 	void DebugDraw();
 
 	p2List<Collider*> colliders;
-	int Player_Touch;
+	int Player_Touch = NULL;
+	bool debug = false;
 
 private:
 
 	bool matrix[COLLIDER_MAX][COLLIDER_MAX];
-	bool debug = false;
+	
 };
 
 #endif // __j1Collision_H__

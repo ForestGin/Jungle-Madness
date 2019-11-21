@@ -89,7 +89,7 @@ public:
 	// entityinfo
 	entity_type  Entity_Type;
 	entity_state Entity_State;
-
+	int entityID = 0;
 	// art
 	Animation* CurrentAnimation = nullptr;
 	SDL_Texture* spritesheet = nullptr;
