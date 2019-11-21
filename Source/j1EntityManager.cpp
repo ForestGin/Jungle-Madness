@@ -59,13 +59,13 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 
 	
 
-	/*playerinfo.Idle->speed = 0.15f;
+	playerinfo.Idle->speed = 0.15f;
 	playerinfo.Run->speed = 0.15f;
 	playerinfo.God->speed = 0.15f;
 	playerinfo.Jump->speed = 0.60f;
 	playerinfo.Fall->speed = 0.15f;
 	playerinfo.Death->speed = 0.15f;
-*/
+
 	
 
 	playerinfo.Death->loop = false;
@@ -93,7 +93,7 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	snakeinfo.Initial_Velocity_x = playernode.child("velocity").attribute("initalVx").as_float();
 	snakeinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
 
-	/*snakeinfo.Move->speed = 0.15f;*/
+	snakeinfo.Move->speed = 0.15f;
 
 	//BAT
 	pugi::xml_node batnode = config.child("bat");
@@ -118,7 +118,7 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	batinfo.Initial_Velocity_x = playernode.child("velocity").attribute("initalVx").as_float();
 	batinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
 
-	/*batinfo.Move->speed = 0.15f;*/
+	batinfo.Move->speed = 0.15f;
 
 	return ret;
 }
