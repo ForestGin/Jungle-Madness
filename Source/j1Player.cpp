@@ -89,6 +89,7 @@ bool j1Player::Update(float dt)
 		else
 		{
 			God_Mode = false;
+			Entity_State = FALLING;
 		}
 	}
 
@@ -155,7 +156,6 @@ bool j1Player::Update(float dt)
 		{
 			Entity_State = FALLING;
 		}
-
 
 		//Horizontally
 
@@ -224,13 +224,13 @@ bool j1Player::Update(float dt)
 
 				if (Double_Jump == true && App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && Velocity.y != playerinfo.Jump_Force)
 				{
-					Velocity.y = playerinfo.Jump_Force / 1.5f;
+					Velocity.y = playerinfo.Jump_Force /1.5f;
 					Position.y -= ceil(Velocity.y)*dt;
 					Double_Jump = false;
 					//SFX?
 				}
 
-				Velocity.y += ceil(playerinfo.Gravity / 2)*dt;
+				Velocity.y += ceil(playerinfo.Gravity*10.0f)*dt;
 				Position.y -= ceil((Velocity.y))*dt;
 
 			}
@@ -280,7 +280,7 @@ bool j1Player::Update(float dt)
 	}
 
 	//Player collider adjustment to sprites
-	Entity_Collider->SetPos(Position.x/* + Player_Collider_Margin.x*/, Position.y /*+ Player_Collider_Margin.y*/);
+	Entity_Collider->SetPos(Position.x + Player_Collider_Margin.x, Position.y + Player_Collider_Margin.y);
 
 	/*App->col->Update(1.0f);
 

@@ -398,8 +398,8 @@ void j1Scene::EntityPosition(const char* scene)
 	
 
 	// Colliders
-	player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
-	player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
+	/*player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
+	player->Entity_Collider->SetPos(player->Position.x, player->Position.y);*/
 	snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
 	snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
 	bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
