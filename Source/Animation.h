@@ -39,13 +39,13 @@ public:
 		frames[last_frame++] = rect;
 	}
 
-	SDL_Rect& GetCurrentFrame(float dt)
+	SDL_Rect& GetCurrentFrame()
 	{
 		switch (direction)
 		{
 		case pingpong::forward:
 		{
-			current_frame += speed*dt;
+			current_frame += speed;
 			if (current_frame >= last_frame)
 			{
 				current_frame = (loop || pingpong) ? 0.0f : last_frame - 1;
