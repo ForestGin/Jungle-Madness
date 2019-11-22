@@ -208,12 +208,13 @@ bool j1Player::Update(float dt)
 				if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && Player_Colliding == true)
 				{
 					Colliding_Floor = false;
-					Velocity.y = playerinfo.Jump_Force;
+					Velocity.y = playerinfo.Jump_Force * gravity;
 					Entity_State = JUMPING;
 					Player_Colliding = false;
 					//SFX?
 
 				}
+				
 			}
 
 			if (Entity_State == JUMPING)
