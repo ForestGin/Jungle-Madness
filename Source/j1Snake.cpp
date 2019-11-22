@@ -63,6 +63,7 @@ bool j1Snake::Update(float dt)
 	if (must_fall)
 	{
 		Position.y -= gravity * dt;
+		
 	}
 
 	if (Position.x < 0)

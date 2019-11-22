@@ -245,14 +245,18 @@ bool j1Scene::PreUpdate()
 
 	//camera down y axis
 	
+	if (App->col->Player_Touch == 0)
+	{
+		App->render->camera.y = -1000;
+	}
 
-	if (player->Position.y*App->win->GetScale() > -App->render->camera.y + App->render->camera.h - App->render->camera.h / 6)
+	if (App->col->Player_Touch > 0 && player->Position.y*App->win->GetScale() > -App->render->camera.y + App->render->camera.h - App->render->camera.h / 6)
 	{
 		App->render->camera.y -= -(player->gravity * 8) + 150;
 	}
 
 
-	if (-App->render->camera.y + App->render->camera.h > App->map->data.height*App->map->data.tile_height*App->win->GetScale())
+	if (App->col->Player_Touch > 0 && -App->render->camera.y + App->render->camera.h > App->map->data.height*App->map->data.tile_height*App->win->GetScale())
 	{
 		App->render->camera.y = (-App->map->data.height*App->map->data.tile_height*App->win->GetScale() + App->render->camera.h);
 	}

@@ -268,7 +268,7 @@ bool j1Player::Update(float dt)
 					Double_Jump = false;
 				}
 
-				Velocity.y += ceil(playerinfo.Gravity / 2)*dt;
+				Velocity.y += ceil(playerinfo.Gravity / 3)*dt;
 				Position.y -= ceil((Velocity.y))*dt;
 			}
 		}

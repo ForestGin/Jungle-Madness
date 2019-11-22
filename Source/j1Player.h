@@ -95,6 +95,7 @@ public:
 	bool First_Move;
 
 	bool God_Mode = false;
+	
 
 	PlayerData playerinfo;
 };
