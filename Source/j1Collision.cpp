@@ -56,8 +56,8 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_PLAYER] = false;
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_CHECKPOINT] = false;
 
-	matrix[COLLIDER_SNAKE][COLLIDER_FLOOR] = false;
-	matrix[COLLIDER_SNAKE][COLLIDER_DEADLY] = false;
+	matrix[COLLIDER_SNAKE][COLLIDER_FLOOR] = true;
+	matrix[COLLIDER_SNAKE][COLLIDER_DEADLY] = true;
 	matrix[COLLIDER_SNAKE][COLLIDER_PLATFORM] = false;
 	matrix[COLLIDER_SNAKE][COLLIDER_ROOF] = false;
 	matrix[COLLIDER_SNAKE][COLLIDER_PLAYER] = false;
@@ -65,8 +65,8 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_SNAKE][COLLIDER_SNAKE] = false;
 	matrix[COLLIDER_SNAKE][COLLIDER_BAT] = false;
 
-	matrix[COLLIDER_BAT][COLLIDER_FLOOR] = false;
-	matrix[COLLIDER_BAT][COLLIDER_DEADLY] = false;
+	matrix[COLLIDER_BAT][COLLIDER_FLOOR] = true;
+	matrix[COLLIDER_BAT][COLLIDER_DEADLY] = true;
 	matrix[COLLIDER_BAT][COLLIDER_PLATFORM] = false;
 	matrix[COLLIDER_BAT][COLLIDER_ROOF] = false;
 	matrix[COLLIDER_BAT][COLLIDER_PLAYER] = false;
@@ -177,10 +177,10 @@ bool j1Collision::Update(float dt)
 		c2 = c1->next;
 	}
 
-	if (App->scene->player->Entity_State != JUMPING && App->scene->player->Entity_State != FALLING && Player_Touch == 0)
+	/*if (App->scene->player->Entity_State != JUMPING && App->scene->player->Entity_State != FALLING && Player_Touch == 0)
 	{
 		App->scene->player->Must_Fall = true;
-	}
+	}*/
 
 	return ret;
 

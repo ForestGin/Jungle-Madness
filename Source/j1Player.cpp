@@ -34,17 +34,22 @@ bool j1Player::Start()
 	gravity = playerinfo.Gravity;
 	colliding_offset = playerinfo.Colliding_Offset;
 
-	Entity_State = IDLE;
+	Entity_State = FALLING;
 	CurrentAnimation = playerinfo.Idle;
+	
 	Moving_Left = false;
 	Moving_Right = false;
 
-	Must_Fall = true;
+	Must_Fall = false;
 	Double_Jump = false;
 	Player_Colliding = false;
 	Initial_Moment = true;
 	First_Move = false;
 	God_Mode = false;
+	Colliding_Floor = true;
+	Dead = false;
+	Was_Right = true;
+	Initial_Moment = true;
 
 	if (spritesheet == nullptr)
 	{
@@ -89,7 +94,6 @@ bool j1Player::Update(float dt)
 		else
 		{
 			God_Mode = false;
-			Entity_State = FALLING;
 		}
 	}
 
@@ -135,6 +139,13 @@ bool j1Player::Update(float dt)
 		if (Initial_Moment)
 		{
 			Entity_State = FALLING;
+			/*Position.y = 650;
+			Entity_Collider->rect.x = 650;
+			if (Position.y < 649)
+			{
+				Position.y = 650;
+				Entity_Collider->rect.x = 650;
+			}*/
 		}
 
 		if (Was_Right == true)
@@ -147,7 +158,7 @@ bool j1Player::Update(float dt)
 			CurrentAnimation = playerinfo.Idle;
 		}
 
-		if (Velocity.y < 0 && Entity_State == JUMPING)
+		if (Velocity.y < 0.0f && Entity_State == JUMPING)
 		{
 			Entity_State = FALLING;
 		}
@@ -157,10 +168,15 @@ bool j1Player::Update(float dt)
 			Entity_State = FALLING;
 		}
 
-		//Horizontally
-
 		if (CurrentAnimation != playerinfo.Death)
 		{
+			if (Dead == true)
+			{
+				Dead = false;
+				playerinfo.Death->Reset();
+			}
+			//Horizontally
+
 			if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 			{
 				if (First_Move == false)
@@ -230,7 +246,7 @@ bool j1Player::Update(float dt)
 					//SFX?
 				}
 
-				Velocity.y += ceil(playerinfo.Gravity*10.0f)*dt;
+				Velocity.y += ceil(playerinfo.Gravity*6.0f)*dt;
 				Position.y -= ceil((Velocity.y))*dt;
 
 			}
@@ -249,7 +265,7 @@ bool j1Player::Update(float dt)
 					//SFX?
 				}
 
-				Velocity.y += ceil(playerinfo.Gravity / 2)*dt;
+				Velocity.y += ceil(playerinfo.Gravity*6.0)*dt;
 				Position.y -= ceil((Velocity.y))*dt;
 
 
@@ -268,7 +284,7 @@ bool j1Player::Update(float dt)
 					Double_Jump = false;
 				}
 
-				Velocity.y += ceil(playerinfo.Gravity / 2)*dt;
+				Velocity.y += ceil(playerinfo.Gravity*6.0)*dt;
 				Position.y -= ceil((Velocity.y))*dt;
 			}
 		}
@@ -288,8 +304,8 @@ bool j1Player::Update(float dt)
 
 	if (Must_Fall)
 	{
-		Velocity.y += ceil(gravity / 2)*dt;
-		Position.y -= (Velocity.y * 4.0f) * dt;
+		Velocity.y += ceil(gravity*6.0)*dt;
+		Position.y -= (Velocity.y) * dt;
 
 		CurrentAnimation = playerinfo.Fall;
 	}
@@ -627,8 +643,6 @@ void j1Player::OnCollision(Collider * c1, Collider * c2)
 	{
 		CurrentAnimation = playerinfo.Idle;
 	}
-
-
 
 	Position.x = c1->rect.x /*- Player_Collider_Margin.x*/;
 	Position.y = c1->rect.y /*- Player_Collider_Margin.y*/;
