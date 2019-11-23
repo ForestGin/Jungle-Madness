@@ -66,7 +66,7 @@ public:
 	j1Bat*				bat = nullptr;
 
 	//pathfind
-	SDL_Rect debug_Tex_rect = { 96,0,16,16 };
+	SDL_Rect debug_Tex_rect = { 32,96,32,32 };
 };
 
 #endif // __j1SCENE_H__
