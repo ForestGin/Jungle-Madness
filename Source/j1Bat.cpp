@@ -85,6 +85,112 @@ bool j1Bat::PostUpdate(float dt)
 {
 	bool ret = true;
 
+		
+
+
+	if ((Position.x)*App->win->GetScale() >= -App->render->camera.x && (Position.x)*App->win->GetScale() <= -App->render->camera.x + App->render->camera.w)
+	{
+		//check for player nearby
+
+		/*if (App->scene->player->Position.x > Position.x - batinfo.Area_Of_Action &&
+			App->scene->player->Position.x < Position.x + batinfo.Area_Of_Action &&
+			App->scene->player->Position.y < Position.y + batinfo.Area_Of_Action &&
+			App->scene->player->Position.y > Position.y - batinfo.Area_Of_Action)
+		{*/
+			if (App->scene->player->Position.x > Position.x)
+			{
+				CurrentAnimation = batinfo.Move;
+
+				going_right = true;
+
+			}
+
+			else if (App->scene->player->Position.x < Position.x)
+			{
+				CurrentAnimation = batinfo.Move;
+
+				going_right = false;
+			}
+
+			else if (App->scene->player->Position.x == Position.x)
+			{
+				CurrentAnimation = batinfo.Move;
+				going_right = false;
+
+			}
+
+
+			if (App->scene->player->Position.y > Position.y)
+			{
+				going_down = false;
+				going_up = true;
+			}
+
+			else if (App->scene->player->Position.y < Position.y)
+			{
+
+				going_down = true;
+				going_up = false;
+			}
+
+			else if (App->scene->player->Position.x == Position.y)
+			{
+				going_down = false;
+				going_up = false;
+
+			}
+
+
+
+			//	//int pathok= App->pathfinding->CreatePath({ (int)App->scene->player->position.x,(int)App->scene->player->position.y }, { (int)this->position.x, (int)this->position.y });
+			//	//path=App->pathfinding->GetLastPath();
+
+		/*}*/
+
+		if (going_right)
+		{
+			Position.x += batinfo.Velocity.x;
+
+		}
+		else if (!going_right)
+		{
+			Position.x -= batinfo.Velocity.x;
+
+		}
+
+		if (going_up)
+		{
+			Position.y += batinfo.Velocity.y;
+
+		}
+		else if (going_down)
+		{
+			Position.y -= batinfo.Velocity.y;
+
+		}
+
+
+		if (going_right)
+			CurrentAnimation = batinfo.Move;
+		else if (going_left)
+			CurrentAnimation = batinfo.Move;
+
+
+
+
+		//check for limits
+		if (Position.x < 0)
+		{
+			Position.x = 0;
+			Entity_Collider->rect.x = 0;
+		}
+		else if (Position.x > App->map->data.width*App->map->data.tile_width)
+		{
+			Position.x = App->map->data.width*App->map->data.tile_width;
+		}
+	}
+
+
 	//Blitting Snake
 	if (going_right == true)
 	{
@@ -95,7 +201,7 @@ bool j1Bat::PostUpdate(float dt)
 	{
 		App->render->Blit(spritesheet, Position.x - Bat_Collider_Margin.x, Position.y - Bat_Collider_Margin.y, &CurrentAnimation->GetCurrentFrame(dt), SDL_FLIP_HORIZONTAL);
 	}
-
+		
 
 	return ret;
 }
