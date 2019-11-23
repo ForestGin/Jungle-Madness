@@ -34,10 +34,7 @@ struct PlayerData {
 	float           Gravity = 0;
 	float  Colliding_Offset = 0;
 
-	/*fPoint Player_Initial_Position;
-
-	fPoint Player_Collider_Margin = { 34, 14 };
-	fPoint Player_Displacement;*/
+	
 };
 
 class j1Player : public j1Entity
@@ -83,7 +80,7 @@ public:
 	
 
 	bool Player_Colliding;
-	bool Colliding_Roof;
+	bool Colliding_Floor;
 
 	bool Double_Jump;
 	bool Must_Fall;
@@ -98,6 +95,7 @@ public:
 	bool First_Move;
 
 	bool God_Mode = false;
+	
 
 	PlayerData playerinfo;
 };

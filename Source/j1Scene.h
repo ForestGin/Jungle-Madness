@@ -4,8 +4,11 @@
 #include "j1Module.h"
 
 struct SDL_Texture;
+class SDL_Rect;
 class Collider;
 class j1Player;
+class j1Snake;
+class j1Bat;
 
 class j1Scene : public j1Module
 {
@@ -38,6 +41,8 @@ public:
 	bool Save(pugi::xml_node&config) const;
 	bool Load(pugi::xml_node&config);
 
+	void EntityPosition(const char* scene);
+
 public:
 
 	fPoint camera_displacement;
@@ -53,9 +58,15 @@ public:
 	bool scene1Loaded = false;
 	bool scene2Loaded = false;
 
-	j1Player*           player = nullptr;
+	int area_of_collision = 0;
 
-	
+	//Entities
+	j1Player*           player = nullptr;
+	j1Snake*			snake = nullptr;
+	j1Bat*				bat = nullptr;
+
+	//pathfind
+	SDL_Rect debug_Tex_rect = { 32,96,32,32 };
 };
 
 #endif // __j1SCENE_H__

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="80" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="22" nextobjectid="3">
+<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="80" height="30" tilewidth="32" tileheight="32" infinite="0" nextlayerid="24" nextobjectid="5">
  <tileset firstgid="1" name="Jungle_terrain" tilewidth="32" tileheight="32" tilecount="840" columns="28">
   <image source="Jungle_terrain.png" width="896" height="960"/>
  </tileset>
- <tileset firstgid="841" name="Colliders" tilewidth="32" tileheight="32" tilecount="4" columns="2">
-  <image source="Colliders.png" width="64" height="64"/>
+ <tileset firstgid="841" name="Colliders" tilewidth="32" tileheight="32" tilecount="8" columns="2">
+  <image source="Colliders.png" width="64" height="128"/>
  </tileset>
- <tileset firstgid="845" name="objects" tilewidth="32" tileheight="32" tilecount="91" columns="13">
+ <tileset firstgid="849" name="objects" tilewidth="32" tileheight="32" tilecount="91" columns="13">
   <image source="objects.PNG" width="416" height="224"/>
  </tileset>
  <imagelayer id="1" name="Parallax_1" offsetx="-400" offsety="0">
@@ -13779,10 +13779,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="845"/>
-   <tile gid="846"/>
-   <tile gid="847"/>
-   <tile gid="848"/>
+   <tile gid="849"/>
+   <tile gid="850"/>
+   <tile gid="851"/>
+   <tile gid="852"/>
    <tile/>
    <tile/>
    <tile/>
@@ -13858,11 +13858,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="868"/>
+   <tile gid="862"/>
+   <tile gid="863"/>
    <tile gid="864"/>
-   <tile gid="858"/>
-   <tile gid="859"/>
-   <tile gid="860"/>
-   <tile gid="861"/>
+   <tile gid="865"/>
    <tile/>
    <tile/>
    <tile/>
@@ -13938,11 +13938,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="881"/>
+   <tile gid="875"/>
+   <tile gid="876"/>
    <tile gid="877"/>
-   <tile gid="871"/>
-   <tile gid="872"/>
-   <tile gid="873"/>
-   <tile gid="874"/>
+   <tile gid="878"/>
    <tile/>
    <tile/>
    <tile/>
@@ -19336,6 +19336,12 @@
   <object id="2" x="2016" y="634" width="128" height="101.333"/>
  </objectgroup>
  <objectgroup id="20" name="StartPoint">
-  <object id="1" x="160" y="608" width="38.6667" height="85.3333"/>
+  <object id="1" x="118" y="114" width="38.6667" height="85.3333"/>
+ </objectgroup>
+ <objectgroup id="22" name="SnakeSpawn1">
+  <object id="3" x="264" y="508" width="32" height="39"/>
+ </objectgroup>
+ <objectgroup id="23" name="BatSpawn1">
+  <object id="4" x="877" y="524" width="64" height="32"/>
  </objectgroup>
 </map>

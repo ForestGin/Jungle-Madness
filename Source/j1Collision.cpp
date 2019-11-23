@@ -4,6 +4,7 @@
 #include "j1Render.h"
 #include "j1Player.h"
 #include "j1Window.h"
+#include "j1Scene.h"
 #include "p2Log.h"
 
 
@@ -45,6 +46,8 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_PLAYER][COLLIDER_ROOF] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER] = false;
 	matrix[COLLIDER_PLAYER][COLLIDER_CHECKPOINT] = true;
+	matrix[COLLIDER_PLAYER][COLLIDER_BAT] = true;
+	matrix[COLLIDER_PLAYER][COLLIDER_SNAKE] = true;
 
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_FLOOR] = false;
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_DEADLY] = false;
@@ -52,6 +55,24 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_ROOF] = false;
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_PLAYER] = false;
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_CHECKPOINT] = false;
+
+	matrix[COLLIDER_SNAKE][COLLIDER_FLOOR] = true;
+	matrix[COLLIDER_SNAKE][COLLIDER_DEADLY] = false;
+	matrix[COLLIDER_SNAKE][COLLIDER_PLATFORM] = false;
+	matrix[COLLIDER_SNAKE][COLLIDER_ROOF] = false;
+	matrix[COLLIDER_SNAKE][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_SNAKE][COLLIDER_CHECKPOINT] = false;
+	matrix[COLLIDER_SNAKE][COLLIDER_SNAKE] = false;
+	matrix[COLLIDER_SNAKE][COLLIDER_BAT] = false;
+
+	matrix[COLLIDER_BAT][COLLIDER_FLOOR] = true;
+	matrix[COLLIDER_BAT][COLLIDER_DEADLY] = false;
+	matrix[COLLIDER_BAT][COLLIDER_PLATFORM] = false;
+	matrix[COLLIDER_BAT][COLLIDER_ROOF] = false;
+	matrix[COLLIDER_BAT][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_BAT][COLLIDER_CHECKPOINT] = false;
+	matrix[COLLIDER_BAT][COLLIDER_SNAKE] = false;
+	matrix[COLLIDER_BAT][COLLIDER_BAT] = false;
 
 }
 
@@ -93,29 +114,39 @@ bool j1Collision::Update(float dt)
 
 	c1 = c2 = colliders.start;
 
-	if(c1->next!=NULL)
+	if (c1->next != NULL)
 	{
 		c2 = c1->next;
 	}
 
 	while (c1 != NULL && c2 != NULL && c1 != c2)
 	{
-		//Checking if colliders are in camera
-		if ((c1->data->rect.x + c1->data->rect.w)*App->win->GetScale() >= -App->render->camera.x
-			&& c1->data->rect.x <= -App->render->camera.x + App->render->camera.w
-			&& (c2->data->rect.x + c2->data->rect.w)*App->win->GetScale() >= -App->render->camera.x
-			&& c2->data->rect.x <= -App->render->camera.x + App->render->camera.w)
+		skipcol = true;
+
+		//check for entity colliders
+		if (c1->data->type == COLLIDER_PLAYER || c2->data->type == COLLIDER_PLAYER ||
+			c1->data->type == COLLIDER_SNAKE || c2->data->type == COLLIDER_SNAKE ||
+			c1->data->type == COLLIDER_BAT || c2->data->type == COLLIDER_BAT)
 		{
 			skipcol = false;
 		}
-		
-		//And skiping them if not
+
 		while (c2 != NULL && skipcol == false)
 		{
 			skipcol = true;
 
-			if ((c2->data->rect.x + c2->data->rect.w)*App->win->GetScale() >= -App->render->camera.x
-				&& c2->data->rect.x*App->win->GetScale() <= -App->render->camera.x + App->render->camera.w)
+			//only check area near entity
+			if ( // Target Collision    ------------------------------   Set Area surrounding Entity
+				(c2->data->rect.x <= c1->data->rect.x + App->scene->area_of_collision &&
+					c2->data->rect.x + c2->data->rect.w >= c1->data->rect.x - App->scene->area_of_collision &&
+					c2->data->rect.y <= c1->data->rect.y + App->scene->area_of_collision &&
+					c2->data->rect.y + c2->data->rect.h >= c1->data->rect.y - App->scene->area_of_collision)
+				||
+				(c1->data->rect.x <= c2->data->rect.x + App->scene->area_of_collision &&
+					c1->data->rect.x + c1->data->rect.w >= c2->data->rect.x - App->scene->area_of_collision &&
+					c1->data->rect.y <= c2->data->rect.y + App->scene->area_of_collision &&
+					c1->data->rect.y + c1->data->rect.h >= c2->data->rect.y - App->scene->area_of_collision)
+				)
 			{
 				skipcol = false;
 			}
@@ -142,18 +173,17 @@ bool j1Collision::Update(float dt)
 			skipcol = false;
 		}
 
-		if (skipcol == true)
-		{
-			c2 = c2->next;
-			continue;
-		}
-
-		skipcol = true;
 		c1 = c1->next;
 		c2 = c1->next;
 	}
 
+	if (App->scene->player->Entity_State != JUMPING && App->scene->player->Entity_State != FALLING && Player_Touch == 0)
+	{
+		App->scene->player->Must_Fall = true;
+	}
+
 	return ret;
+
 }
 
 bool j1Collision::PostUpdate(float dt)
@@ -232,6 +262,12 @@ void j1Collision::DebugDraw()
 			App->render->DrawQuad(item->data->rect, 255, 0, 128, alpha);
 			break;
 		case COLLIDER_CHECKPOINT: // cyan
+			App->render->DrawQuad(item->data->rect, 0, 255, 255, alpha);
+			break;
+		case COLLIDER_SNAKE: // cyan
+			App->render->DrawQuad(item->data->rect, 0, 255, 255, alpha);
+			break;
+		case COLLIDER_BAT: // cyan
 			App->render->DrawQuad(item->data->rect, 0, 255, 255, alpha);
 			break;
 		}

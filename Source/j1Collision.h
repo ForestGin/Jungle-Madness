@@ -15,6 +15,8 @@ enum COLLIDER_TYPE
 	COLLIDER_PLATFORM,
 	COLLIDER_ROOF,
 	COLLIDER_PLAYER,
+	COLLIDER_SNAKE,
+	COLLIDER_BAT,
 	COLLIDER_CHECKPOINT,
 
 	COLLIDER_MAX
@@ -60,11 +62,11 @@ public:
 
 	p2List<Collider*> colliders;
 	int Player_Touch;
-
+	bool debug = false;
 private:
 
 	bool matrix[COLLIDER_MAX][COLLIDER_MAX];
-	bool debug = false;
+	
 };
 
 #endif // __j1Collision_H__

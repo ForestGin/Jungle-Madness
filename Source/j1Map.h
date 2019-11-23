@@ -5,6 +5,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "j1Module.h"
+#include "SDL\include\SDL.h"
 
 // ----------------------------------------------------
 
@@ -104,6 +105,8 @@ struct MapData
 
 	iPoint				StartPoint;
 	iPoint				FinishPoint;
+	iPoint				Snake1;
+	iPoint				Bat1;
 
 	p2List<TileSet*>	tilesets;
 	p2List<MapLayer*>	layers;
@@ -138,7 +141,8 @@ public:
 	iPoint MapToWorld(int x, int y, MapData& Data) const;
 	iPoint WorldToMap(int x, int y, MapData& Data) const;
 	bool MapCollisions(MapData& data);
-
+	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer, MapData& Data) const;
+	TileSet* TileId(int id, MapData& mapdata) const;
 
 private:
 
@@ -148,7 +152,7 @@ private:
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadImageLayer(pugi::xml_node& node, ImageLayer* imagelayer);
 
-	TileSet* TileId(int id, MapData& mapdata) const;
+	
 
 public:
 

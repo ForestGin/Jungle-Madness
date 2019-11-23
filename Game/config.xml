@@ -32,6 +32,7 @@
     <scene_name name="Map_alpha.tmx"/>
     <firstcamera x ="0" y ="-800"/>
     <secondcamera x ="1000" y ="-800"/>
+    <collisionarea value="100" />
   </scene>
 
   <audio>
@@ -57,15 +58,21 @@
       <folder>animations/player.tmx</folder>
       <texture>Sprites/Adventurer_fullx2.png</texture>
       <collider x="0" y="0" width="32" height="58"/>
-      <velocity x="4.0" y="0.0"  max_speed_y="10.0" initalVx="4.0" jump_force="10.0"/>
-      <gravity value="-1.0"/>
+      <velocity x="120.0" y="0.0"  max_speed_y="150.0" initalVx="160.0" jump_force="150.0"/>
+      <gravity value="-80.0"/>
       <colliding_offset value="0" />
     </player>
 
-    <snek>
-    </snek>
+    <snake>
+      <folder>animations/Snek.tmx</folder>
+      <texture>Sprites/Cobra_SpriteSheet2x.png</texture>
+      <collider x="0" y="0" width="30" height="40"/>
+    </snake>
 
     <bat>
+      <folder>animations/Bat.tmx</folder>
+      <texture>Sprites/Bat_Sprite_Sheet2x.png</texture>
+      <collider x="0" y="0" width="30" height="20"/>
     </bat>
     
   </entities>

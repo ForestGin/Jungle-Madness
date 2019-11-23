@@ -10,7 +10,10 @@
 #include "j1Scene.h"
 #include "j1Collision.h"
 #include "j1Player.h"
+#include "j1Snake.h"
+#include "j1Bat.h"
 #include "j1EntityManager.h"
+#include "j1PathFinding.h"
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -49,6 +52,7 @@ bool j1Scene::Awake(pugi::xml_node& config)
 	CamScene2.y = config.child("secondcamera").attribute("y").as_int();
 
 	
+	area_of_collision = config.child("collisionarea").attribute("value").as_int();
 
 	return ret;
 }
@@ -58,7 +62,15 @@ bool j1Scene::Start()
 {
 	bool ret = true;
 
+	currentscene = "Map_Beta.tmx";
+
 	player = (j1Player*)App->entities->EntityCreation("player", entity_type::PLAYER);
+	snake = (j1Snake*)App->entities->EntityCreation("snake", entity_type::SNAKE);
+	bat = (j1Bat*)App->entities->EntityCreation("bat", entity_type::BAT);
+	
+	
+
+
 	//Loading both scenes(maps/levels)
 
 	p2List_item<p2SString*>* sceneListItem;
@@ -83,45 +95,72 @@ bool j1Scene::Start()
 	}
 
 	//Loading positions and music
-	firstscene = scenes.start->data->GetString();
+	currentscene = scenes.start->data->GetString();
 
-	if (firstscene == "Map_Beta.tmx")
+	if (currentscene == "Map_Beta.tmx")
 	{
 
-		App->render->camera.x = CamScene1.x;
-		App->render->camera.y = CamScene1.y;
+		/*App->render->camera.x = CamScene1.x;
+		App->render->camera.y = CamScene1.y;*/
 
-		//Player position Loaded from map
+		//entities
 		player->Position.x = App->map->data.StartPoint.x;
 		player->Position.y = App->map->data.StartPoint.y;
-		
-		scene1 = true;
+		snake->Position.x = App->map->data.Snake1.x;
+		snake->Position.y = App->map->data.Snake1.y;
+		bat->Position.x = App->map->data.Bat1.x;
+		bat->Position.y = App->map->data.Bat1.y;
+
+		/*player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
+		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);*/
+		snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
+		snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
+		bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
+		bat->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
+
+
+		/*scene1 = true;
 		scene2 = false;
 
-		currentscene = scenes.start->data->GetString();
-		//load different music samples
-		/*p2SString SceneMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->data->GetString());
-		App->audio->PlayMusic(SceneMusic.GetString());*/
+		currentscene = scenes.start->data->GetString();*/
+
+		// --- Pathfinding walkability map 1 ---
+		int w, h;
+		uchar* buffer_data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &buffer_data, App->map->data))
+			App->pathfinding->SetMap(w, h, buffer_data);
+
+		RELEASE_ARRAY(buffer_data);
+		
 	}
-	//else if(currentscene == "Map_alpha.tmx")
-	//{
+	else
+	{
+		
+		//entities
+		player->Position.x = App->map->data2.StartPoint.x;
+		player->Position.y = App->map->data2.StartPoint.y;
+		snake->Position.x = App->map->data2.Snake1.x;
+		snake->Position.y = App->map->data2.Snake1.y;
+		bat->Position.x = App->map->data2.Bat1.x;
+		bat->Position.y = App->map->data2.Bat1.y;
 
-	//	App->render->camera.x = CamScene2.x;
-	//	App->render->camera.y = CamScene2.y;
+		/*player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
+		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);*/
+		snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
+		snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
+		bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
+		bat->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
 
-	//	App->player->Position.x = App->map->data2.StartPoint.x;
-	//	App->player->Position.y = App->map->data2.StartPoint.y;
-	//	//Player position Loaded from map
-	//	/*App->player->Player_Initial_Position.x = App->map->data2.StartPoint.x;
-	//	App->player->Player_Initial_Position.y = App->map->data2.FinishPoint.y;
-	//	App->player->Player_Initial_Position.x = App->player->Position.x;
-	//	App->player->Player_Initial_Position.y = App->player->Position.y;*/
+		// --- Pathfinding walkability map 2 ---
 
-	//	//load different music samples
-	//	/*p2SString SceneMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->next->data->GetString());
-	//	App->audio->PlayMusic(SceneMusic.GetString());*/
-	//}
+		int w, h;
+		uchar* buffer_data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &buffer_data, App->map->data2))
+			App->pathfinding->SetMap(w, h, buffer_data);
 
+		RELEASE_ARRAY(buffer_data);
+	}
+	
 	
 	p2SString SceneMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->data->GetString());
 	App->audio->PlayMusic(SceneMusic.GetString());
@@ -129,12 +168,42 @@ bool j1Scene::Start()
 	//colliders from tiled
 	App->map->MapCollisions(App->map->data);
 
+	
 	return ret;
 }
 
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
+	// debug pathfing ------------------
+	static iPoint origin;
+	static bool origin_selected = false;
+
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint p = App->render->ScreenToWorld(x, y);
+	if (scene1)
+	{
+		p = App->map->WorldToMap(p.x, p.y, App->map->data);
+	}
+	else
+	{
+		p = App->map->WorldToMap(p.x, p.y, App->map->data2);
+	}
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		if (origin_selected == true)
+		{
+			App->pathfinding->CreatePath(origin, p);
+			origin_selected = false;
+		}
+		else
+		{
+			origin = p;
+			origin_selected = true;
+		}
+	}
+
 	//TODO: Win condition
 
 	if (scene1 && (player->Position.x >= App->map->data.FinishPoint.x))
@@ -176,14 +245,18 @@ bool j1Scene::PreUpdate()
 
 	//camera down y axis
 	
+	if (App->col->Player_Touch == 0)
+	{
+		App->render->camera.y = -1000;
+	}
 
-	if (player->Position.y*App->win->GetScale() > -App->render->camera.y + App->render->camera.h - App->render->camera.h / 6)
+	if (App->col->Player_Touch > 0 && player->Position.y*App->win->GetScale() > -App->render->camera.y + App->render->camera.h - App->render->camera.h / 6)
 	{
 		App->render->camera.y -= -(player->gravity * 8) + 150;
 	}
 
 
-	if (-App->render->camera.y + App->render->camera.h > App->map->data.height*App->map->data.tile_height*App->win->GetScale())
+	if (App->col->Player_Touch > 0 && -App->render->camera.y + App->render->camera.h > App->map->data.height*App->map->data.tile_height*App->win->GetScale())
 	{
 		App->render->camera.y = (-App->map->data.height*App->map->data.tile_height*App->win->GetScale() + App->render->camera.h);
 	}
@@ -210,6 +283,7 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && scene2 == false)//SECOND
 	{
+		
 		currentscene = scenes.start->next->data->GetString();
 		SceneChange(scenes.start->next->data->GetString());
 		scene1 = false;
@@ -228,6 +302,7 @@ bool j1Scene::Update(float dt)
 			SceneChange(scenes.start->data->GetString());
 			scene1 = true;
 			scene2 = false;
+			
 		}
 		else if (scene2)
 		{
@@ -298,7 +373,42 @@ bool j1Scene::Update(float dt)
 		//App->win->SetTitle(title.GetString());
 	}
 
-	
+	// --- Debug Pathfinding
+	if (App->col->debug)
+	{
+		iPoint p = App->render->ScreenToWorld(x, y);
+		if (scene1)
+		{
+			p = App->map->WorldToMap(p.x, p.y, App->map->data);
+			p = App->map->MapToWorld(p.x, p.y, App->map->data);
+			App->render->Blit(App->map->data.tilesets.start->next->data->texture, p.x, p.y, &debug_Tex_rect);
+		}
+		else
+		{
+			p = App->map->WorldToMap(p.x, p.y, App->map->data2);
+			p = App->map->MapToWorld(p.x, p.y, App->map->data2);
+			App->render->Blit(App->map->data2.tilesets.start->next->data->texture, p.x, p.y, &debug_Tex_rect);
+		}
+
+		const p2DynArray<iPoint>* path = App->pathfinding->GetLastPath();
+
+		for (uint i = 0; i < path->Count(); ++i)
+		{
+			if (scene1)
+			{
+				iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y, App->map->data);
+				App->render->Blit(App->map->data.tilesets.start->next->data->texture, pos.x, pos.y, &debug_Tex_rect);
+			}
+			else
+			{
+				iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y, App->map->data2);
+				App->render->Blit(App->map->data2.tilesets.start->next->data->texture, pos.x, pos.y, &debug_Tex_rect);
+			}
+
+
+		}
+	}
+		
 	return true;
 }
 
@@ -336,24 +446,20 @@ bool j1Scene::CleanUp()
 bool j1Scene::SceneChange(const char* scene) {
 	bool ret = true;
 
-	//THIS WAS CAUSING MEMORY LEAKS LIKE A BOSS
-	//App->map->CleanUp();
-	//App->map->Load(scene);
+
+
 
 	player->Initial_Moment = true;
 	player->First_Move = false;
 
 	App->col->CleanUp();
-	player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_PLAYER, App->entities);
-
+	EntityPosition(scene);
+	
+	
 	if (currentscene == scenes.start->data->GetString())
 	{
 		App->map->MapCollisions(App->map->data);
-
-		//TODO: Initial position
-		player->Position.x = App->map->data.StartPoint.x;
-		player->Position.y = App->map->data.StartPoint.y;
-
+				
 		App->render->camera.x = CamScene1.x;
 		App->render->camera.y = CamScene1.y;
 
@@ -361,15 +467,21 @@ bool j1Scene::SceneChange(const char* scene) {
 		App->audio->PlayMusic(stageMusic.GetString());
 
 		player->Entity_State = FALLING;
+
+		//pathfinding map1
+		int w, h;
+		uchar* buffer_data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &buffer_data, App->map->data))
+			App->pathfinding->SetMap(w, h, buffer_data);
+
+		RELEASE_ARRAY(buffer_data);
+		
 	}
 	else if (currentscene == scenes.start->next->data->GetString()) 
 	{
 		App->map->MapCollisions(App->map->data2);
 		
-		//TODO: Initial position
-		player->Position.x = App->map->data2.StartPoint.x;
-		player->Position.y = App->map->data2.StartPoint.y;
-
+		
 		App->render->camera.x = CamScene2.x;
 		App->render->camera.y = CamScene2.y;
 
@@ -377,9 +489,58 @@ bool j1Scene::SceneChange(const char* scene) {
 		App->audio->PlayMusic(stageMusic.GetString());
 
 		player->Entity_State = FALLING;
+
+		//pathfinding map2
+		int w, h;
+		uchar* buffer_data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &buffer_data, App->map->data2))
+			App->pathfinding->SetMap(w, h, buffer_data);
+
+		RELEASE_ARRAY(buffer_data);
+		
 	}
 
+	
+
 	return ret;
+}
+
+void j1Scene::EntityPosition(const char* scene)
+{
+	player->CurrentAnimation = player->playerinfo.Idle;
+	
+	if (scene == scenes.start->data->GetString())
+	{
+
+		player->Position.x = App->map->data.StartPoint.x;
+		player->Position.y = App->map->data.StartPoint.y;
+		snake->Position.x = App->map->data.Snake1.x;
+		snake->Position.y = App->map->data.Snake1.y;
+		bat->Position.x = App->map->data.Bat1.x;
+		bat->Position.y = App->map->data.Bat1.y;
+	}
+	else
+	{
+		player->Position.x = App->map->data2.StartPoint.x;
+		player->Position.y = App->map->data2.StartPoint.y;
+		snake->Position.x = App->map->data2.Snake1.x;
+		snake->Position.y = App->map->data2.Snake1.y;
+		bat->Position.x = App->map->data2.Bat1.x;
+		bat->Position.y = App->map->data2.Bat1.y;
+	}
+	
+
+	// Colliders
+	player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
+	player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
+	snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
+	snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
+	bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
+	bat->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
+	
+	//variables reset
+	snake->must_fall = true;
+	
 }
 
 bool j1Scene::Save(pugi::xml_node &config) const

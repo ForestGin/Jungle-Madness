@@ -2,7 +2,7 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1EntityManager.h"
-#include "j1Entity.h"
+
 
 j1EntityManager::j1EntityManager() : j1Module(), logic_updates_per_second(DEFAULT_LPS), accumulated_time(0.0f)
 {
@@ -59,16 +59,66 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 
 	
 
-	playerinfo.Idle->speed = 0.15f;
+	/*playerinfo.Idle->speed = 0.15f;
 	playerinfo.Run->speed = 0.15f;
 	playerinfo.God->speed = 0.15f;
 	playerinfo.Jump->speed = 0.60f;
 	playerinfo.Fall->speed = 0.15f;
 	playerinfo.Death->speed = 0.15f;
-
+*/
 	
 
 	playerinfo.Death->loop = false;
+
+	//SNAKE 
+	pugi::xml_node snakenode = config.child("snake");
+
+	snakeinfo.folder.create(snakenode.child("folder").child_value());
+	snakeinfo.Texture.create(snakenode.child("texture").child_value());
+
+	x = snakenode.child("collider").attribute("x").as_int();
+	y = snakenode.child("collider").attribute("y").as_int();
+	w = snakenode.child("collider").attribute("width").as_int();
+	h = snakenode.child("collider").attribute("height").as_int();
+	snakeinfo.Snake_Collider_Rect = { x,y,w,h };
+
+
+	snakeinfo.Move = LoadAnimation(snakeinfo.folder.GetString(), "Move");
+	
+
+	snakeinfo.Gravity = playernode.child("gravity").attribute("value").as_float();
+	snakeinfo.Velocity.x = playernode.child("velocity").attribute("x").as_float();
+	snakeinfo.Velocity.y = playernode.child("velocity").attribute("y").as_float();
+	snakeinfo.Max_Speed_y = playernode.child("velocity").attribute("max_speed_y").as_float();
+	snakeinfo.Initial_Velocity_x = playernode.child("velocity").attribute("initalVx").as_float();
+	snakeinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
+
+	/*snakeinfo.Move->speed = 0.15f;*/
+
+	//BAT
+	pugi::xml_node batnode = config.child("bat");
+
+	batinfo.folder.create(batnode.child("folder").child_value());
+	batinfo.Texture.create(batnode.child("texture").child_value());
+
+	x = batnode.child("collider").attribute("x").as_int();
+	y = batnode.child("collider").attribute("y").as_int();
+	w = batnode.child("collider").attribute("width").as_int();
+	h = batnode.child("collider").attribute("height").as_int();
+	batinfo.Bat_Collider_Rect = { x,y,w,h };
+
+
+	batinfo.Move = LoadAnimation(batinfo.folder.GetString(), "Move");
+
+
+	batinfo.Gravity = playernode.child("gravity").attribute("value").as_float();
+	batinfo.Velocity.x = playernode.child("velocity").attribute("x").as_float();
+	batinfo.Velocity.y = playernode.child("velocity").attribute("y").as_float();
+	batinfo.Max_Speed_y = playernode.child("velocity").attribute("max_speed_y").as_float();
+	batinfo.Initial_Velocity_x = playernode.child("velocity").attribute("initalVx").as_float();
+	batinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
+
+	/*batinfo.Move->speed = 0.15f;*/
 
 	return ret;
 }
@@ -177,7 +227,15 @@ j1Entity* const j1EntityManager::EntityCreation(const char* entname, entity_type
 	case entity_type::PLAYER:
 		entity = new j1Player();
 		break;
+	case entity_type::SNAKE:
+		entity = new j1Snake();
+		break;
+	case entity_type::BAT:
+		entity = new j1Bat();
+		break;
+		
 	}
+
 
 	entity->Init(this);
 	entity->Start();

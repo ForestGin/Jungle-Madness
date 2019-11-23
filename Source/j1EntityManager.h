@@ -5,8 +5,8 @@
 #include "j1Module.h"
 #include "j1Entity.h"
 #include "j1Player.h"
-#include "j1Bat.h"
 #include "j1Snake.h"
+#include "j1Bat.h"
 
 #define DEFAULT_LPS 60//(LOGIC PER SEC)
 
@@ -45,7 +45,7 @@ public:
 	
 	PlayerData& GetPlayerData() { return playerinfo; }//player info
 	BatData& GetBatData() { return batinfo; }
-	SnakeData& GetSlimeData() { return snakeinfo; }
+	SnakeData& GetSnakeData() { return snakeinfo; }
 
 
 	bool Load(pugi::xml_node&);
