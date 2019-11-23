@@ -179,9 +179,9 @@ bool j1Scene::PreUpdate()
 	//camera X axis
 	App->render->camera.x = (-player->Position.x*App->win->GetScale() - player->Entity_Collider->rect.w/2  + App->render->camera.w /2);
 
-	if (-App->render->camera.x <= player->playerinfo.Initial_Velocity_x)
+	if (-App->render->camera.x <= player->playerinfo.Target_Velocity_x)
 	{
-		App->render->camera.x = -player->playerinfo.Initial_Velocity_x;
+		App->render->camera.x = -player->playerinfo.Target_Velocity_x;
 	}
 
 	if (-App->render->camera.x + App->render->camera.w >= App->map->data.width*App->map->data.tile_width*App->win->GetScale())
@@ -242,8 +242,8 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)//BEGINING OF CURRENT SCENE
 	{
-		if (player->God_Mode == true)
-			player->God_Mode = false;
+		/*if (player->God_Mode == true)
+			player->God_Mode = false;*/
 
 		if (scene1)
 		{
@@ -363,8 +363,8 @@ bool j1Scene::SceneChange(const char* scene) {
 
 
 
-	player->Initial_Moment = true;
-	player->First_Move = false;
+	/*player->Initial_Moment = true;
+	player->First_Move = false;*/
 
 	App->col->CleanUp();
 	EntityPosition(scene);
@@ -380,7 +380,7 @@ bool j1Scene::SceneChange(const char* scene) {
 		p2SString stageMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->data->GetString());
 		App->audio->PlayMusic(stageMusic.GetString());
 
-		player->Entity_State = FALLING;
+		//player->Entity_State = FALLING;
 		
 	}
 	else if (currentscene == scenes.start->next->data->GetString()) 
@@ -394,7 +394,7 @@ bool j1Scene::SceneChange(const char* scene) {
 		p2SString stageMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->next->data->GetString());
 		App->audio->PlayMusic(stageMusic.GetString());
 
-		player->Entity_State = FALLING;
+		//player->Entity_State = FALLING;
 		
 	}
 
@@ -405,13 +405,13 @@ bool j1Scene::SceneChange(const char* scene) {
 
 void j1Scene::EntityPosition(const char* scene)
 {
-	player->CurrentAnimation = player->playerinfo.Idle;
+	//player->CurrentAnimation = player->playerinfo.Idle;
 	
 	if (scene == scenes.start->data->GetString())
 	{
 
-		player->Position.x = App->map->data.StartPoint.x;
-		player->Position.y = App->map->data.StartPoint.y;
+		/*player->Position.x = App->map->data.StartPoint.x;
+		player->Position.y = App->map->data.StartPoint.y;*/
 		snake->Position.x = App->map->data.Snake1.x;
 		snake->Position.y = App->map->data.Snake1.y;
 		bat->Position.x = App->map->data.Bat1.x;
@@ -419,8 +419,8 @@ void j1Scene::EntityPosition(const char* scene)
 	}
 	else
 	{
-		player->Position.x = App->map->data2.StartPoint.x;
-		player->Position.y = App->map->data2.StartPoint.y;
+		/*player->Position.x = App->map->data2.StartPoint.x;
+		player->Position.y = App->map->data2.StartPoint.y;*/
 		snake->Position.x = App->map->data2.Snake1.x;
 		snake->Position.y = App->map->data2.Snake1.y;
 		bat->Position.x = App->map->data2.Bat1.x;
@@ -429,8 +429,8 @@ void j1Scene::EntityPosition(const char* scene)
 	
 
 	// Colliders
-	player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
-	player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
+	//player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
+	//player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
 	snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
 	snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
 	bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);

@@ -79,6 +79,7 @@ public:
 	p2SString			name;
 	fPoint			Position;
 	fPoint          Velocity;
+	fPoint			Current_Velocity;
 	float gravity = 0;
 
 	// collider

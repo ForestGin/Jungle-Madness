@@ -47,12 +47,9 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	playerinfo.Player_Collider_Rect = { x,y,w,h};
 
 	//Player config
-
-	playerinfo.Velocity.x = playernode.child("velocity").attribute("x").as_float();
-	playerinfo.Velocity.y = playernode.child("velocity").attribute("y").as_float();
 	playerinfo.Gravity = playernode.child("gravity").attribute("value").as_float();
 	playerinfo.Jump_Force = playernode.child("velocity").attribute("jump_force").as_float();
-	playerinfo.Initial_Velocity_x = playernode.child("velocity").attribute("initalVx").as_float();
+	playerinfo.Target_Velocity_x = playernode.child("velocity").attribute("initalVx").as_float();
 	playerinfo.Max_Speed_y = playernode.child("velocity").attribute("max_speed_y").as_float();
 	playerinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
 

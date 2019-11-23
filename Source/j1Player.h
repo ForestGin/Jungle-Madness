@@ -9,10 +9,47 @@
 struct SDL_Texture;
 struct Collider;
 
+enum class MODE
+{
+	GOD,
+	STANDING,
+	CROUCHING
+};
+
+enum class STATE
+{
+	IDLE,
+	RUNNING,
+	ATTACKING,
+	JUMPING,
+	FALLING,
+	CROUCHIDLE,
+	CROUCHWALKING,
+	SLIDING,
+
+	NONE
+};
+
+enum class DIRECTION
+{
+	LEFT,
+	RIGHT
+};
+
+enum class MOVEMENT
+{
+	UPWARDS,
+	RIGHTWARDS,
+	LEFTWARDS,
+	DOWNWARDS,
+
+	STATIC
+};
+
 struct PlayerData {
 
 	float Jump_Force = 0;
-	float Initial_Velocity_x = 0;
+	float Target_Velocity_x = 0;
 	float Max_Speed_y = 0;
 
 	
@@ -30,7 +67,6 @@ struct PlayerData {
 
 	SDL_Rect Player_Collider_Rect = { 0,0,0,0 };
 
-	fPoint          Velocity = { 0,0 };
 	float           Gravity = 0;
 	float  Colliding_Offset = 0;
 
@@ -65,36 +101,22 @@ public:
 	//void Jump();
 	//void Slide();
 	//void WallSlide();
+	void CheckMode();
+	void CheckState(float dt);
+	void CheckMovement();
 
 public:
 
-
-
+	fPoint Future_Position;
 	fPoint Player_Initial_Position;
 
 	fPoint Player_Collider_Margin = { 34, 14 };
 	fPoint Player_Displacement;
 
-	
-
-	
-
-	bool Player_Colliding;
-	bool Colliding_Floor;
-
-	bool Double_Jump;
-	bool Must_Fall;
-
-	bool Moving_Right;
-	bool Moving_Left;
-
-	bool Was_Right = true;
-	bool Dead = false;
-
-	bool Initial_Moment;
-	bool First_Move;
-
-	bool God_Mode = false;
+	MODE playermode;
+	STATE playerstate;
+	DIRECTION playerdirection;
+	MOVEMENT playermovement;
 
 	PlayerData playerinfo;
 };
