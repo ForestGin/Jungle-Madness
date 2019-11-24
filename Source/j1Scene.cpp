@@ -177,7 +177,7 @@ bool j1Scene::PreUpdate()
 	}
 
 	//camera X axis
-	App->render->camera.x = (-player->Position.x*App->win->GetScale() - player->Entity_Collider->rect.w/2  + App->render->camera.w /2);
+	App->render->camera.x = (-player->Position.x*App->win->GetScale() - player->Entity_Collider->rect.w / 2 + App->render->camera.w / 2);
 
 	if (-App->render->camera.x <= player->playerinfo.Target_Velocity_x)
 	{
@@ -192,16 +192,17 @@ bool j1Scene::PreUpdate()
 	// camera up y axis
 	if (player->Position.y*App->win->GetScale() <= -App->render->camera.y + App->render->camera.h / 6)
 	{
-		if (App->render->camera.y + (-player->gravity * 8) < 0)
-			App->render->camera.y += (-player->gravity * 8);
+		if (App->render->camera.y + (-player->Gravity * 8) < 0)
+			App->render->camera.y += (-player->Gravity * 8);
 	}
 
 	//camera down y axis
-	
+
 
 	if (player->Position.y*App->win->GetScale() > -App->render->camera.y + App->render->camera.h - App->render->camera.h / 6)
 	{
-		App->render->camera.y -= -(player->gravity * 8) + 150;
+		App->render->camera.y -= -(player->Gravity * 8) + 150;
+
 	}
 
 

@@ -26,6 +26,7 @@ enum class STATE
 	CROUCHIDLE,
 	CROUCHWALKING,
 	SLIDING,
+	FLYING,
 
 	NONE
 };
@@ -50,11 +51,15 @@ struct PlayerData {
 
 	float Jump_Force = 0;
 	float Target_Velocity_x = 0;
+	float Crouch_Velocity_x = 0;
+	float God_Velocity = 0;
 	float Max_Speed_y = 0;
 
 	
 	Animation* Idle = nullptr;
 	Animation* Run = nullptr;
+	Animation* CrouchIdle = nullptr;
+	Animation* CrouchWalk = nullptr;
 	Animation* Jump = nullptr;
 	Animation* Fall = nullptr;
 	Animation* Slide = nullptr;
@@ -66,6 +71,8 @@ struct PlayerData {
 	p2SString Texture = nullptr;
 
 	SDL_Rect Player_Collider_Rect = { 0,0,0,0 };
+	SDL_Rect Standing_Rect = { 0,0,0,0 };
+	SDL_Rect Crouching_Rect = { 0,0,0,0 };
 
 	float           Gravity = 0;
 	float  Colliding_Offset = 0;
@@ -101,9 +108,13 @@ public:
 	//void Jump();
 	//void Slide();
 	//void WallSlide();
-	void CheckMode();
-	void CheckState(float dt);
+	void HandleMode();
+
+	void HandleState(float dt);
+
 	void CheckMovement();
+
+	void HandleAnimations();
 
 public:
 

@@ -29,14 +29,16 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	playerinfo.Texture.create(playernode.child("texture").child_value());
 
 	//animations
-	playerinfo.Idle = LoadAnimation(playerinfo.folder.GetString(), "Idle_Sword_Sheathed");
-	playerinfo.Run = LoadAnimation(playerinfo.folder.GetString(), "Run_Sword_Sheathed");
-	playerinfo.Jump = LoadAnimation(playerinfo.folder.GetString(), "Jump");
-	playerinfo.Fall = LoadAnimation(playerinfo.folder.GetString(), "Fall");
-	playerinfo.Death = LoadAnimation(playerinfo.folder.GetString(), "Knockout");
-	playerinfo.Slide = LoadAnimation(playerinfo.folder.GetString(), "Slide");
-	playerinfo.Wall_Slide = LoadAnimation(playerinfo.folder.GetString(), "Wall_Slide");
-	playerinfo.God = LoadAnimation(playerinfo.folder.GetString(), "God_Mode");
+	playerinfo.Idle =			LoadAnimation(playerinfo.folder.GetString(), "Idle_Sword_Sheathed");
+	playerinfo.Run =			LoadAnimation(playerinfo.folder.GetString(), "Run_Sword_Sheathed");
+	playerinfo.CrouchIdle =		LoadAnimation(playerinfo.folder.GetString(), "Crouch_Idle_Sword_Sheathed");
+	playerinfo.CrouchWalk =		LoadAnimation(playerinfo.folder.GetString(), "Crouch_Walk_Sword_Sheathed");
+	playerinfo.Jump =			LoadAnimation(playerinfo.folder.GetString(), "Jump");
+	playerinfo.Fall =			LoadAnimation(playerinfo.folder.GetString(), "Fall");
+	playerinfo.Death =			LoadAnimation(playerinfo.folder.GetString(), "Knockout");
+	playerinfo.Slide =			LoadAnimation(playerinfo.folder.GetString(), "Slide");
+	playerinfo.Wall_Slide =		LoadAnimation(playerinfo.folder.GetString(), "Wall_Slide");
+	playerinfo.God =			LoadAnimation(playerinfo.folder.GetString(), "God_Mode");
 
 	//COLLIDER PLAYER
 	
@@ -46,12 +48,12 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	int h = playernode.child("collider").attribute("height").as_int();
 	playerinfo.Player_Collider_Rect = { x,y,w,h};
 
-	//Player config
-	playerinfo.Gravity = playernode.child("gravity").attribute("value").as_float();
-	playerinfo.Jump_Force = playernode.child("velocity").attribute("jump_force").as_float();
-	playerinfo.Target_Velocity_x = playernode.child("velocity").attribute("initalVx").as_float();
-	playerinfo.Max_Speed_y = playernode.child("velocity").attribute("max_speed_y").as_float();
-	playerinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
+	////Player config
+	//playerinfo.Gravity = playernode.child("gravity").attribute("value").as_float();
+	//playerinfo.Jump_Force = playernode.child("velocity").attribute("jump_force").as_float();
+	//playerinfo.Target_Velocity_x = playernode.child("velocity").attribute("initalVx").as_float();
+	//playerinfo.Max_Speed_y = playernode.child("velocity").attribute("max_speed_y").as_float();
+	//playerinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
 
 
 	

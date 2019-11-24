@@ -80,12 +80,12 @@ public:
 	fPoint			Position;
 	fPoint          Velocity;
 	fPoint			Current_Velocity;
-	float gravity = 0;
+	float			Gravity = 0;
 
 	// collider
-	Collider*     Entity_Collider = nullptr;
-	SDL_Rect Entity_Collider_Rect;
-	float colliding_offset = 0;
+	Collider*		Entity_Collider = nullptr;
+	SDL_Rect		Entity_Collider_Rect;
+	float			colliding_offset = 0;
 
 	// entityinfo
 	entity_type  Entity_Type;

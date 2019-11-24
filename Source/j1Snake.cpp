@@ -28,7 +28,7 @@ bool j1Snake::Start()
 
 	Entity_Collider = App->col->AddCollider(Entity_Collider_Rect, COLLIDER_SNAKE, (j1Module*)manager);
 	Velocity = snakeinfo.Velocity;
-	gravity = snakeinfo.Gravity;
+	Gravity = snakeinfo.Gravity;
 	colliding_offset = snakeinfo.Colliding_Offset;
 
 	Entity_State = IDLE;
@@ -62,7 +62,7 @@ bool j1Snake::Update(float dt)
 	//If no ground, free fall
 	if (must_fall)
 	{
-		Position.y -= gravity * dt;
+		Position.y -= Gravity * dt;
 	}
 
 	if (Position.x < 0)
