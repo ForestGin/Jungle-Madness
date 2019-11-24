@@ -92,7 +92,7 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	snakeinfo.Max_Speed_y = playernode.child("velocity").attribute("max_speed_y").as_float();
 	snakeinfo.Initial_Velocity_x = playernode.child("velocity").attribute("initalVx").as_float();
 	snakeinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
-
+	snakeinfo.Area_Of_Action = snakenode.child("areaofaction").attribute("value").as_int();
 	/*snakeinfo.Move->speed = 0.15f;*/
 
 	//BAT
@@ -112,12 +112,12 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 
 
 	batinfo.Gravity = playernode.child("gravity").attribute("value").as_float();
-	batinfo.Velocity.x = playernode.child("velocity").attribute("x").as_float();
-	batinfo.Velocity.y = playernode.child("velocity").attribute("y").as_float();
+	batinfo.Velocity.x = batnode.child("Velocity").attribute("x").as_float();
+	batinfo.Velocity.y = batnode.child("Velocity").attribute("y").as_float();
+	batinfo.Initial_Velocity_x = batnode.child("Velocity").attribute("initalVx").as_float();
 	batinfo.Max_Speed_y = playernode.child("velocity").attribute("max_speed_y").as_float();
-	batinfo.Initial_Velocity_x = playernode.child("velocity").attribute("initalVx").as_float();
 	batinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
-
+	batinfo.Area_Of_Action = batnode.child("areaofaction").attribute("value").as_int();
 	/*batinfo.Move->speed = 0.15f;*/
 
 	return ret;

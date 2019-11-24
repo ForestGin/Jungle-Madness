@@ -92,11 +92,11 @@ bool j1Bat::PostUpdate(float dt)
 	{
 		//check for player nearby
 
-		/*if (App->scene->player->Position.x > Position.x - batinfo.Area_Of_Action &&
+		if (App->scene->player->Position.x > Position.x - batinfo.Area_Of_Action &&
 			App->scene->player->Position.x < Position.x + batinfo.Area_Of_Action &&
 			App->scene->player->Position.y < Position.y + batinfo.Area_Of_Action &&
 			App->scene->player->Position.y > Position.y - batinfo.Area_Of_Action)
-		{*/
+		{
 			if (App->scene->player->Position.x > Position.x)
 			{
 				CurrentAnimation = batinfo.Move;
@@ -142,10 +142,9 @@ bool j1Bat::PostUpdate(float dt)
 
 
 
-			//	//int pathok= App->pathfinding->CreatePath({ (int)App->scene->player->position.x,(int)App->scene->player->position.y }, { (int)this->position.x, (int)this->position.y });
-			//	//path=App->pathfinding->GetLastPath();
+			
 
-		/*}*/
+		}//
 
 		if (going_right)
 		{
