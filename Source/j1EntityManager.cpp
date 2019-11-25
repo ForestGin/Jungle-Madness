@@ -86,13 +86,15 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	snakeinfo.Move = LoadAnimation(snakeinfo.folder.GetString(), "Move");
 	
 
-	snakeinfo.Gravity = playernode.child("gravity").attribute("value").as_float();
+	snakeinfo.Gravity = snakenode.child("gravity").attribute("value").as_float();
 	snakeinfo.Velocity.x = snakenode.child("Velocity").attribute("x").as_float();
 	snakeinfo.Velocity.y = snakenode.child("Velocity").attribute("y").as_float();
 	snakeinfo.Initial_Velocity_x = snakenode.child("Velocity").attribute("initalVx").as_float();
 	snakeinfo.Max_Speed_y = playernode.child("velocity").attribute("max_speed_y").as_float();
-	snakeinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
+	snakeinfo.Colliding_Offset = snakenode.child("colliding_offset").attribute("value").as_float();
 	snakeinfo.Area_Of_Action = snakenode.child("areaofaction").attribute("value").as_int();
+	snakeinfo.Print_offset.x = snakenode.child("printingoffset").attribute("x").as_int();
+	snakeinfo.Print_offset.y = snakenode.child("printingoffset").attribute("y").as_int();
 	/*snakeinfo.Move->speed = 0.15f;*/
 
 	//BAT

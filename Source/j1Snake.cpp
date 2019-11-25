@@ -54,30 +54,9 @@ bool j1Snake::Start()
 
 bool j1Snake::Update(float dt)
 {
-	if (going_right == true)
-		CurrentAnimation = snakeinfo.Move;
-	else if (going_right == false)
-		CurrentAnimation = snakeinfo.Move;
-
-	//If no ground, free fall
-	if (must_fall)
-	{
-		Position.y -= gravity * dt;
-		
-	}
-
-	if (Position.x < 0)
-	{
-		Position.x = 0;
-		Entity_Collider->rect.x = 0;
-	}
-	else if (Position.x > App->map->data.width*App->map->data.tile_width)
-	{
-		Position.x = App->map->data.width*App->map->data.tile_width;
-	}
-
-	
-	
+	must_fall = true;
+	Snakecolliding = false;
+	Entity_State = FALLING;
 
 	return true;
 }
@@ -85,6 +64,7 @@ bool j1Snake::Update(float dt)
 bool j1Snake::PostUpdate(float dt)
 {
 	bool ret = true;
+
 
 	if ((Position.x)*App->win->GetScale() >= -App->render->camera.x && (Position.x)*App->win->GetScale() <= -App->render->camera.x + App->render->camera.w)
 	{
@@ -95,55 +75,51 @@ bool j1Snake::PostUpdate(float dt)
 			App->scene->player->Position.y < Position.y + snakeinfo.Area_Of_Action &&
 			App->scene->player->Position.y > Position.y - snakeinfo.Area_Of_Action)
 		{
-			if (App->scene->player->Position.x > Position.x)
+			if (App->scene->player->Position.x > Position.x && Entity_State != FALLING)
 			{
 				CurrentAnimation = snakeinfo.Move;
-
+				Entity_State = RIGHT;
 				going_right = true;
 
 			}
 
-			else if (App->scene->player->Position.x < Position.x)
+			else if (App->scene->player->Position.x < Position.x && Entity_State != FALLING)
 			{
 				CurrentAnimation = snakeinfo.Move;
-
+				Entity_State = LEFT;
 				going_right = false;
 			}
 
-			else if (App->scene->player->Position.x == Position.x)
-			{
-				CurrentAnimation = snakeinfo.Move;
-				going_right = false;
 
-			}
+		}
 
-
-
-		}//
-
-		if (going_right)
+		if (Entity_State != FALLING && Entity_State == RIGHT)
 		{
 			Position.x += snakeinfo.Velocity.x;
-
+			Entity_State = RIGHT;
+			must_fall = false;
 		}
-		else if (!going_right)
+		else if (Entity_State != FALLING && Entity_State == LEFT)
 		{
 			Position.x -= snakeinfo.Velocity.x;
-
+			Entity_State = LEFT;
+			must_fall = false;
 		}
 
-		
 
-
-		if (going_right)
+		if (Entity_State == RIGHT)
 			CurrentAnimation = snakeinfo.Move;
-		else if (going_left)
+		else if (Entity_State == LEFT)
 			CurrentAnimation = snakeinfo.Move;
 
 
 
+		//If no ground, free fall
+		if (must_fall)
+		{
+			Position.y -= gravity;
+		}
 
-		//check for limits
 		if (Position.x < 0)
 		{
 			Position.x = 0;
@@ -153,17 +129,26 @@ bool j1Snake::PostUpdate(float dt)
 		{
 			Position.x = App->map->data.width*App->map->data.tile_width;
 		}
-	}
 
-	//Blitting Snake
-	if (going_right == true)
-	{
-		App->render->Blit(spritesheet, Position.x - Snake_Collider_Margin.x, Position.y - Snake_Collider_Margin.y, &CurrentAnimation->GetCurrentFrame(dt));
-	}
+		//Check if slime is Falling 
 
-	else
-	{
-		App->render->Blit(spritesheet, Position.x - Snake_Collider_Margin.x, Position.y - Snake_Collider_Margin.y, &CurrentAnimation->GetCurrentFrame(dt), SDL_FLIP_HORIZONTAL);
+
+		if (Snakecolliding == false)
+		{
+			Entity_State = FALLING;
+		}
+
+
+		//Blitting Snake
+		if (going_right == true)
+		{
+			App->render->Blit(spritesheet, Position.x - snakeinfo.Print_offset.x, Position.y + snakeinfo.Print_offset.y, &CurrentAnimation->GetCurrentFrame(dt));
+		}
+
+		else
+		{
+			App->render->Blit(spritesheet, Position.x - snakeinfo.Print_offset.x, Position.y + snakeinfo.Print_offset.y, &CurrentAnimation->GetCurrentFrame(dt), SDL_FLIP_HORIZONTAL);
+		}
 	}
 
 	return ret;
@@ -199,114 +184,52 @@ void j1Snake::LogicUpdate(float dt)
 
 void j1Snake::OnCollision(Collider * c1, Collider * c2)
 {
+	bool lateralcollision = true;
+
+	if (c1->rect.y - 4 + c1->rect.h == c2->rect.y)
 	{
-		bool lateralcollision = true;
+		lateralcollision = false;
+	}
 
-		if (c1->rect.y + c1->rect.h == c2->rect.y)
+	if (c2->type == COLLIDER_FLOOR && dead == false && !lateralcollision)
+	{
+		must_fall = false;
+		if (going_right)
 		{
-			lateralcollision = false;
+			going_right = true;
+			Entity_State = RIGHT;
+			going_left = false;
+		}
+		else
+		{
+			Entity_State = LEFT;
+			going_left = true;
+			going_right = false;
 		}
 
-		float aux = c1->rect.y; //pos.y
+		Snakecolliding = true;
+	}
 
-		if (c2->type == COLLIDER_FLOOR && dead == false)
+	if (lateralcollision)
+	{
+		if (going_right)
 		{
-			if ((going_left || going_right) && must_fall)
-			{
-				if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x + c1->rect.w <= c2->rect.x + snakeinfo.Initial_Velocity_x)
-				{
-					Velocity.x = 0.0f;
-					c1->rect.x = c2->rect.x - c1->rect.w - colliding_offset;
-				}
-
-				if (c1->rect.x >= c2->rect.x + c2->rect.w - snakeinfo.Initial_Velocity_x && c1->rect.x <= c2->rect.x + c2->rect.w)
-				{
-					Velocity.x = 0.0f;
-					c1->rect.x = c2->rect.x + c2->rect.w + colliding_offset;
-				}
-
-				if (lateralcollision == true)
-				{
-
-					if (going_left)
-						c1->rect.x += colliding_offset;
-					else
-						c1->rect.x -= colliding_offset;
-
-
-					must_fall = true;
-				}
-				else
-				{
-					must_fall = false;
-				}
-
-			}
-			else
-			{
-
-				if (going_right)
-				{
-
-					//stopping player if lateral collision
-
-					if (lateralcollision)
-					{
-
-						if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x + c1->rect.w <= c2->rect.x + snakeinfo.Initial_Velocity_x)
-						{
-							Velocity.x = 0.0f;
-							if (Entity_State != JUMPING)
-								c1->rect.y = aux;
-							c1->rect.x = c2->rect.x - c1->rect.w - colliding_offset;
-						}
-
-
-					}
-					else if (!lateralcollision && must_fall == false)
-						Entity_State = IDLE;
-
-					if ((going_left || going_right) && must_fall)
-					{
-						c1->rect.x = c2->rect.x + c2->rect.w - colliding_offset;
-					}
-				}
-
-				//going left
-				if (going_left)
-				{
-
-					if (lateralcollision)
-					{
-
-						if (c1->rect.x >= c2->rect.x + c2->rect.w - snakeinfo.Initial_Velocity_x && c1->rect.x <= c2->rect.x + c2->rect.w)
-						{
-							Velocity.x = 0.0f;
-							if (Entity_State != JUMPING)
-								c1->rect.y = aux;
-							c1->rect.x = c2->rect.x + c2->rect.w + colliding_offset;
-						}
-
-
-					}
-					else if (!lateralcollision && must_fall == false)
-						Entity_State = IDLE;
-
-					if ((going_left || going_right) && must_fall)
-					{
-						c1->rect.x = c2->rect.x + c2->rect.w + colliding_offset;
-					}
-				}
-
-				must_fall = false;
-
-			}
+			Entity_State = LEFT;
+			going_left = true;
+			going_right = false;
+			c1->rect.x -= snakeinfo.Colliding_Offset;
 		}
+		else
+		{
+			going_right = true;
+			Entity_State = RIGHT;
+			going_left = false;
+			c1->rect.x += snakeinfo.Colliding_Offset;
 
-
+		}
+		Snakecolliding = true;
 
 		Position.x = c1->rect.x;
-		Position.y = c1->rect.y;
 	}
 }
 

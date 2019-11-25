@@ -66,9 +66,12 @@
     <snake>
       <folder>animations/Snek.tmx</folder>
       <texture>Sprites/Cobra_SpriteSheet2x.png</texture>
-      <collider x="0" y="0" width="30" height="40"/>
-      <Velocity x="1" y="0.5" initalVx="2.0"/>
+      <collider x="0" y="0" width="30" height="30"/>
+      <colliding_offset value="5" />
+      <printingoffset x="24" y="-28"/>
+      <Velocity x="0.5" y="0.0" initalVx="2.0"/>
       <areaofaction value="100"/>
+      <gravity value="-4.0"/>
     </snake>
 
     <bat>
