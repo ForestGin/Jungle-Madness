@@ -67,7 +67,8 @@
       <folder>animations/Snek.tmx</folder>
       <texture>Sprites/Cobra_SpriteSheet2x.png</texture>
       <collider x="0" y="0" width="30" height="40"/>
-      <areaofaction value="25"/>
+      <Velocity x="1" y="0.5" initalVx="2.0"/>
+      <areaofaction value="100"/>
     </snake>
 
     <bat>

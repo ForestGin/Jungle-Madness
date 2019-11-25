@@ -86,6 +86,75 @@ bool j1Snake::PostUpdate(float dt)
 {
 	bool ret = true;
 
+	if ((Position.x)*App->win->GetScale() >= -App->render->camera.x && (Position.x)*App->win->GetScale() <= -App->render->camera.x + App->render->camera.w)
+	{
+		//check for player nearby
+
+		if (App->scene->player->Position.x > Position.x - snakeinfo.Area_Of_Action &&
+			App->scene->player->Position.x < Position.x + snakeinfo.Area_Of_Action &&
+			App->scene->player->Position.y < Position.y + snakeinfo.Area_Of_Action &&
+			App->scene->player->Position.y > Position.y - snakeinfo.Area_Of_Action)
+		{
+			if (App->scene->player->Position.x > Position.x)
+			{
+				CurrentAnimation = snakeinfo.Move;
+
+				going_right = true;
+
+			}
+
+			else if (App->scene->player->Position.x < Position.x)
+			{
+				CurrentAnimation = snakeinfo.Move;
+
+				going_right = false;
+			}
+
+			else if (App->scene->player->Position.x == Position.x)
+			{
+				CurrentAnimation = snakeinfo.Move;
+				going_right = false;
+
+			}
+
+
+
+		}//
+
+		if (going_right)
+		{
+			Position.x += snakeinfo.Velocity.x;
+
+		}
+		else if (!going_right)
+		{
+			Position.x -= snakeinfo.Velocity.x;
+
+		}
+
+		
+
+
+		if (going_right)
+			CurrentAnimation = snakeinfo.Move;
+		else if (going_left)
+			CurrentAnimation = snakeinfo.Move;
+
+
+
+
+		//check for limits
+		if (Position.x < 0)
+		{
+			Position.x = 0;
+			Entity_Collider->rect.x = 0;
+		}
+		else if (Position.x > App->map->data.width*App->map->data.tile_width)
+		{
+			Position.x = App->map->data.width*App->map->data.tile_width;
+		}
+	}
+
 	//Blitting Snake
 	if (going_right == true)
 	{
