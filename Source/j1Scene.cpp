@@ -559,6 +559,10 @@ bool j1Scene::Load(pugi::xml_node &config)
 	bool ret = true;
 	int x = player->Position.x;
 	int y = player->Position.y;
+	int batx = bat->Position.x;
+	int baty = bat->Position.y;
+	int snakex = snake->Position.x;
+	int snakey = snake->Position.y;
 
 	scene1Loaded = config.child("scene1").attribute("value").as_bool();
 	scene2Loaded= config.child("scene2").attribute("value").as_bool();
@@ -575,6 +579,10 @@ bool j1Scene::Load(pugi::xml_node &config)
 			scene1 = false;
 			player->Position.x = x;
 			player->Position.y = y;
+			bat->Position.x = batx;
+			bat->Position.y = baty;
+			snake->Position.x = snakex;
+			snake->Position.y = snakey;
 		}
 
 		else
@@ -585,6 +593,10 @@ bool j1Scene::Load(pugi::xml_node &config)
 			scene2 = false;
 			player->Position.x = x;
 			player->Position.y = y;
+			bat->Position.x = batx;
+			bat->Position.y = baty;
+			snake->Position.x = snakex;
+			snake->Position.y = snakey;
 
 		}
 
@@ -601,6 +613,10 @@ bool j1Scene::Load(pugi::xml_node &config)
 			scene2 = false;
 			player->Position.x = x;
 			player->Position.y = y;
+			bat->Position.x = batx;
+			bat->Position.y = baty;
+			snake->Position.x = snakex;
+			snake->Position.y = snakey;
 
 		}
 
@@ -612,6 +628,10 @@ bool j1Scene::Load(pugi::xml_node &config)
 			scene2 = true;
 			player->Position.x = x;
 			player->Position.y = y;
+			bat->Position.x = batx;
+			bat->Position.y = baty;
+			snake->Position.x = snakex;
+			snake->Position.y = snakey;
 		}
 	}
 

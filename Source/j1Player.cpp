@@ -511,7 +511,7 @@ void j1Player::OnCollision(Collider * c1, Collider * c2)
 					Dead = true;
 				}
 
-				//App->LoadGame("save_game.xml");
+				/*App->LoadGame("save_game.xml");*/
 			}
 
 			//SFX?
@@ -642,16 +642,16 @@ bool j1Player::Load(pugi::xml_node &config)
 
 	bool ret = true;
 
-	Position.x = config.child("Playerx").attribute("value").as_float();
-	Position.y = config.child("Playery").attribute("value").as_float();
+	Position.x = config.child("Player").child("Playerx").attribute("value").as_float();
+	Position.y = config.child("Player").child("Playery").attribute("value").as_float();
 
 	return ret;
 }
 
 bool j1Player::Save(pugi::xml_node &config) const
 {
-	config.append_child("Playerx").append_attribute("value") = Position.x;
-	config.append_child("Playery").append_attribute("value") = Position.y;
+	config.append_child("Player").append_child("Playerx").append_attribute("value") = Position.x;
+	config.child("Player").append_child("Playery").append_attribute("value") = Position.y;
 
 	return true;
 }

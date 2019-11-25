@@ -242,15 +242,15 @@ bool j1Bat::Load(pugi::xml_node &config)
 {
 	bool ret = true;
 
-	Position.x = config.child("Bat").child("Playerx").attribute("value").as_float();
-	Position.y = config.child("Bat").child("Playery").attribute("value").as_float();
+	Position.x = config.child("bat").child("Batx").attribute("value").as_float();
+	Position.y = config.child("bat").child("Baty").attribute("value").as_float();
 	return ret;
 }
 
 bool j1Bat::Save(pugi::xml_node &config) const
 {
-	config.append_child("Bat").append_child("Playerx").append_attribute("value") = Position.x;
-	config.child("Bat").append_child("Playery").append_attribute("value") = Position.y;
+	config.append_child("bat").append_child("Batx").append_attribute("value") = Position.x;
+	config.child("bat").append_child("Baty").append_attribute("value") = Position.y;
 
 	return true;
 }

@@ -237,15 +237,15 @@ bool j1Snake::Load(pugi::xml_node &config)
 {
 	bool ret = true;
 
-	Position.x = config.child("Snake").child("Playerx").attribute("value").as_float();
-	Position.y = config.child("Snake").child("Playery").attribute("value").as_float();
+	Position.x = config.child("snake").child("Snakex").attribute("value").as_float();
+	Position.y = config.child("snake").child("Snakey").attribute("value").as_float();
 	return ret;
 }
 
 bool j1Snake::Save(pugi::xml_node &config) const
 {
-	config.append_child("Snake").append_child("Playerx").append_attribute("value") = Position.x;
-	config.child("Snake").append_child("Playery").append_attribute("value") = Position.y;
+	config.append_child("snake").append_child("Snakex").append_attribute("value") = Position.x;
+	config.child("snake").append_child("Snakey").append_attribute("value") = Position.y;
 
 	return true;
 }
