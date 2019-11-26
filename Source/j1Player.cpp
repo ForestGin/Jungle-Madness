@@ -55,7 +55,7 @@ bool j1Player::Start()
 	Position.y = 0;
 	Player_Initial_Position = Position;
 
-	/*entityID = App->entities->entityID;*/
+	ID = App->entities->entityID;
 
 	return true;
 }

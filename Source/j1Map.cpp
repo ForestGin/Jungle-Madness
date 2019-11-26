@@ -478,6 +478,23 @@ bool j1Map::LoadMap(MapData& data)
 			data.Bat1.x = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
 			data.Bat1.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
 		}
+
+		p2SString obj5(map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").attribute("name").as_string());
+
+		if (obj5 == "SnakeSpawn2")
+		{
+			data.Snake2.x = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
+			data.Snake2.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
+		}
+
+		p2SString obj6(map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").attribute("name").as_string());
+
+		if (obj6 == "BatSpawn2")
+		{
+			data.Bat2.x = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
+			data.Bat2.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
+		}
+
 	}
 
 	return ret;

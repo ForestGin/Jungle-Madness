@@ -95,6 +95,8 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	snakeinfo.Area_Of_Action = snakenode.child("areaofaction").attribute("value").as_int();
 	snakeinfo.Print_offset.x = snakenode.child("printingoffset").attribute("x").as_int();
 	snakeinfo.Print_offset.y = snakenode.child("printingoffset").attribute("y").as_int();
+	snakeinfo.Reference_ID.x = snakenode.child("ID").attribute("value1").as_int();
+	snakeinfo.Reference_ID.y = snakenode.child("ID").attribute("value2").as_int();
 	/*snakeinfo.Move->speed = 0.15f;*/
 
 	//BAT
@@ -120,6 +122,8 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	batinfo.Max_Speed_y = playernode.child("velocity").attribute("max_speed_y").as_float();
 	batinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
 	batinfo.Area_Of_Action = batnode.child("areaofaction").attribute("value").as_int();
+	batinfo.Reference_ID.x = batnode.child("ID").attribute("value1").as_int();
+	batinfo.Reference_ID.y = batnode.child("ID").attribute("value2").as_int();
 	/*batinfo.Move->speed = 0.15f;*/
 
 	return ret;
@@ -238,7 +242,7 @@ j1Entity* const j1EntityManager::EntityCreation(const char* entname, entity_type
 		
 	}
 
-
+	entityID++;
 	entity->Init(this);
 	entity->Start();
 	entities.add(entity);

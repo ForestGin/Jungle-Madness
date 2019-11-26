@@ -72,6 +72,7 @@
       <Velocity x="0.5" y="0.0" initalVx="2.0"/>
       <areaofaction value="100"/>
       <gravity value="-4.0"/>
+      <ID value1 ="4" value2 ="5"/>
     </snake>
 
     <bat>
@@ -80,6 +81,7 @@
       <collider x="0" y="0" width="30" height="20"/>
       <Velocity x="1" y="0.5" initalVx="2.0"/>
       <areaofaction value="100"/>
+      <ID value1 ="2" value2 ="3"/>
     </bat>
     
   </entities>

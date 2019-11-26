@@ -64,7 +64,8 @@ public:
 	j1Player*           player = nullptr;
 	j1Snake*			snake = nullptr;
 	j1Bat*				bat = nullptr;
-
+	j1Snake*			snake2 = nullptr;
+	j1Bat*				bat2 = nullptr;
 	//pathfind
 	SDL_Rect debug_Tex_rect = { 32,96,32,32 };
 };

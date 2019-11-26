@@ -49,7 +49,7 @@ bool j1Bat::Start()
 	/*Position.x = App->map->data.Bat1.x;
 	Position.y = App->map->data.Bat1.y;*/
 
-
+	ID = App->entities->entityID;
 
 
 	return true;
@@ -242,15 +242,32 @@ bool j1Bat::Load(pugi::xml_node &config)
 {
 	bool ret = true;
 
-	Position.x = config.child("bat").child("Batx").attribute("value").as_float();
-	Position.y = config.child("bat").child("Baty").attribute("value").as_float();
+	if (ID == batinfo.Reference_ID.x)
+	{
+		Position.x = config.child("Bat1").child("Batx").attribute("value").as_float();
+		Position.y = config.child("Bat1").child("Baty").attribute("value").as_float();
+	}
+	else if (ID == batinfo.Reference_ID.y)
+	{
+		Position.x = config.child("Bat2").child("Batx").attribute("value").as_float();
+		Position.y = config.child("Bat2").child("Baty").attribute("value").as_float();
+	}
+	
 	return ret;
 }
 
 bool j1Bat::Save(pugi::xml_node &config) const
 {
-	config.append_child("bat").append_child("Batx").append_attribute("value") = Position.x;
-	config.child("bat").append_child("Baty").append_attribute("value") = Position.y;
+	if (ID == batinfo.Reference_ID.x)
+	{
+		config.append_child("Bat1").append_child("Batx").append_attribute("value") = Position.x;
+		config.child("Bat1").append_child("Baty").append_attribute("value") = Position.y;
+	}
+	else if (ID == batinfo.Reference_ID.y)
+	{
+		config.append_child("Bat2").append_child("Batx").append_attribute("value") = Position.x;
+		config.child("Bat2").append_child("Baty").append_attribute("value") = Position.y;
+	}
 
 	return true;
 }

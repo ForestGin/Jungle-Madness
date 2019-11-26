@@ -65,9 +65,12 @@ bool j1Scene::Start()
 	currentscene = "Map_Beta.tmx";
 
 	player = (j1Player*)App->entities->EntityCreation("player", entity_type::PLAYER);
-	snake = (j1Snake*)App->entities->EntityCreation("snake", entity_type::SNAKE);
-	bat = (j1Bat*)App->entities->EntityCreation("bat", entity_type::BAT);
 	
+	bat = (j1Bat*)App->entities->EntityCreation("bat", entity_type::BAT);
+	bat2 = (j1Bat*)App->entities->EntityCreation("bat", entity_type::BAT);
+
+	snake = (j1Snake*)App->entities->EntityCreation("snake", entity_type::SNAKE);
+	snake2 = (j1Snake*)App->entities->EntityCreation("snake", entity_type::SNAKE);
 	
 
 
@@ -110,6 +113,10 @@ bool j1Scene::Start()
 		snake->Position.y = App->map->data.Snake1.y;
 		bat->Position.x = App->map->data.Bat1.x;
 		bat->Position.y = App->map->data.Bat1.y;
+		snake2->Position.x = App->map->data.Snake2.x;
+		snake2->Position.y = App->map->data.Snake2.y;
+		bat2->Position.x = App->map->data.Bat2.x;
+		bat2->Position.y = App->map->data.Bat2.y;
 
 		/*player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
 		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);*/
@@ -117,7 +124,10 @@ bool j1Scene::Start()
 		snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
 		bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
 		bat->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
-
+		snake2->Entity_Collider = App->col->AddCollider(snake2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
+		snake2->Entity_Collider->SetPos(snake2->Position.x, snake2->Position.y);
+		bat2->Entity_Collider = App->col->AddCollider(bat2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
+		bat2->Entity_Collider->SetPos(bat2->Position.x, bat2->Position.y);
 
 		/*scene1 = true;
 		scene2 = false;
@@ -143,6 +153,10 @@ bool j1Scene::Start()
 		snake->Position.y = App->map->data2.Snake1.y;
 		bat->Position.x = App->map->data2.Bat1.x;
 		bat->Position.y = App->map->data2.Bat1.y;
+		snake2->Position.x = App->map->data2.Snake2.x;
+		snake2->Position.y = App->map->data2.Snake2.y;
+		bat2->Position.x = App->map->data2.Bat2.x;
+		bat2->Position.y = App->map->data2.Bat2.y;
 
 		/*player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
 		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);*/
@@ -150,6 +164,10 @@ bool j1Scene::Start()
 		snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
 		bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
 		bat->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
+		snake2->Entity_Collider = App->col->AddCollider(snake2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
+		snake2->Entity_Collider->SetPos(snake2->Position.x, snake2->Position.y);
+		bat2->Entity_Collider = App->col->AddCollider(bat2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
+		bat2->Entity_Collider->SetPos(bat2->Position.x, bat2->Position.y);
 
 		// --- Pathfinding walkability map 2 ---
 
@@ -519,6 +537,10 @@ void j1Scene::EntityPosition(const char* scene)
 		snake->Position.y = App->map->data.Snake1.y;
 		bat->Position.x = App->map->data.Bat1.x;
 		bat->Position.y = App->map->data.Bat1.y;
+		snake2->Position.x = App->map->data.Snake2.x;
+		snake2->Position.y = App->map->data.Snake2.y;
+		bat2->Position.x = App->map->data.Bat2.x;
+		bat2->Position.y = App->map->data.Bat2.y;
 	}
 	else
 	{
@@ -528,6 +550,10 @@ void j1Scene::EntityPosition(const char* scene)
 		snake->Position.y = App->map->data2.Snake1.y;
 		bat->Position.x = App->map->data2.Bat1.x;
 		bat->Position.y = App->map->data2.Bat1.y;
+		snake2->Position.x = App->map->data2.Snake2.x;
+		snake2->Position.y = App->map->data2.Snake2.y;
+		bat2->Position.x = App->map->data2.Bat2.x;
+		bat2->Position.y = App->map->data2.Bat2.y;
 	}
 	
 
@@ -538,10 +564,14 @@ void j1Scene::EntityPosition(const char* scene)
 	snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
 	bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
 	bat->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
-	
+	snake2->Entity_Collider = App->col->AddCollider(snake2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
+	snake2->Entity_Collider->SetPos(snake2->Position.x, snake2->Position.y);
+	bat2->Entity_Collider = App->col->AddCollider(bat2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
+	bat2->Entity_Collider->SetPos(bat2->Position.x, bat2->Position.y);
+
 	//variables reset
 	snake->must_fall = true;
-	
+	snake2->must_fall = true;
 }
 
 bool j1Scene::Save(pugi::xml_node &config) const
@@ -564,6 +594,10 @@ bool j1Scene::Load(pugi::xml_node &config)
 	int baty = bat->Position.y;
 	int snakex = snake->Position.x;
 	int snakey = snake->Position.y;
+	int bat2x = bat2->Position.x;
+	int bat2y = bat2->Position.y;
+	int snake2x = snake2->Position.x;
+	int snake2y = snake2->Position.y;
 
 	scene1Loaded = config.child("scene1").attribute("value").as_bool();
 	scene2Loaded= config.child("scene2").attribute("value").as_bool();
@@ -584,6 +618,10 @@ bool j1Scene::Load(pugi::xml_node &config)
 			bat->Position.y = baty;
 			snake->Position.x = snakex;
 			snake->Position.y = snakey;
+			bat2->Position.x = bat2x;
+			bat2->Position.y = bat2y;
+			snake2->Position.x = snake2x;
+			snake2->Position.y = snake2y;
 		}
 
 		else
@@ -598,7 +636,10 @@ bool j1Scene::Load(pugi::xml_node &config)
 			bat->Position.y = baty;
 			snake->Position.x = snakex;
 			snake->Position.y = snakey;
-
+			bat2->Position.x = bat2x;
+			bat2->Position.y = bat2y;
+			snake2->Position.x = snake2x;
+			snake2->Position.y = snake2y;
 		}
 
 	}
@@ -618,7 +659,10 @@ bool j1Scene::Load(pugi::xml_node &config)
 			bat->Position.y = baty;
 			snake->Position.x = snakex;
 			snake->Position.y = snakey;
-
+			bat2->Position.x = bat2x;
+			bat2->Position.y = bat2y;
+			snake2->Position.x = snake2x;
+			snake2->Position.y = snake2y;
 		}
 
 		else
@@ -633,6 +677,10 @@ bool j1Scene::Load(pugi::xml_node &config)
 			bat->Position.y = baty;
 			snake->Position.x = snakex;
 			snake->Position.y = snakey;
+			bat2->Position.x = bat2x;
+			bat2->Position.y = bat2y;
+			snake2->Position.x = snake2x;
+			snake2->Position.y = snake2y;
 		}
 	}
 

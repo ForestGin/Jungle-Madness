@@ -47,7 +47,7 @@ bool j1Snake::Start()
 	/*Position.x = App->map->data.Snake1.x;
 	Position.y = App->map->data.Snake1.y;*/
 
-	
+	ID = App->entities->entityID;
 
 	return true;
 }
@@ -237,15 +237,31 @@ bool j1Snake::Load(pugi::xml_node &config)
 {
 	bool ret = true;
 
-	Position.x = config.child("snake").child("Snakex").attribute("value").as_float();
-	Position.y = config.child("snake").child("Snakey").attribute("value").as_float();
+	if (ID == snakeinfo.Reference_ID.x)
+	{
+		Position.x = config.child("Snake1").child("Snakex").attribute("value").as_float();
+		Position.y = config.child("Snake1").child("Snakey").attribute("value").as_float();
+	}
+	else if (ID == snakeinfo.Reference_ID.y)
+	{
+		Position.x = config.child("Snake2").child("Snakex").attribute("value").as_float();
+		Position.y = config.child("Snake2").child("Snakey").attribute("value").as_float();
+	}
+
 	return ret;
 }
 
 bool j1Snake::Save(pugi::xml_node &config) const
 {
-	config.append_child("snake").append_child("Snakex").append_attribute("value") = Position.x;
-	config.child("snake").append_child("Snakey").append_attribute("value") = Position.y;
-
+	if (ID == snakeinfo.Reference_ID.x)
+	{
+		config.append_child("Snake1").append_child("Snakex").append_attribute("value") = Position.x;
+		config.child("Snake1").append_child("Snakey").append_attribute("value") = Position.y;
+	}
+	else if (ID == snakeinfo.Reference_ID.y)
+	{
+		config.append_child("Snake2").append_child("Snakex").append_attribute("value") = Position.x;
+		config.child("Snake2").append_child("Snakey").append_attribute("value") = Position.y;
+	}
 	return true;
 }

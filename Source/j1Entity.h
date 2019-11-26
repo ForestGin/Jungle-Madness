@@ -89,6 +89,7 @@ public:
 	// entityinfo
 	entity_type  Entity_Type;
 	entity_state Entity_State;
+	int ID = 0;
 
 	// art
 	Animation* CurrentAnimation = nullptr;
