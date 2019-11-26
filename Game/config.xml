@@ -24,7 +24,7 @@
 
   <map>
     <folder>Map/</folder>
-    <collision red="841" pink="844" blue="843" green="842"/>
+    <collision red="841" pink="844" blue="843" green="845" checkpoint="842"/>
   </map>
 
   <scene>

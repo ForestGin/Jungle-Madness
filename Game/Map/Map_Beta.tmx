@@ -18392,6 +18392,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="842"/>
    <tile/>
    <tile/>
    <tile/>
@@ -18471,6 +18472,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="842"/>
    <tile/>
    <tile/>
    <tile/>
@@ -18550,9 +18552,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="842"/>
    <tile/>
    <tile/>
    <tile/>

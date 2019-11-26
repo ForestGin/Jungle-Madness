@@ -95,7 +95,7 @@ public:
 	bool First_Move;
 
 	bool God_Mode = false;
-	
+	bool SavedCheckPoint = false;
 
 	PlayerData playerinfo;
 };

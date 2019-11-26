@@ -29,7 +29,7 @@ bool j1Map::Awake(pugi::xml_node& config)
 	BlueCol = config.child("collision").attribute("blue").as_int();
 	PinkCol = config.child("collision").attribute("pink").as_int();
 	GreenCol = config.child("collision").attribute("green").as_int();
-
+	checkpoint = config.child("collision").attribute("checkpoint").as_int();
 	return ret;
 }
 
@@ -647,10 +647,11 @@ bool j1Map::MapCollisions(MapData& data)
 							{
 								App->col->AddCollider({ pos.x,pos.y,data.tile_width,data.tile_height }, COLLIDER_PLATFORM, this);
 							}
-							else if (tile_id == GreenCol)
+							else if (tile_id == checkpoint)
 							{
 								App->col->AddCollider({ pos.x,pos.y,data.tile_width,data.tile_height }, COLLIDER_CHECKPOINT, this);
 							}
+							
 						}
 					}
 				}

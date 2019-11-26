@@ -319,10 +319,11 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 		App->SaveGame("save_game.xml");
 
-	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN )
 	{
 		bool result = App->LoadGame("save_game.xml");
 	}
+	
 
 //-----------------------------------------
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)

@@ -64,18 +64,26 @@ bool j1Player::Update(float dt)
 {
 	if (Dead)
 	{
-		if (App->scene->scene1 == true)
+		if (SavedCheckPoint)
 		{
-			App->scene->SceneChange(App->scene->scenes.start->data->GetString());
-			App->scene->scene1 = true;
-			App->scene->scene2 = false;
+			bool result = App->LoadGame("save_game.xml");
 		}
 		else
 		{
-			App->scene->SceneChange(App->scene->scenes.start->next->data->GetString());
-			App->scene->scene1 = false;
-			App->scene->scene2 = true;
+			if (App->scene->scene1 == true)
+			{
+				App->scene->SceneChange(App->scene->scenes.start->data->GetString());
+				App->scene->scene1 = true;
+				App->scene->scene2 = false;
+			}
+			else
+			{
+				App->scene->SceneChange(App->scene->scenes.start->next->data->GetString());
+				App->scene->scene1 = false;
+				App->scene->scene2 = true;
+			}
 		}
+
 		Dead = false;
 	}
 
@@ -566,56 +574,12 @@ void j1Player::OnCollision(Collider * c1, Collider * c2)
 		}
 	}
 
-	//else if (c2->type == COLLIDER_ROOF)
-	//{
-	//	//Colliding_Roof = true;
-
-	//	if (c1->rect.y <= c2->rect.y + c2->rect.h && c1->rect.y >= c2->rect.y + c2->rect.h - playerinfo.Initial_Velocity_x + 1)
-	//	{
-	//		c1->rect.y = c2->rect.y + c2->rect.h + playerinfo.Colliding_Offset;
-	//		Velocity.y = 0.0f;
-	//		Entity_State = FALLING;
-	//		Double_Jump = false;
-	//		Must_Fall = true;
-	//	}
-	//	else
-	//	{
-
-	//		if ((Entity_State == JUMPING || Entity_State == FALLING) && Moving_Right || Moving_Left)
-	//		{
-	//			Double_Jump = false;
-	//			Must_Fall = true;
-
-	//		}
-	//		if (Moving_Right)
-	//		{
-	//			c1->rect.x = c2->rect.x - c1->rect.w - playerinfo.Colliding_Offset;
-
-	//		}
-	//		else
-	//		{
-	//			c1->rect.x = c2->rect.x + c2->rect.w + playerinfo.Colliding_Offset;
-	//		}
-	//	}
-	//}
+	
 
 	else if (c2->type == COLLIDER_CHECKPOINT)
 	{
-		if (Moving_Right)
-		{
-			if (c1->rect.x >= c2->rect.x + c2->rect.w - playerinfo.Colliding_Offset*3.0f)
-			{
-				App->SaveGame("save_game.xml");
-			}
-
-		}
-		else
-		{
-			if (c1->rect.x + c1->rect.w <= c2->rect.x + playerinfo.Colliding_Offset*3.0f)
-			{
-				App->SaveGame("save_game.xml");
-			}
-		}
+		App->SaveGame("save_game.xml");
+		SavedCheckPoint = true;
 	}
 
 
@@ -630,9 +594,15 @@ void j1Player::OnCollision(Collider * c1, Collider * c2)
 	}
 
 
-
 	Position.x = c1->rect.x /*- Player_Collider_Margin.x*/;
 	Position.y = c1->rect.y /*- Player_Collider_Margin.y*/;
+
+	if (c2->type != COLLIDER_CHECKPOINT)
+		Player_Colliding = true;
+	else
+	{
+		Player_Colliding = false;
+	}
 
 	Player_Colliding = true;
 }

@@ -167,7 +167,11 @@ private:
 	p2SString			folder;
 	bool				map_loaded;
 	//colliders
-	int RedCol, BlueCol, PinkCol, GreenCol;
+	int checkpoint = NULL;
+	int RedCol = NULL;
+	int BlueCol = NULL;
+	int PinkCol = NULL;
+	int GreenCol = NULL;
 	
 };
 
