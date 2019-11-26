@@ -485,6 +485,24 @@ void j1Player::CheckMovement()
 			playermovement = MOVEMENT::RIGHTWARDS;
 		}
 	}
+
+	/*if (Current_Velocity.x < 0)
+	{
+		playermovement = MOVEMENT::LEFTWARDS;
+	}
+	if (Current_Velocity.x > 0)
+	{
+		playermovement = MOVEMENT::RIGHTWARDS;
+	}
+	if (Current_Velocity.y < 0)
+	{
+		playermovement = MOVEMENT::UPWARDS;
+	}
+
+	if (Current_Velocity.y > 0)
+	{
+		playermovement = MOVEMENT::DOWNWARDS;
+	}*/
 }
 
 void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
@@ -493,6 +511,12 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 	{
 		switch (playermovement)
 		{
+		case MOVEMENT::LEFTWARDS:
+			Left_Collision(entitycollider, to_check);
+			break;
+		case MOVEMENT::RIGHTWARDS:
+			Right_Collision(entitycollider, to_check);
+			break;
 		case MOVEMENT::UPRIGHTWARDS:
 			UpRight_Collision(entitycollider, to_check);
 			break;
@@ -500,30 +524,52 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 			Up_Collision(entitycollider, to_check);
 			break;
 		case MOVEMENT::UPLEFTWARDS:
-			UpLeft_Collision(entitycollider, to_check);
+			/*UpLeft_Collision(entitycollider, to_check);*/
+			Up_Collision(entitycollider, to_check);
 			break;
 		case MOVEMENT::DOWNRIGHTWARDS:
-			DownRight_Collision(entitycollider, to_check);
+			/*DownRight_Collision(entitycollider, to_check);*/
+			Down_Collision(entitycollider, to_check);
 			break;
 		case MOVEMENT::DOWNWARDS:
 			Down_Collision(entitycollider, to_check);
 			break;
 		case MOVEMENT::DOWNLEFTWARDS:
-			DownLeft_Collision(entitycollider, to_check);
+			/*DownLeft_Collision(entitycollider, to_check);*/
+			Down_Collision(entitycollider, to_check);
 			break;
-		case MOVEMENT::RIGHTWARDS:
-			Right_Collision(entitycollider, to_check);
-			break;
-		case MOVEMENT::LEFTWARDS:
-			Left_Collision(entitycollider, to_check);
+		default:
 			break;
 		}
+		
 	}
 
 }
 
 void j1Player::UpRight_Collision(Collider * entitycollider, Collider * to_check)
 {
+	SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
+
+	switch (to_check->type)
+	{
+	case COLLIDER_TYPE::COLLIDER_FLOOR:
+		if (Intersection.x == entitycollider->rect.x)
+		{
+			entitycollider->rect.y += Intersection.h;
+			Future_Position.x = entitycollider->rect.x;
+			Future_Position.y = entitycollider->rect.y;
+		}
+
+		if(Intersection.x > entitycollider->rect.x)
+		{
+			entitycollider->rect.x -= Intersection.w;
+			Future_Position.x = entitycollider->rect.x;
+			Future_Position.y = entitycollider->rect.y;
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 void j1Player::Up_Collision(Collider * entitycollider, Collider * to_check)
@@ -544,6 +590,28 @@ void j1Player::Up_Collision(Collider * entitycollider, Collider * to_check)
 
 void j1Player::UpLeft_Collision(Collider * entitycollider, Collider * to_check)
 {
+	SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
+
+	switch (to_check->type)
+	{
+	case COLLIDER_TYPE::COLLIDER_FLOOR:
+		if (Intersection.x == entitycollider->rect.x)
+		{
+			entitycollider->rect.x += Intersection.w;
+			Future_Position.x = entitycollider->rect.x;
+			Future_Position.y = entitycollider->rect.y;
+		}
+
+		if (Intersection.x > entitycollider->rect.x)
+		{
+			entitycollider->rect.x -= Intersection.w;
+			Future_Position.x = entitycollider->rect.x;
+			Future_Position.y = entitycollider->rect.y;
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_check)
