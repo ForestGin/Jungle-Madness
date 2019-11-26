@@ -304,29 +304,6 @@ void j1Player::StandingModeMovement(float dt)
 
 			playerdirection = DIRECTION::RIGHT;
 		}
-
-		// ---- Y AXIS MOVEMENT ----
-
-		// ---- UP ----
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-		{
-			Current_Velocity.y = -playerinfo.God_Velocity;
-			Future_Position.y = (Position.y + Current_Velocity.y*dt);
-		}
-
-		// ---- DOWN ----
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-		{
-			Current_Velocity.y = playerinfo.God_Velocity;
-			Future_Position.y = (Position.y + Current_Velocity.y*dt);
-		}
-
-		// ---- BOTH ----
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-		{
-			Current_Velocity.y = 0;
-			Future_Position.y = (Position.y + Current_Velocity.y*dt);
-		}
 }
 
 void j1Player::CrouchingModeMovenent(float dt)
@@ -411,7 +388,6 @@ void j1Player::HandleAnimations()
 	{
 		CurrentAnimation = playerinfo.God;
 	}
-
 }
 
 void j1Player::UpdateColliderPos()
@@ -448,6 +424,24 @@ void j1Player::CheckMovement()
 		}
 	}
 
+	//MOVEMENT LATERAL
+	if (Current_Velocity.y == 0)
+	{
+		if (Current_Velocity.x < 0)
+		{
+			playermovement = MOVEMENT::LEFTWARDS;
+		}
+		if (Current_Velocity.x == 0)
+		{
+			//It should never be static (maybe except when loading)
+			playermovement = MOVEMENT::STATIC;
+		}
+		if (Current_Velocity.x > 0)
+		{
+			playermovement = MOVEMENT::RIGHTWARDS;
+		}
+	}
+
 	//DOWN SIDE MOVEMENT
 	if (Current_Velocity.y > 0)
 	{
@@ -467,42 +461,6 @@ void j1Player::CheckMovement()
 			playermovement = MOVEMENT::DOWNRIGHTWARDS;
 		}
 	}
-
-	//MOVEMENT LATERAL
-	if (Current_Velocity.y == 0)
-	{
-		if (Current_Velocity.x < 0)
-		{
-			playermovement = MOVEMENT::LEFTWARDS;
-		}
-		if (Current_Velocity.x == 0)
-		{
-			//It should never be static (maybe except when loading)
-			playermovement = MOVEMENT::STATIC;
-		}
-		if (Current_Velocity.x > 0)
-		{
-			playermovement = MOVEMENT::RIGHTWARDS;
-		}
-	}
-
-	/*if (Current_Velocity.x < 0)
-	{
-		playermovement = MOVEMENT::LEFTWARDS;
-	}
-	if (Current_Velocity.x > 0)
-	{
-		playermovement = MOVEMENT::RIGHTWARDS;
-	}
-	if (Current_Velocity.y < 0)
-	{
-		playermovement = MOVEMENT::UPWARDS;
-	}
-
-	if (Current_Velocity.y > 0)
-	{
-		playermovement = MOVEMENT::DOWNWARDS;
-	}*/
 }
 
 void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
@@ -511,102 +469,33 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 	{
 		switch (playermovement)
 		{
+		case MOVEMENT::UPLEFTWARDS:
+			UpLeft_Collision(entitycollider, to_check);
+			break;
+		case MOVEMENT::UPWARDS:
+			Up_Collision(entitycollider, to_check);
+			break;
+		case MOVEMENT::UPRIGHTWARDS:
+			UpRight_Collision(entitycollider, to_check);
+			break;
 		case MOVEMENT::LEFTWARDS:
 			Left_Collision(entitycollider, to_check);
 			break;
 		case MOVEMENT::RIGHTWARDS:
 			Right_Collision(entitycollider, to_check);
 			break;
-		case MOVEMENT::UPRIGHTWARDS:
-			UpRight_Collision(entitycollider, to_check);
-			break;
-		case MOVEMENT::UPWARDS:
-			Up_Collision(entitycollider, to_check);
-			break;
-		case MOVEMENT::UPLEFTWARDS:
-			UpLeft_Collision(entitycollider, to_check);
-			break;
-		case MOVEMENT::DOWNRIGHTWARDS:
-			DownRight_Collision(entitycollider, to_check);
+		case MOVEMENT::DOWNLEFTWARDS:
+			DownLeft_Collision(entitycollider, to_check);
 			break;
 		case MOVEMENT::DOWNWARDS:
 			Down_Collision(entitycollider, to_check);
 			break;
-		case MOVEMENT::DOWNLEFTWARDS:
-			DownLeft_Collision(entitycollider, to_check);
+		case MOVEMENT::DOWNRIGHTWARDS:
+			DownRight_Collision(entitycollider, to_check);
 			break;
 		default:
 			break;
 		}
-		
-	}
-
-}
-
-void j1Player::UpRight_Collision(Collider * entitycollider, Collider * to_check)
-{
-	SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
-
-	switch (to_check->type)
-	{
-	case COLLIDER_TYPE::COLLIDER_FLOOR:
-		//CHECKING WHEN COLLIDING RIGHT
-		if (Intersection.x > entitycollider->rect.x)
-		{
-			if (Intersection.y == entitycollider->rect.y)
-			{
-				//Colliding Right
-				entitycollider->rect.x -= Intersection.w;
-				Future_Position.x = entitycollider->rect.x;
-				Future_Position.y = entitycollider->rect.y;
-			}
-			else if (Intersection.w < Intersection.h) 
-			{
-				//Colliding Right
-				entitycollider->rect.x -= Intersection.w;
-				Future_Position.x = entitycollider->rect.x;
-				Future_Position.y = entitycollider->rect.y;
-			}
-		}
-
-		//CHECKING WHEN COLLIDING UP
-		if(Intersection.y > entitycollider->rect.y)
-		{
-			if (Intersection.x == entitycollider->rect.x)
-			{
-				//Colliding Up
-				entitycollider->rect.y += Intersection.h;
-				Future_Position.x = entitycollider->rect.x;
-				Future_Position.y = entitycollider->rect.y;
-			}
-			else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
-			{
-				//Colliding Up
-				entitycollider->rect.y += Intersection.h;
-				Future_Position.x = entitycollider->rect.x;
-				Future_Position.y = entitycollider->rect.y;
-			}
-		}
-		break;
-	default:
-		break;
-	}
-}
-
-void j1Player::Up_Collision(Collider * entitycollider, Collider * to_check)
-{
-	SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
-
-	switch (to_check->type)
-	{
-	case COLLIDER_TYPE::COLLIDER_FLOOR:
-		//Colliding Up
-		entitycollider->rect.y += Intersection.h;
-		Future_Position.x = entitycollider->rect.x;
-		Future_Position.y = entitycollider->rect.y;
-		break;
-	default:
-		break;
 	}
 }
 
@@ -660,7 +549,24 @@ void j1Player::UpLeft_Collision(Collider * entitycollider, Collider * to_check)
 	}
 }
 
-void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_check)
+void j1Player::Up_Collision(Collider * entitycollider, Collider * to_check)
+{
+	SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
+
+	switch (to_check->type)
+	{
+	case COLLIDER_TYPE::COLLIDER_FLOOR:
+		//Colliding Up
+		entitycollider->rect.y += Intersection.h;
+		Future_Position.x = entitycollider->rect.x;
+		Future_Position.y = entitycollider->rect.y;
+		break;
+	default:
+		break;
+	}
+}
+
+void j1Player::UpRight_Collision(Collider * entitycollider, Collider * to_check)
 {
 	SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
 
@@ -677,7 +583,7 @@ void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_chec
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
 			}
-			else if (Intersection.w < Intersection.h)
+			else if (Intersection.w < Intersection.h) 
 			{
 				//Colliding Right
 				entitycollider->rect.x -= Intersection.w;
@@ -686,20 +592,20 @@ void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_chec
 			}
 		}
 
-		//CHECKING WHEN COLLIDING DOWN
-		if (Intersection.y > entitycollider->rect.y)
+		//CHECKING WHEN COLLIDING UP
+		if(Intersection.y > entitycollider->rect.y)
 		{
 			if (Intersection.x == entitycollider->rect.x)
 			{
-				//Colliding Down
-				entitycollider->rect.y -= Intersection.h;
+				//Colliding Up
+				entitycollider->rect.y += Intersection.h;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
 			}
 			else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
 			{
-				//Colliding Down
-				entitycollider->rect.y -= Intersection.h;
+				//Colliding Up
+				entitycollider->rect.y += Intersection.h;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
 			}
@@ -710,20 +616,36 @@ void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_chec
 	}
 }
 
-void j1Player::Down_Collision(Collider * entitycollider, Collider * to_check)
+void j1Player::Left_Collision(Collider * entitycollider, Collider * to_check)
 {
 	SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
 
 	switch (to_check->type)
 	{
 	case COLLIDER_TYPE::COLLIDER_FLOOR:
-		entitycollider->rect.y -= Intersection.h;
+		entitycollider->rect.x += Intersection.w;
 		Future_Position.x = entitycollider->rect.x;
 		Future_Position.y = entitycollider->rect.y;
 		break;
 	default:
 		break;
 	}
+}
+
+void j1Player::Right_Collision(Collider * entitycollider, Collider * to_check)
+{
+	SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
+	switch (to_check->type)
+	{
+	case COLLIDER_TYPE::COLLIDER_FLOOR:
+		entitycollider->rect.x -= Intersection.w;
+		Future_Position.x = entitycollider->rect.x;
+		Future_Position.y = entitycollider->rect.y;
+		break;
+	default:
+		break;
+	}
+
 }
 
 void j1Player::DownLeft_Collision(Collider * entitycollider, Collider * to_check)
@@ -776,32 +698,66 @@ void j1Player::DownLeft_Collision(Collider * entitycollider, Collider * to_check
 	}
 }
 
-void j1Player::Right_Collision(Collider * entitycollider, Collider * to_check)
+void j1Player::Down_Collision(Collider * entitycollider, Collider * to_check)
 {
 	SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
+
 	switch (to_check->type)
 	{
 	case COLLIDER_TYPE::COLLIDER_FLOOR:
-		entitycollider->rect.x -= Intersection.w;
+		entitycollider->rect.y -= Intersection.h;
 		Future_Position.x = entitycollider->rect.x;
 		Future_Position.y = entitycollider->rect.y;
 		break;
 	default:
 		break;
 	}
-
 }
 
-void j1Player::Left_Collision(Collider * entitycollider, Collider * to_check)
+void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_check)
 {
 	SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
 
 	switch (to_check->type)
 	{
 	case COLLIDER_TYPE::COLLIDER_FLOOR:
-		entitycollider->rect.x += Intersection.w;
-		Future_Position.x = entitycollider->rect.x;
-		Future_Position.y = entitycollider->rect.y;
+		//CHECKING WHEN COLLIDING RIGHT
+		if (Intersection.x > entitycollider->rect.x)
+		{
+			if (Intersection.y == entitycollider->rect.y)
+			{
+				//Colliding Right
+				entitycollider->rect.x -= Intersection.w;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+			}
+			else if (Intersection.w < Intersection.h)
+			{
+				//Colliding Right
+				entitycollider->rect.x -= Intersection.w;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+			}
+		}
+
+		//CHECKING WHEN COLLIDING DOWN
+		if (Intersection.y > entitycollider->rect.y)
+		{
+			if (Intersection.x == entitycollider->rect.x)
+			{
+				//Colliding Down
+				entitycollider->rect.y -= Intersection.h;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+			}
+			else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
+			{
+				//Colliding Down
+				entitycollider->rect.y -= Intersection.h;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+			}
+		}
 		break;
 	default:
 		break;
