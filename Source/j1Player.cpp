@@ -28,9 +28,11 @@ bool j1Player::Start()
 	playerinfo = manager->GetPlayerData();
 	//Entity_Collider_Rect = playerinfo.Player_Collider_Rect;
 
-	Entity_Collider_Rect = { 0,0,32,64 };
+	Entity_Collider_Rect = { 0,0,32,58 };
 	playerinfo.Standing_Rect = Entity_Collider_Rect;
 	playerinfo.Crouching_Rect = { 0,0,32,32 };
+
+	Player_Collider_Margin = { 34, 14 };
 
 
 	Entity_Collider = App->col->AddCollider(Entity_Collider_Rect, COLLIDER_PLAYER, (j1Module*)manager);
@@ -53,6 +55,11 @@ bool j1Player::Start()
 	playermovement = MOVEMENT::STATIC;
 	playerstate = STATE::IDLE;
 
+	//INITALIZE THIS MAYBE?
+	CollidingGround;
+	CollidingWall;
+	CollidingCeiling;
+
 	Current_Velocity = { 0, 0 };
 
 	playerinfo.Target_Velocity_x = 160;
@@ -64,22 +71,20 @@ bool j1Player::Start()
 
 bool j1Player::Update(float dt)
 {
+	bool ret = true;
 	HandleMode();
+
+	Current_Velocity = { 0,0 };
 
 	HandleState(dt);
 
-	/*if (playermode == MODE::STANDING || playermode == MODE::GOD)
-	{
-		Entity_Collider->SetPos(Future_Position.x, Future_Position.y);
-	}
-	else
-	{
-		Entity_Collider->SetPos(Future_Position.x, Future_Position.y + 32);
-	}*/
+	CheckMovement();
+
+	UpdateColliderPos();
 
 	HandleAnimations();
 
-	return true;
+	return ret;
 }
 
 bool j1Player::PostUpdate(float dt)
@@ -88,16 +93,7 @@ bool j1Player::PostUpdate(float dt)
 
 	Position = Future_Position;
 
-	Entity_Collider->SetPos(Position.x, Position.y);
-
-	/*if (playermode == MODE::STANDING || playermode == MODE::GOD)
-	{
-		Entity_Collider->SetPos(Position.x, Position.y);
-	}
-	else
-	{
-		Entity_Collider->SetPos(Position.x, Position.y + 32);
-	}*/
+	UpdateColliderPos();
 
 	//Calculation for Parallax
 
@@ -179,153 +175,25 @@ void j1Player::HandleState(float dt)
 	// ---- GOD MODE MOVEMENT ---- 
 	if (playermode == MODE::GOD)
 	{
-		// ---- X AXIS MOVEMENT ----
-
-			// ---- LEFT ----
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		{
-			Current_Velocity.x = playerinfo.God_Velocity;
-			Future_Position.x = (Position.x - Current_Velocity.x*dt);
-
-			playerdirection = DIRECTION::LEFT;
-		}
-
-			// ---- RIGHT ----
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		{
-			Current_Velocity.x = playerinfo.God_Velocity;
-			Future_Position.x = (Position.x + Current_Velocity.x*dt);
-
-			playerdirection = DIRECTION::RIGHT;
-		}
-
-			// ---- BOTH ----
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		{
-			Current_Velocity.x = 0;
-			Future_Position.x = (Position.x + Current_Velocity.x*dt);
-
-			playerdirection = DIRECTION::RIGHT;
-		}
-
-		// ---- Y AXIS MOVEMENT ----
-
-			// ---- UP ----
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-		{
-			Current_Velocity.y = playerinfo.God_Velocity;
-			Future_Position.y = (Position.y - Current_Velocity.y*dt);
-		}
-
-			// ---- DOWN ----
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-		{
-			Current_Velocity.y = playerinfo.God_Velocity;
-			Future_Position.y = (Position.y + Current_Velocity.y*dt);
-		}
-
-			// ---- BOTH ----
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-		{
-			Current_Velocity.y = 0;
-			Future_Position.y = (Position.y + Current_Velocity.y*dt);
-		}
+		GodModeMovement(dt);
 	}
 
 	// ---- STANDING MOVEMENT ----
 
 	if (playermode == MODE::STANDING)
 	{
-		// ---- X AXIS MOVEMENT ----
-
-			// ---- LEFT ----
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		{
-			Current_Velocity.x = playerinfo.Target_Velocity_x;
-			Future_Position.x = (Position.x - Current_Velocity.x*dt);
-
-			if (playerstate == STATE::IDLE)
-			{
-				playerstate = STATE::RUNNING;
-			}
-
-			playerdirection = DIRECTION::LEFT;
-		}
-
-			// ---- RIGHT ----
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		{
-			Current_Velocity.x = playerinfo.Target_Velocity_x;
-			Future_Position.x = (Position.x + Current_Velocity.x*dt);
-
-			if (playerstate == STATE::IDLE)
-			{
-				playerstate = STATE::RUNNING;
-			}
-
-			playerdirection = DIRECTION::RIGHT;
-		}
-
-			// ---- BOTH ----
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		{
-			Current_Velocity.x = 0;
-			Future_Position.x = (Position.x + Current_Velocity.x*dt);
-
-			playerstate = STATE::IDLE;
-
-			playerdirection = DIRECTION::RIGHT;
-		}
+		StandingModeMovement(dt);
 	}
 
 	// ---- CROUCHING MOVEMENT ---- 
 
 	if (playermode == MODE::CROUCHING)
 	{
-		// ---- X AXIS MOVEMENT ----
-
-			// ---- LEFT ----
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		{
-			Current_Velocity.x = playerinfo.Crouch_Velocity_x;
-			Future_Position.x = (Position.x - Current_Velocity.x*dt);
-
-			if (playerstate == STATE::CROUCHIDLE)
-			{
-				playerstate = STATE::CROUCHWALKING;
-			}
-
-			playerdirection = DIRECTION::LEFT;
-		}
-
-		// ---- RIGHT ----
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		{
-			Current_Velocity.x = playerinfo.Crouch_Velocity_x;
-			Future_Position.x = (Position.x + Current_Velocity.x*dt);
-
-			if (playerstate == STATE::CROUCHIDLE)
-			{
-				playerstate = STATE::CROUCHWALKING;
-			}
-
-			playerdirection = DIRECTION::RIGHT;
-		}
-
-		// ---- BOTH ----
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		{
-			Current_Velocity.x = 0;
-			Future_Position.x = (Position.x + Current_Velocity.x*dt);
-
-			playerstate = STATE::CROUCHIDLE;
-
-			playerdirection = DIRECTION::RIGHT;
-		}
+		CrouchingModeMovenent(dt);
 	}
 
 	//IDLE STATE WHEN NO MOVEMENT
-	if (Current_Velocity.x == 0 && Current_Velocity.y == 0)
+	if (Current_Velocity.x == 0 && CollidingGround == true)
 	{
 		if (playermode == MODE::STANDING)
 		{
@@ -337,6 +205,176 @@ void j1Player::HandleState(float dt)
 			playerstate = STATE::CROUCHIDLE;
 		}
 	}
+}
+
+void j1Player::GodModeMovement(float dt)
+{
+	// ---- X AXIS MOVEMENT ----
+
+			// ---- LEFT ----
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		Current_Velocity.x = -playerinfo.God_Velocity;
+		Future_Position.x = (Position.x + Current_Velocity.x*dt);
+
+		playerdirection = DIRECTION::LEFT;
+	}
+
+	// ---- RIGHT ----
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		Current_Velocity.x = playerinfo.God_Velocity;
+		Future_Position.x = (Position.x + Current_Velocity.x*dt);
+
+		playerdirection = DIRECTION::RIGHT;
+	}
+
+	// ---- BOTH ----
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		Current_Velocity.x = 0;
+		Future_Position.x = (Position.x + Current_Velocity.x*dt);
+
+		playerdirection = DIRECTION::RIGHT;
+	}
+
+	// ---- Y AXIS MOVEMENT ----
+
+		// ---- UP ----
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	{
+		Current_Velocity.y = -playerinfo.God_Velocity;
+		Future_Position.y = (Position.y + Current_Velocity.y*dt);
+	}
+
+	// ---- DOWN ----
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	{
+		Current_Velocity.y = playerinfo.God_Velocity;
+		Future_Position.y = (Position.y + Current_Velocity.y*dt);
+	}
+
+	// ---- BOTH ----
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	{
+		Current_Velocity.y = 0;
+		Future_Position.y = (Position.y + Current_Velocity.y*dt);
+	}
+}
+
+void j1Player::StandingModeMovement(float dt)
+{
+	// ---- X AXIS MOVEMENT ----
+
+			// ---- LEFT ----
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		{
+			Current_Velocity.x = -playerinfo.Target_Velocity_x;
+			Future_Position.x = (Position.x + Current_Velocity.x*dt);
+
+			if (playerstate == STATE::IDLE)
+			{
+				playerstate = STATE::RUNNING;
+			}
+
+			playerdirection = DIRECTION::LEFT;
+		}
+
+			// ---- RIGHT ----
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		{
+			Current_Velocity.x = playerinfo.Target_Velocity_x;
+			Future_Position.x = (Position.x + Current_Velocity.x*dt);
+
+			if (playerstate == STATE::IDLE)
+			{
+				playerstate = STATE::RUNNING;
+			}
+
+			playerdirection = DIRECTION::RIGHT;
+		}
+
+			// ---- BOTH ----
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		{
+			Current_Velocity.x = 0;
+			Future_Position.x = (Position.x + Current_Velocity.x*dt);
+
+			playerstate = STATE::IDLE;
+
+			playerdirection = DIRECTION::RIGHT;
+		}
+
+		// ---- Y AXIS MOVEMENT ----
+
+		// ---- UP ----
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		{
+			Current_Velocity.y = -playerinfo.God_Velocity;
+			Future_Position.y = (Position.y + Current_Velocity.y*dt);
+		}
+
+		// ---- DOWN ----
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		{
+			Current_Velocity.y = playerinfo.God_Velocity;
+			Future_Position.y = (Position.y + Current_Velocity.y*dt);
+		}
+
+		// ---- BOTH ----
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		{
+			Current_Velocity.y = 0;
+			Future_Position.y = (Position.y + Current_Velocity.y*dt);
+		}
+}
+
+void j1Player::CrouchingModeMovenent(float dt)
+{
+	// ---- X AXIS MOVEMENT ----
+
+			// ---- LEFT ----
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		Current_Velocity.x = -playerinfo.Crouch_Velocity_x;
+		Future_Position.x = (Position.x + Current_Velocity.x*dt);
+
+		if (playerstate == STATE::CROUCHIDLE)
+		{
+			playerstate = STATE::CROUCHWALKING;
+		}
+
+		playerdirection = DIRECTION::LEFT;
+	}
+
+	// ---- RIGHT ----
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		Current_Velocity.x = playerinfo.Crouch_Velocity_x;
+		Future_Position.x = (Position.x + Current_Velocity.x*dt);
+
+		if (playerstate == STATE::CROUCHIDLE)
+		{
+			playerstate = STATE::CROUCHWALKING;
+		}
+
+		playerdirection = DIRECTION::RIGHT;
+	}
+
+	// ---- BOTH ----
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		Current_Velocity.x = 0;
+		Future_Position.x = (Position.x + Current_Velocity.x*dt);
+
+		playerstate = STATE::CROUCHIDLE;
+
+		playerdirection = DIRECTION::RIGHT;
+	}
+}
+
+void j1Player::Jump(float dt)
+{
 }
 
 void j1Player::HandleAnimations()
@@ -375,14 +413,193 @@ void j1Player::HandleAnimations()
 	}
 
 }
+
+void j1Player::UpdateColliderPos()
+{
+	if (playermode == MODE::STANDING || playermode == MODE::GOD)
+	{
+		Entity_Collider->SetPos(Future_Position.x, Future_Position.y);
+	}
+	else
+	{
+		Entity_Collider->SetPos(Future_Position.x, Future_Position.y + 26);
+	}
+}
+
 void j1Player::CheckMovement()
 {
+	//UPPER SIDE MOVEMENT
+	if (Current_Velocity.y < 0)
+	{
+		//MOVEMENT UP-LEFT
+		if (Current_Velocity.x < 0)
+		{
+			playermovement = MOVEMENT::UPLEFTWARDS;
+		}
+		//MOVEMENT UP
+		if (Current_Velocity.x == 0)
+		{
+			playermovement = MOVEMENT::UPWARDS;
+		}
+		//MOVEMENT UP-RIGHT
+		if (Current_Velocity.x > 0)
+		{
+			playermovement = MOVEMENT::UPRIGHTWARDS;
+		}
+	}
+
+	//DOWN SIDE MOVEMENT
+	if (Current_Velocity.y > 0)
+	{
+		//MOVEMENT DOWN-LEFT
+		if (Current_Velocity.x < 0)
+		{
+			playermovement = MOVEMENT::DOWNLEFTWARDS;
+		}
+		//MOVEMENT DOWN
+		if (Current_Velocity.x == 0)
+		{
+			playermovement = MOVEMENT::DOWNWARDS;
+		}
+		//MOVEMENT DOWN-RIGHT
+		if (Current_Velocity.x > 0)
+		{
+			playermovement = MOVEMENT::DOWNRIGHTWARDS;
+		}
+	}
+
+	//MOVEMENT LATERAL
+	if (Current_Velocity.y == 0)
+	{
+		if (Current_Velocity.x < 0)
+		{
+			playermovement = MOVEMENT::LEFTWARDS;
+		}
+		if (Current_Velocity.x == 0)
+		{
+			//It should never be static (maybe except when loading)
+			playermovement = MOVEMENT::STATIC;
+		}
+		if (Current_Velocity.x > 0)
+		{
+			playermovement = MOVEMENT::RIGHTWARDS;
+		}
+	}
+}
+
+void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
+{
+	if (entitycollider->type == COLLIDER_TYPE::COLLIDER_PLAYER)
+	{
+		switch (playermovement)
+		{
+		case MOVEMENT::UPRIGHTWARDS:
+			UpRight_Collision(entitycollider, to_check);
+			break;
+		case MOVEMENT::UPWARDS:
+			Up_Collision(entitycollider, to_check);
+			break;
+		case MOVEMENT::UPLEFTWARDS:
+			UpLeft_Collision(entitycollider, to_check);
+			break;
+		case MOVEMENT::DOWNRIGHTWARDS:
+			DownRight_Collision(entitycollider, to_check);
+			break;
+		case MOVEMENT::DOWNWARDS:
+			Down_Collision(entitycollider, to_check);
+			break;
+		case MOVEMENT::DOWNLEFTWARDS:
+			DownLeft_Collision(entitycollider, to_check);
+			break;
+		case MOVEMENT::RIGHTWARDS:
+			Right_Collision(entitycollider, to_check);
+			break;
+		case MOVEMENT::LEFTWARDS:
+			Left_Collision(entitycollider, to_check);
+			break;
+		}
+	}
 
 }
 
-void j1Player::OnCollision(Collider * c1, Collider * c2)
+void j1Player::UpRight_Collision(Collider * entitycollider, Collider * to_check)
 {
+}
 
+void j1Player::Up_Collision(Collider * entitycollider, Collider * to_check)
+{
+	SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
+
+	switch (to_check->type)
+	{
+	case COLLIDER_TYPE::COLLIDER_FLOOR:
+		entitycollider->rect.y += Intersection.h;
+		Future_Position.x = entitycollider->rect.x;
+		Future_Position.y = entitycollider->rect.y;
+		break;
+	default:
+		break;
+	}
+}
+
+void j1Player::UpLeft_Collision(Collider * entitycollider, Collider * to_check)
+{
+}
+
+void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_check)
+{
+}
+
+void j1Player::Down_Collision(Collider * entitycollider, Collider * to_check)
+{
+	SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
+
+	switch (to_check->type)
+	{
+	case COLLIDER_TYPE::COLLIDER_FLOOR:
+		entitycollider->rect.y -= Intersection.h;
+		Future_Position.x = entitycollider->rect.x;
+		Future_Position.y = entitycollider->rect.y;
+		break;
+	default:
+		break;
+	}
+}
+
+void j1Player::DownLeft_Collision(Collider * entitycollider, Collider * to_check)
+{
+}
+
+void j1Player::Right_Collision(Collider * entitycollider, Collider * to_check)
+{
+	SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
+	switch (to_check->type)
+	{
+	case COLLIDER_TYPE::COLLIDER_FLOOR:
+		entitycollider->rect.x -= Intersection.w;
+		Future_Position.x = entitycollider->rect.x;
+		Future_Position.y = entitycollider->rect.y;
+		break;
+	default:
+		break;
+	}
+
+}
+
+void j1Player::Left_Collision(Collider * entitycollider, Collider * to_check)
+{
+	SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
+
+	switch (to_check->type)
+	{
+	case COLLIDER_TYPE::COLLIDER_FLOOR:
+		entitycollider->rect.x += Intersection.w;
+		Future_Position.x = entitycollider->rect.x;
+		Future_Position.y = entitycollider->rect.y;
+		break;
+	default:
+		break;
+	}
 }
 
 bool j1Player::Load(pugi::xml_node &config)

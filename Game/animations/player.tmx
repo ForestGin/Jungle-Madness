@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="1200" height="2000" tilewidth="1" tileheight="1" infinite="0" nextlayerid="56" nextobjectid="287">
+<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="1200" height="2000" tilewidth="1" tileheight="1" infinite="0" nextlayerid="57" nextobjectid="291">
  <objectgroup color="#aa5500" id="53" name="God_Mode">
   <object id="275" x="800" y="1184" width="100" height="74"/>
   <object id="276" x="900" y="1184" width="100" height="74"/>
@@ -309,8 +309,11 @@
   <object id="285" x="200" y="0" width="100" height="74"/>
   <object id="286" x="300" y="0" width="100" height="74"/>
  </objectgroup>
+ <objectgroup color="#ffffff" id="56" name="Collider_Player_Crouch">
+  <object id="289" x="36" y="1076" width="32" height="32"/>
+ </objectgroup>
  <objectgroup color="#ffffff" id="55" name="Collider_Player_Idle">
-  <object id="283" x="34" y="14" width="32" height="57.8899"/>
+  <object id="290" x="34" y="14" width="32" height="58"/>
  </objectgroup>
  <imagelayer id="3" name="Sprites">
   <image source="../Sprites/Adventurer_fullx2.png" width="1200" height="1258"/>
