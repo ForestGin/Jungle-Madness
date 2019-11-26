@@ -70,7 +70,7 @@ bool j1Snake::PostUpdate(float dt)
 	{
 		//check for player nearby
 
-		if (App->scene->player->Position.x > Position.x - snakeinfo.Area_Of_Action &&
+		if (!App->scene->player->God_Mode && App->scene->player->Position.x > Position.x - snakeinfo.Area_Of_Action &&
 			App->scene->player->Position.x < Position.x + snakeinfo.Area_Of_Action &&
 			App->scene->player->Position.y < Position.y + snakeinfo.Area_Of_Action &&
 			App->scene->player->Position.y > Position.y - snakeinfo.Area_Of_Action)
