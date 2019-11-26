@@ -19345,7 +19345,7 @@
   <object id="4" x="877" y="524" width="64" height="32"/>
  </objectgroup>
  <objectgroup id="24" name="SnakeSpawn2">
-  <object id="5" x="396.667" y="616" width="32" height="32"/>
+  <object id="5" x="396" y="654" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="25" name="BatSpawn2">
   <object id="6" x="572" y="523.333" width="32" height="32"/>

@@ -226,6 +226,8 @@ bool j1Scene::PreUpdate()
 
 	if (scene1 && (player->Position.x >= App->map->data.FinishPoint.x))
 	{
+		
+
 		currentscene = scenes.start->next->data->GetString();
 		SceneChange(scenes.start->next->data->GetString());
 		scene1 = false;

@@ -51,9 +51,9 @@ bool j1Player::Start()
 		spritesheet = App->tex->Load(playerinfo.Texture.GetString());
 	}
 
-	Position.x = 0;
-	Position.y = 0;
-	Player_Initial_Position = Position;
+	/*Position.x = 0;
+	Position.y = 0;*/
+	Player_Initial_Position = { 0,0 };
 
 	ID = App->entities->entityID;
 
