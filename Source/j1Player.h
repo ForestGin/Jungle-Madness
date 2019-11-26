@@ -51,16 +51,9 @@ enum class MOVEMENT
 	DOWNLEFTWARDS,	DOWNWARDS,	DOWNRIGHTWARDS
 };
 
-struct PlayerData {
-
-	float Target_Velocity_x = 0;
-	float Crouch_Velocity_x = 0;
-	float God_Velocity = 0;
-
-	float Max_Speed_y = 0;
-	float Jump_Force = 0;
-
-	
+struct PlayerData 
+{
+	//Animations
 	Animation* Idle = nullptr;
 	Animation* Run = nullptr;
 	Animation* CrouchIdle = nullptr;
@@ -74,16 +67,24 @@ struct PlayerData {
 
 	p2SString folder = nullptr;
 	p2SString Texture = nullptr;
-
+	
+	//Collider Rects
 	SDL_Rect Player_Collider_Rect = { 0,0,0,0 };
 	SDL_Rect Standing_Rect = { 0,0,0,0 };
 	SDL_Rect Crouching_Rect = { 0,0,0,0 };
 
+	//Velocities
+	float Target_Velocity_x = 0;
+	float Crouch_Velocity_x = 0;
+	float God_Velocity = 0;
+
+	//Gravity stuff
 	float           Gravity = 0;
+	float			Jump_Force = 0;
+	fPoint			Max_Speed = { 0,0 };
+
 	float  Colliding_Offset = 0;
 
-
-	
 };
 
 class j1Player : public j1Entity
@@ -114,7 +115,6 @@ public:
 		void Right_Collision(Collider * entitycollider, Collider * to_check);
 		void Left_Collision(Collider * entitycollider, Collider * to_check);
 
-
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
@@ -123,8 +123,9 @@ public:
 
 	void HandleMode();
 
-	void HandleState(float dt);
+	void AddGravity(float dt);
 
+	void HandleState(float dt);
 		void GodModeMovement(float dt);
 		void StandingModeMovement(float dt);
 		void CrouchingModeMovenent(float dt);
@@ -147,10 +148,14 @@ public:
 	DIRECTION playerdirection;
 	MOVEMENT playermovement;
 
-	//Colisions
+	//Collisions
 	bool CollidingGround;
-	bool CollidingWall;
+	bool CollidingLeftWall;
+	bool CollidingRightWall;
 	bool CollidingCeiling;
+
+	//Checking if the game is loaded
+	bool loading;
 
 	SDL_Rect Intersection = { 0,0,0,0 };
 
