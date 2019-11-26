@@ -82,8 +82,6 @@ bool j1Player::Update(float dt)
 
 	HandleState(dt);
 
-	AddGravity(dt);
-
 	CheckMovement();
 
 	UpdateColliderPos();
@@ -99,12 +97,10 @@ bool j1Player::PostUpdate(float dt)
 
 	Position = Future_Position;
 
-	/*UpdateColliderPos();*/
+	UpdateColliderPos();
 
 	//Calculation for Parallax
-
 	Player_Displacement.x = Player_Initial_Position.x - Position.x;
-
 	App->map->PX = Player_Displacement.x;
 
 	//Player position being controlled
@@ -215,11 +211,22 @@ void j1Player::HandleState(float dt)
 
 void j1Player::AddGravity(float dt)
 {
-	if (!loading && playermode != MODE::GOD/* && !CollidingGround*/)
+	if (!loading && playermode != MODE::GOD)
 	{
-		Current_Velocity.y += playerinfo.Gravity * dt;
-		Future_Position.y += Current_Velocity.y;
+		if (!CollidingGround)
+		{
+			//Real gravity when not on ground
+			Current_Velocity.y += playerinfo.Gravity*dt;
+			Future_Position.y += Current_Velocity.y;
+		}
+		else
+		{
+			//Fake gravity when on ground to avoid collision problems
+			Current_Velocity.y = playerinfo.Target_Velocity_x;
+			Future_Position.y += Current_Velocity.y*dt;
+		}
 	}
+
 
 	if (Current_Velocity.y > playerinfo.Max_Speed.y)
 	{
@@ -324,6 +331,31 @@ void j1Player::StandingModeMovement(float dt)
 
 		playerdirection = DIRECTION::RIGHT;
 	}
+
+	//// ---- Y AXIS MOVEMENT ----
+
+	//	// ---- UP ----
+	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	//{
+	//	Current_Velocity.y = -playerinfo.God_Velocity;
+	//	Future_Position.y = (Position.y + Current_Velocity.y*dt);
+	//}
+
+	//// ---- DOWN ----
+	//if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	//{
+	//	Current_Velocity.y = playerinfo.God_Velocity;
+	//	Future_Position.y = (Position.y + Current_Velocity.y*dt);
+	//}
+
+	//// ---- BOTH ----
+	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	//{
+	//	Current_Velocity.y = 0;
+	//	Future_Position.y = (Position.y + Current_Velocity.y*dt);
+	//}
+
+	AddGravity(dt);
 
 	// ---- IDLE CONDITION ----
 	if (Current_Velocity.x == 0 && CollidingGround == true)
@@ -491,17 +523,18 @@ void j1Player::CheckMovement()
 			playermovement = MOVEMENT::DOWNRIGHTWARDS;
 		}
 	}
+
+	//RESETING COLLIDING CHECKERS
+	CollidingGround = false;
+	CollidingLeftWall = false;
+	CollidingRightWall = false;
+	CollidingCeiling = false;
 }
 
 void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 {
 	if (entitycollider->type == COLLIDER_TYPE::COLLIDER_PLAYER)
 	{
-		CollidingGround =	false;
-		CollidingLeftWall =	false;
-		CollidingRightWall = false;
-		CollidingCeiling =	false;
-
 		switch (playermovement)
 		{
 		case MOVEMENT::UPLEFTWARDS:
