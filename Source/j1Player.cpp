@@ -524,8 +524,7 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 			Up_Collision(entitycollider, to_check);
 			break;
 		case MOVEMENT::UPLEFTWARDS:
-			/*UpLeft_Collision(entitycollider, to_check);*/
-			Up_Collision(entitycollider, to_check);
+			UpLeft_Collision(entitycollider, to_check);
 			break;
 		case MOVEMENT::DOWNRIGHTWARDS:
 			/*DownRight_Collision(entitycollider, to_check);*/
@@ -620,18 +619,42 @@ void j1Player::UpLeft_Collision(Collider * entitycollider, Collider * to_check)
 	switch (to_check->type)
 	{
 	case COLLIDER_TYPE::COLLIDER_FLOOR:
+		//CHECKING WHEN COLLIDING LEFT
 		if (Intersection.x == entitycollider->rect.x)
 		{
-			entitycollider->rect.x += Intersection.w;
-			Future_Position.x = entitycollider->rect.x;
-			Future_Position.y = entitycollider->rect.y;
+			if (Intersection.y > entitycollider->rect.y)
+			{
+				//Colliding Left
+				entitycollider->rect.x += Intersection.w;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+			}
+			else if (Intersection.w < Intersection.h)
+			{
+				//Colliding Left
+				entitycollider->rect.x += Intersection.w;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+			}
 		}
 
-		if (Intersection.x > entitycollider->rect.x)
+		//CHECKING WHEN COLLIDING UP
+		if (Intersection.y == entitycollider->rect.y)
 		{
-			entitycollider->rect.x -= Intersection.w;
-			Future_Position.x = entitycollider->rect.x;
-			Future_Position.y = entitycollider->rect.y;
+			if (Intersection.x > entitycollider->rect.x)
+			{
+				//Colliding Up
+				entitycollider->rect.y += Intersection.h;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+			}
+			else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
+			{
+				//Colliding Up
+				entitycollider->rect.y += Intersection.h;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+			}
 		}
 		break;
 	default:
