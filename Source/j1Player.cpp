@@ -43,7 +43,7 @@ bool j1Player::Start()
 	}
 
 	Position.x = 200;
-	Position.y = 600;
+	Position.y = 671;
 
 	Future_Position = Position;
 
@@ -553,18 +553,42 @@ void j1Player::UpRight_Collision(Collider * entitycollider, Collider * to_check)
 	switch (to_check->type)
 	{
 	case COLLIDER_TYPE::COLLIDER_FLOOR:
-		if (Intersection.x == entitycollider->rect.x)
+		//CHECKING WHEN COLLIDING RIGHT
+		if (Intersection.x > entitycollider->rect.x)
 		{
-			entitycollider->rect.y += Intersection.h;
-			Future_Position.x = entitycollider->rect.x;
-			Future_Position.y = entitycollider->rect.y;
+			if (Intersection.y > entitycollider->rect.y)
+			{
+				//Colliding Right
+				entitycollider->rect.x -= Intersection.w;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+			}
+			else if (Intersection.w < Intersection.h) 
+			{
+				//Colliding Right
+				entitycollider->rect.x -= Intersection.w;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+			}
 		}
 
-		if(Intersection.x > entitycollider->rect.x)
+		//CHECKING WHEN COLLIDING UP
+		if(Intersection.y == entitycollider->rect.y)
 		{
-			entitycollider->rect.x -= Intersection.w;
-			Future_Position.x = entitycollider->rect.x;
-			Future_Position.y = entitycollider->rect.y;
+			if (Intersection.x == entitycollider->rect.x)
+			{
+				//Colliding Up
+				entitycollider->rect.y += Intersection.h;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+			}
+			else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
+			{
+				//Colliding Up
+				entitycollider->rect.y += Intersection.h;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+			}
 		}
 		break;
 	default:
@@ -579,6 +603,7 @@ void j1Player::Up_Collision(Collider * entitycollider, Collider * to_check)
 	switch (to_check->type)
 	{
 	case COLLIDER_TYPE::COLLIDER_FLOOR:
+		//Colliding Up
 		entitycollider->rect.y += Intersection.h;
 		Future_Position.x = entitycollider->rect.x;
 		Future_Position.y = entitycollider->rect.y;
