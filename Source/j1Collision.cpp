@@ -177,10 +177,7 @@ bool j1Collision::Update(float dt)
 		c2 = c1->next;
 	}
 
-	if (App->scene->player->Entity_State != JUMPING && App->scene->player->Entity_State != FALLING && Player_Touch == 0)
-	{
-		App->scene->player->Must_Fall = true;
-	}
+	
 
 	return ret;
 

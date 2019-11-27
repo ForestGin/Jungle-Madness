@@ -79,7 +79,9 @@ public:
 	p2SString			name;
 	fPoint			Position;
 	fPoint          Velocity;
+	fPoint          Current_Velocity;
 	float gravity = 0;
+	float            Gravity = 0;
 
 	// collider
 	Collider*     Entity_Collider = nullptr;

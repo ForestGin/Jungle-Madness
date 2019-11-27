@@ -9,16 +9,56 @@
 struct SDL_Texture;
 struct Collider;
 
+enum class MODE
+{
+	GOD,
+	STANDING,
+	CROUCHING
+};
+
+enum class STATE
+{
+	IDLE,
+	RUNNING,
+	ATTACKING,
+	JUMPING,
+	DOUBLEJUMPING,
+	FALLING,
+	CROUCHIDLE,
+	CROUCHWALKING,
+	SLIDING,
+	FLYING,
+
+	DEAD,
+
+	NONE
+};
+
+enum class DIRECTION
+{
+	LEFT,
+	RIGHT
+};
+
+enum class MOVEMENT
+{
+	UPLEFTWARDS, UPWARDS, UPRIGHTWARDS,
+
+
+	RIGHTWARDS, STATIC, LEFTWARDS,
+
+
+	DOWNLEFTWARDS, DOWNWARDS, DOWNRIGHTWARDS
+};
+
 struct PlayerData {
-
-	float Jump_Force = 0;
-	float Initial_Velocity_x = 0;
-	float Max_Speed_y = 0;
-
-	
+	//Animations
 	Animation* Idle = nullptr;
 	Animation* Run = nullptr;
+	Animation* CrouchIdle = nullptr;
+	Animation* CrouchWalk = nullptr;
 	Animation* Jump = nullptr;
+	Animation* DoubleJump = nullptr;
 	Animation* Fall = nullptr;
 	Animation* Slide = nullptr;
 	Animation* Wall_Slide = nullptr;
@@ -28,12 +68,28 @@ struct PlayerData {
 	p2SString folder = nullptr;
 	p2SString Texture = nullptr;
 
+	//Collider Rects
 	SDL_Rect Player_Collider_Rect = { 0,0,0,0 };
+	SDL_Rect Standing_Rect = { 0,0,0,0 };
+	SDL_Rect Crouching_Rect = { 0,0,0,0 };
 
-	fPoint          Velocity = { 0,0 };
-	float           Gravity = 0;
+	iPoint Animation_Offset = { 0,0 };
+
+	//Velocities
+	float Target_Velocity_x = 0;
+	float Crouch_Velocity_x = 0;
+	float God_Velocity = 0;
+
+	//Gravity stuff
+	float           Gravity = 0.0f;
+	float            Jump_Force = 0.0f;
+	float            Double_Jump_Force = 0.0f;
+	fPoint            Max_Speed = { 0.0f, 0.0f };
+
 	float  Colliding_Offset = 0;
-
+	//------------------------------
+	
+	float Initial_Velocity_x = 0;
 	
 };
 
@@ -55,49 +111,71 @@ public:
 	// Called each logic iteration
 	void LogicUpdate(float dt);
 
-	void OnCollision(Collider* c1, Collider* c2);
+	//Collisions
+	void OnCollision(Collider * entitycollider, Collider * to_check);
+	void UpRight_Collision(Collider * entitycollider, Collider * to_check);
+	void Up_Collision(Collider * entitycollider, Collider * to_check);
+	void UpLeft_Collision(Collider * entitycollider, Collider * to_check);
+	void DownRight_Collision(Collider * entitycollider, Collider * to_check);
+	void Down_Collision(Collider * entitycollider, Collider * to_check);
+	void DownLeft_Collision(Collider * entitycollider, Collider * to_check);
+	void Right_Collision(Collider * entitycollider, Collider * to_check);
+	void Left_Collision(Collider * entitycollider, Collider * to_check);
 
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
 	Animation* LoadAnimation(const char* animationPath, const char* animationName);
 	SDL_Rect LoadColliderRect(const char* colliderPath, const char* colliderName);
-	//void Jump();
+	//
+	void HandleMode();
+
+	void AddGravity(float dt);
+
+	void HandleState(float dt);
+	void GodModeMovement(float dt);
+	void StandingModeMovement(float dt);
+	void CrouchingModeMovenent(float dt);
+	void Jump(float dt);
+	void DoubleJump(float dt);
 	//void Slide();
 	//void WallSlide();
 
+	void CheckMovement();
+
+	void HandleAnimations();
+
+	void UpdateColliderPos();
+
 public:
 
+	//Basic stuff
+	PlayerData playerinfo;
+	MODE playermode;
+	STATE playerstate;
+	DIRECTION playerdirection;
+	MOVEMENT playermovement;
 
+	bool DoubleJumpAvailable;
+
+	//Collisions
+	bool CollidingGround;
+	bool CollidingLeftWall;
+	bool CollidingRightWall;
+	bool CollidingCeiling;
+
+	SDL_Rect Intersection = { 0,0,0,0 };
+
+	fPoint Future_Position = { 0,0 };
+	//
 
 	fPoint Player_Initial_Position;
-
-	fPoint Player_Collider_Margin = { 34, 14 };
 	fPoint Player_Displacement;
-
 	
-
-	
-
-	bool Player_Colliding;
-	bool Colliding_Floor;
-
-	bool Double_Jump;
-	bool Must_Fall;
-
-	bool Moving_Right;
-	bool Moving_Left;
-
-	bool Was_Right = true;
+	bool SavedCheckPoint = false;
 	bool Dead = false;
 
-	bool Initial_Moment;
-	bool First_Move;
-
-	bool God_Mode = false;
-	bool SavedCheckPoint = false;
-
-	PlayerData playerinfo;
+	
 };
 
 #endif // __j1Player_H__

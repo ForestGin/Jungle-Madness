@@ -60,6 +60,8 @@ public:
 	float				accumulated_time;
 
 	int					entityID = 0;
+	//Checking if the game is loaded
+	bool                loading;
 
 private:
 	PlayerData playerinfo;
