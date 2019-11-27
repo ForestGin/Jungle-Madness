@@ -34,6 +34,7 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	playerinfo.CrouchIdle =		LoadAnimation(playerinfo.folder.GetString(), "Crouch_Idle_Sword_Sheathed");
 	playerinfo.CrouchWalk =		LoadAnimation(playerinfo.folder.GetString(), "Crouch_Walk_Sword_Sheathed");
 	playerinfo.Jump =			LoadAnimation(playerinfo.folder.GetString(), "Jump");
+	playerinfo.DoubleJump =		LoadAnimation(playerinfo.folder.GetString(), "Double_Jump");
 	playerinfo.Fall =			LoadAnimation(playerinfo.folder.GetString(), "Fall");
 	playerinfo.Death =			LoadAnimation(playerinfo.folder.GetString(), "Knockout");
 	playerinfo.Slide =			LoadAnimation(playerinfo.folder.GetString(), "Slide");
@@ -55,17 +56,7 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	//playerinfo.Max_Speed_y = playernode.child("velocity").attribute("max_speed_y").as_float();
 	//playerinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
 
-
-	
-
-	/*playerinfo.Idle->speed = 0.15f;
-	playerinfo.Run->speed = 0.15f;
-	playerinfo.God->speed = 0.15f;
-	playerinfo.Jump->speed = 0.60f;
-	playerinfo.Fall->speed = 0.15f;
-	playerinfo.Death->speed = 0.15f;
-*/
-	
+	playerinfo.DoubleJump->speed = 20.0f;
 
 	playerinfo.Death->loop = false;
 

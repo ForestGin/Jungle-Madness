@@ -55,7 +55,8 @@ bool j1Player::Start()
 	playermovement = MOVEMENT::STATIC;
 	playerstate = STATE::IDLE;
 
-	//INITALIZE THIS MAYBE?
+	DoubleJumpAvailable = true;
+
 	CollidingGround = false;
 	CollidingLeftWall = false;
 	CollidingRightWall = false;
@@ -63,12 +64,14 @@ bool j1Player::Start()
 
 	Current_Velocity = { 0, 0 };
 
-	playerinfo.Target_Velocity_x = 160;
-	playerinfo.God_Velocity = 200;
+	playerinfo.Target_Velocity_x = 250.0f;
+	playerinfo.God_Velocity = 200.0f;
 	playerinfo.Crouch_Velocity_x = playerinfo.Target_Velocity_x / 2;
 
-	playerinfo.Gravity = 100;
-	playerinfo.Max_Speed.y = 15;
+	playerinfo.Gravity = 50.0f;
+	playerinfo.Max_Speed.y = 15.0f;
+	playerinfo.Jump_Force = -15.0f;
+	playerinfo.Double_Jump_Force = -10.0f;
 
 	loading = true;
 
@@ -174,6 +177,8 @@ void j1Player::HandleMode()
 
 void j1Player::HandleState(float dt)
 {
+	//RESETING VELOCITY.X
+	Current_Velocity.x = 0;
 	// ---- GOD MODE MOVEMENT ---- 
 	if (playermode == MODE::GOD)
 	{
@@ -226,7 +231,6 @@ void j1Player::AddGravity(float dt)
 			Future_Position.y += Current_Velocity.y*dt;
 		}
 	}
-
 
 	if (Current_Velocity.y > playerinfo.Max_Speed.y)
 	{
@@ -299,7 +303,7 @@ void j1Player::StandingModeMovement(float dt)
 		Current_Velocity.x = -playerinfo.Target_Velocity_x;
 		Future_Position.x = (Position.x + Current_Velocity.x*dt);
 
-		if (playerstate == STATE::IDLE)
+		if (CollidingGround == true)
 		{
 			playerstate = STATE::RUNNING;
 		}
@@ -313,7 +317,7 @@ void j1Player::StandingModeMovement(float dt)
 		Current_Velocity.x = playerinfo.Target_Velocity_x;
 		Future_Position.x = (Position.x + Current_Velocity.x*dt);
 
-		if (playerstate == STATE::IDLE)
+		if (CollidingGround == true)
 		{
 			playerstate = STATE::RUNNING;
 		}
@@ -332,35 +336,32 @@ void j1Player::StandingModeMovement(float dt)
 		playerdirection = DIRECTION::RIGHT;
 	}
 
-	//// ---- Y AXIS MOVEMENT ----
-
-	//	// ---- UP ----
-	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-	//{
-	//	Current_Velocity.y = -playerinfo.God_Velocity;
-	//	Future_Position.y = (Position.y + Current_Velocity.y*dt);
-	//}
-
-	//// ---- DOWN ----
-	//if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-	//{
-	//	Current_Velocity.y = playerinfo.God_Velocity;
-	//	Future_Position.y = (Position.y + Current_Velocity.y*dt);
-	//}
-
-	//// ---- BOTH ----
-	//if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-	//{
-	//	Current_Velocity.y = 0;
-	//	Future_Position.y = (Position.y + Current_Velocity.y*dt);
-	//}
-
+	// ---- Y AXIS MOVEMENT ----
+	
 	AddGravity(dt);
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		if (CollidingGround == true)
+		{
+			Jump(dt);
+		}
+
+		else if (CollidingGround == false && DoubleJumpAvailable == true)
+		{
+			DoubleJump(dt);
+		}
+	}
 
 	// ---- IDLE CONDITION ----
 	if (Current_Velocity.x == 0 && CollidingGround == true)
 	{
 		playerstate = STATE::IDLE;
+	}
+
+	if (Current_Velocity.y > 0 && CollidingGround == false)
+	{
+		playerstate = STATE::FALLING;
 	}
 }
 
@@ -374,7 +375,7 @@ void j1Player::CrouchingModeMovenent(float dt)
 		Current_Velocity.x = -playerinfo.Crouch_Velocity_x;
 		Future_Position.x = (Position.x + Current_Velocity.x*dt);
 
-		if (playerstate == STATE::CROUCHIDLE)
+		if (CollidingGround == true)
 		{
 			playerstate = STATE::CROUCHWALKING;
 		}
@@ -388,7 +389,7 @@ void j1Player::CrouchingModeMovenent(float dt)
 		Current_Velocity.x = playerinfo.Crouch_Velocity_x;
 		Future_Position.x = (Position.x + Current_Velocity.x*dt);
 
-		if (playerstate == STATE::CROUCHIDLE)
+		if (CollidingGround == true)
 		{
 			playerstate = STATE::CROUCHWALKING;
 		}
@@ -405,6 +406,15 @@ void j1Player::CrouchingModeMovenent(float dt)
 		playerdirection = DIRECTION::RIGHT;
 	}
 
+	// ---- Y AXIS MOVEMENT ----
+
+	AddGravity(dt);
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && CollidingGround == true)
+	{
+		Jump(dt);
+	}
+
 	// ---- Idle Condition ---- 
 	if (Current_Velocity.x == 0 && CollidingGround == true)
 	{
@@ -414,6 +424,29 @@ void j1Player::CrouchingModeMovenent(float dt)
 
 void j1Player::Jump(float dt)
 {
+	//Adding Y velocity
+	Current_Velocity.y = playerinfo.Jump_Force;
+	Future_Position.y = (Position.y + Current_Velocity.y*dt);
+
+	playermode = MODE::STANDING;
+
+	playerstate = STATE::JUMPING;
+
+	CollidingGround = false;
+}
+
+void j1Player::DoubleJump(float dt)
+{
+	//Adding Y velocity
+	Current_Velocity.y = playerinfo.Double_Jump_Force;
+	Future_Position.y = (Position.y + Current_Velocity.y*dt);
+
+	playerstate = STATE::DOUBLEJUMPING;
+
+	//Can activate only once 
+	DoubleJumpAvailable = false;
+
+	CollidingGround = false;
 }
 
 void j1Player::HandleAnimations()
@@ -432,7 +465,27 @@ void j1Player::HandleAnimations()
 	}
 	if (playerstate == STATE::JUMPING)
 	{
-
+		playerinfo.Jump->Reset();
+		CurrentAnimation = playerinfo.Jump;
+	}
+	if (playerstate == STATE::DOUBLEJUMPING)
+	{
+		playerinfo.DoubleJump->Reset();
+		CurrentAnimation = playerinfo.DoubleJump;
+	}
+	if (playerstate == STATE::FALLING)
+	{
+		if (CurrentAnimation == playerinfo.DoubleJump || CurrentAnimation == playerinfo.DoubleJump)
+		{
+			if (CurrentAnimation->Finished() == true)
+			{
+				CurrentAnimation = playerinfo.Fall;
+			}
+		}
+		else
+		{
+			CurrentAnimation = playerinfo.Fall;
+		}
 	}
 	if (playerstate == STATE::CROUCHIDLE)
 	{
@@ -563,6 +616,12 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 			break;
 		default:
 			break;
+		}
+
+		//Reseting double jump if player landed
+		if (CollidingGround == true)
+		{
+			DoubleJumpAvailable = true;
 		}
 	}
 }

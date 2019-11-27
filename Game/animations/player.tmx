@@ -272,16 +272,13 @@
   <object id="37" x="1000" y="74" width="100" height="74"/>
   <object id="38" x="1100" y="74" width="100" height="74"/>
  </objectgroup>
- <objectgroup color="#ffffff" id="54" name="Jump_Spin">
-  <object id="277" x="500" y="74" width="100" height="74"/>
+ <objectgroup color="#ffffff" id="54" name="Double_Jump">
   <object id="278" x="600" y="74" width="100" height="74"/>
   <object id="279" x="700" y="74" width="100" height="74"/>
   <object id="280" x="800" y="74" width="100" height="74"/>
   <object id="281" x="900" y="74" width="100" height="74"/>
  </objectgroup>
  <objectgroup color="#aa5500" id="7" name="Jump">
-  <object id="18" x="200" y="74" width="100" height="74"/>
-  <object id="19" x="300" y="74" width="100" height="74"/>
   <object id="23" x="400" y="74" width="100" height="74"/>
   <object id="24" x="500" y="74" width="100" height="74"/>
   <object id="25" x="600" y="74" width="100" height="74"/>

@@ -59,6 +59,7 @@ struct PlayerData
 	Animation* CrouchIdle = nullptr;
 	Animation* CrouchWalk = nullptr;
 	Animation* Jump = nullptr;
+	Animation* DoubleJump = nullptr;
 	Animation* Fall = nullptr;
 	Animation* Slide = nullptr;
 	Animation* Wall_Slide = nullptr;
@@ -79,9 +80,10 @@ struct PlayerData
 	float God_Velocity = 0;
 
 	//Gravity stuff
-	float           Gravity = 0;
-	float			Jump_Force = 0;
-	fPoint			Max_Speed = { 0,0 };
+	float           Gravity = 0.0f;
+	float			Jump_Force = 0.0f;
+	float			Double_Jump_Force = 0.0f;
+	fPoint			Max_Speed = { 0.0f, 0.0f };
 
 	float  Colliding_Offset = 0;
 
@@ -130,6 +132,7 @@ public:
 		void StandingModeMovement(float dt);
 		void CrouchingModeMovenent(float dt);
 		void Jump(float dt);
+		void DoubleJump(float dt);
 		//void Slide();
 		//void WallSlide();
 
@@ -147,6 +150,8 @@ public:
 	STATE playerstate;
 	DIRECTION playerdirection;
 	MOVEMENT playermovement;
+
+	bool DoubleJumpAvailable;
 
 	//Collisions
 	bool CollidingGround;
