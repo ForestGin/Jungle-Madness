@@ -38,10 +38,14 @@ public:
 	bool CleanUp();
 
 	bool SceneChange(const char* scene);
+	void RestartLevel();
+
 	bool Save(pugi::xml_node&config) const;
 	bool Load(pugi::xml_node&config);
 
 	void EntityPosition(const char* scene);
+
+	
 
 public:
 

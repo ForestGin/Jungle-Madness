@@ -321,24 +321,7 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)//BEGINING OF CURRENT SCENE
 	{
-		if (player->playermode == MODE::GOD)
-			player->playermode == MODE::STANDING;
-
-		if (scene1)
-		{
-			currentscene = scenes.start->data->GetString();
-			SceneChange(scenes.start->data->GetString());
-			scene1 = true;
-			scene2 = false;
-			
-		}
-		else if (scene2)
-		{
-			currentscene = scenes.start->next->data->GetString();
-			SceneChange(scenes.start->next->data->GetString());
-			scene1 = false;
-			scene2 = true;
-		}
+		RestartLevel();
 	}
 //---------------------------------------
 
@@ -474,9 +457,7 @@ bool j1Scene::CleanUp()
 
 bool j1Scene::SceneChange(const char* scene)
 {
-
 	bool ret = true;
-
 
 	App->col->CleanUp();
 	EntityPosition(scene);
@@ -528,6 +509,28 @@ bool j1Scene::SceneChange(const char* scene)
 	App->entities->loading = false;
 
 	return ret;
+}
+
+void j1Scene::RestartLevel()
+{
+	if (player->playermode == MODE::GOD)
+		player->playermode == MODE::STANDING;
+
+	if (scene1)
+	{
+		currentscene = scenes.start->data->GetString();
+		SceneChange(scenes.start->data->GetString());
+		scene1 = true;
+		scene2 = false;
+
+	}
+	else if (scene2)
+	{
+		currentscene = scenes.start->next->data->GetString();
+		SceneChange(scenes.start->next->data->GetString());
+		scene1 = false;
+		scene2 = true;
+	}
 }
 
 void j1Scene::EntityPosition(const char* scene)

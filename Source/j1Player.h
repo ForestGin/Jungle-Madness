@@ -169,13 +169,12 @@ public:
 	fPoint Future_Position = { 0,0 };
 	//
 
-	fPoint Player_Initial_Position;
-	fPoint Player_Displacement;
+	fPoint Player_Initial_Position = { 0,0 };
+	fPoint Player_Displacement = { 0,0 };
 	
 	bool SavedCheckPoint = false;
-	bool Dead = false;
-
-	
+	fPoint LastCheckpointPostion = { 0,0 };
+	int SavedCheckPointArea = 0;
 };
 
 #endif // __j1Player_H__

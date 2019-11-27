@@ -42,6 +42,8 @@ bool j1Player::Start()
 	CollidingRightWall = false;
 	CollidingCeiling = false;
 
+	SavedCheckPointArea = 64;
+
 	Current_Velocity = { 0, 0 };
 
 	Entity_Collider = App->col->AddCollider(Entity_Collider_Rect, COLLIDER_PLAYER, (j1Module*)manager);
@@ -74,7 +76,6 @@ bool j1Player::Start()
 
 	/*Position.x = 0;
 	Position.y = 0;*/
-	Player_Initial_Position = { 0,0 };
 
 	ID = App->entities->entityID;
 
@@ -591,7 +592,6 @@ void j1Player::CheckMovement()
 
 void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 {
-
 	if (entitycollider->type == COLLIDER_TYPE::COLLIDER_PLAYER)
 	{
 		switch (playermovement)
@@ -624,46 +624,45 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 			break;
 		}
 
+		if (to_check->type == COLLIDER_DEADLY || to_check->type == COLLIDER_SNAKE || to_check->type == COLLIDER_BAT)
+		{
+			playerstate = STATE::DEAD;
+
+			CurrentAnimation = playerinfo.Death;
+
+			if (CurrentAnimation->Finished())
+			{
+				if (SavedCheckPoint == true)
+				{
+					App->LoadGame("save_game.xml");
+				}
+				else
+				{
+					App->scene->RestartLevel();
+				}
+			}
+			//SFX?
+		}
+
+		if (to_check->type == COLLIDER_CHECKPOINT)
+		{
+			LastCheckpointPostion = Future_Position;
+			if (Future_Position.x > LastCheckpointPostion.x - SavedCheckPointArea &&
+				Future_Position.x < LastCheckpointPostion.x + SavedCheckPointArea &&
+				Future_Position.y > LastCheckpointPostion.y - SavedCheckPointArea &&
+				Future_Position.y < LastCheckpointPostion.y + SavedCheckPointArea)
+			{
+				App->SaveGame("save_game.xml");
+			}
+			SavedCheckPoint = true;
+		}
+
 		//Reseting double jump if player landed
 		if (CollidingGround == true)
 		{
 			DoubleJumpAvailable = true;
 		}
-	}
-
-	//ANTIGUO ONCOLLISION RESTOS
-	if (to_check->type == COLLIDER_DEADLY || to_check->type == COLLIDER_SNAKE || to_check->type == COLLIDER_BAT)
-	{
-		playerstate = STATE::DEAD;
-
-		CurrentAnimation = playerinfo.Death;
-
-		if (CurrentAnimation->Finished())
-		{
-			if (!Dead)
-			{
-					Dead = true;
-			}
-
-			/*App->LoadGame("save_game.xml");*/
-		}
-
-			//SFX?
-	}
-
-	//
-
-	//
-
-	//else if (c2->type == COLLIDER_CHECKPOINT)
-	//{
-	//	App->SaveGame("save_game.xml");
-	//	SavedCheckPoint = true;
-	//}
-
-	//if (c2->type != COLLIDER_CHECKPOINT)
-	//	Player_Colliding = true;
-	
+	}	
 }
 
 void j1Player::UpLeft_Collision(Collider * entitycollider, Collider * to_check)

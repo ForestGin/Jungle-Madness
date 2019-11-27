@@ -87,7 +87,6 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	playerinfo.Max_Speed.y = playernode.child("velocity").attribute("max_speed_y").as_float();
 	playerinfo.Initial_Velocity_x = playernode.child("velocity").attribute("initalVx").as_float();
 
-
 	//SNAKE 
 	pugi::xml_node snakenode = config.child("snake");
 
