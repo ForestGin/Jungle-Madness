@@ -582,11 +582,11 @@ void j1Player::CheckMovement()
 		}
 	}
 
-	////RESETING COLLIDING CHECKERS
-	//CollidingGround = false;
-	//CollidingLeftWall = false;
-	//CollidingRightWall = false;
-	//CollidingCeiling = false;
+	//RESETING COLLIDING CHECKERS
+	CollidingGround = false;
+	CollidingLeftWall = false;
+	CollidingRightWall = false;
+	CollidingCeiling = false;
 }
 
 void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
@@ -1105,9 +1105,9 @@ void j1Player::LogicUpdate(float dt)
 	Update(dt);
 
 	// --- Set player pos, prevent surpassing colliders ---
-	Entity_Collider->SetPos(Position.x, Position.y);
+	/*Entity_Collider->SetPos(Position.x, Position.y);*/
 
 	App->col->Update(1.0f);
 
-	Entity_Collider->SetPos(Position.x, Position.y);
+	/*Entity_Collider->SetPos(Position.x, Position.y);*/
 }
