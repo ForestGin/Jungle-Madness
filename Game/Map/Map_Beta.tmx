@@ -19336,7 +19336,7 @@
   <object id="2" x="2016" y="634" width="128" height="101.333"/>
  </objectgroup>
  <objectgroup id="20" name="StartPoint">
-  <object id="1" x="162.667" y="567.939" width="38.6667" height="85.3333"/>
+  <object id="1" x="192" y="608" width="38.6667" height="85.3333"/>
  </objectgroup>
  <objectgroup id="22" name="SnakeSpawn1">
   <object id="3" x="320.667" y="530" width="32" height="64"/>

@@ -74,6 +74,8 @@ struct PlayerData
 	SDL_Rect Standing_Rect = { 0,0,0,0 };
 	SDL_Rect Crouching_Rect = { 0,0,0,0 };
 
+	iPoint Animation_Offset = { 0,0 };
+
 	//Velocities
 	float Target_Velocity_x = 0;
 	float Crouch_Velocity_x = 0;
@@ -159,23 +161,13 @@ public:
 	bool CollidingRightWall;
 	bool CollidingCeiling;
 
-	//Checking if the game is loaded
-	bool loading;
-
 	SDL_Rect Intersection = { 0,0,0,0 };
 
-	fPoint Future_Position;
+	fPoint Future_Position = { 0,0 };
 
 	//Parallax Variables (SHOULD BE DEPENDING ON CAMERA NOT PLAYER BUT OK)
-	fPoint Player_Initial_Position;
-	fPoint Player_Displacement;
-
-	fPoint Player_Collider_Margin;
-	
-
-	
-
-	
+	fPoint Player_Initial_Position = { 0,0 };
+	fPoint Player_Displacement = { 0,0 };
 };
 
 #endif // __j1Player_H__

@@ -25,10 +25,16 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	LOG("Loading Player Parser");
 	pugi::xml_node playernode = config.child("player");
 
+	int x, y, w, h;
+
+	loading = true;
+
+	// ---- LOADING PLAYER INFO ----
+
 	playerinfo.folder.create(playernode.child("folder").child_value());
 	playerinfo.Texture.create(playernode.child("texture").child_value());
 
-	//animations
+	//ANIMATIONS
 	playerinfo.Idle =			LoadAnimation(playerinfo.folder.GetString(), "Idle_Sword_Sheathed");
 	playerinfo.Run =			LoadAnimation(playerinfo.folder.GetString(), "Run_Sword_Sheathed");
 	playerinfo.CrouchIdle =		LoadAnimation(playerinfo.folder.GetString(), "Crouch_Idle_Sword_Sheathed");
@@ -41,24 +47,42 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	playerinfo.Wall_Slide =		LoadAnimation(playerinfo.folder.GetString(), "Wall_Slide");
 	playerinfo.God =			LoadAnimation(playerinfo.folder.GetString(), "God_Mode");
 
-	//COLLIDER PLAYER
-	
-	int x = playernode.child("collider").attribute("x").as_int();
-	int y = playernode.child("collider").attribute("y").as_int();
-	int w = playernode.child("collider").attribute("width").as_int();
-	int h = playernode.child("collider").attribute("height").as_int();
-	playerinfo.Player_Collider_Rect = { x,y,w,h};
+	//ANIMATIONS OFFSET
+	x = playernode.child("animation_offset").attribute("x").as_int();
+	y = playernode.child("animation_offset").attribute("y").as_int();
+	playerinfo.Animation_Offset = { x,y };
 
-	////Player config
-	//playerinfo.Gravity = playernode.child("gravity").attribute("value").as_float();
-	//playerinfo.Jump_Force = playernode.child("velocity").attribute("jump_force").as_float();
-	//playerinfo.Target_Velocity_x = playernode.child("velocity").attribute("initalVx").as_float();
-	//playerinfo.Max_Speed_y = playernode.child("velocity").attribute("max_speed_y").as_float();
-	//playerinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
-
+	//ANIMATIONS TWEAKING
 	playerinfo.DoubleJump->speed = 20.0f;
 
 	playerinfo.Death->loop = false;
+
+	//COLLIDER PLAYER
+
+	//Standing
+	x = playernode.child("collider").child("standing").attribute("x").as_int();
+	y = playernode.child("collider").child("standing").attribute("y").as_int();
+	w = playernode.child("collider").child("standing").attribute("width").as_int();
+	h = playernode.child("collider").child("standing").attribute("height").as_int();
+	playerinfo.Standing_Rect = { x,y,w,h};
+
+	//Crouching
+	x = playernode.child("collider").child("crouching").attribute("x").as_int();
+	y = playernode.child("collider").child("crouching").attribute("y").as_int();
+	w = playernode.child("collider").child("crouching").attribute("width").as_int();
+	h = playernode.child("collider").child("crouching").attribute("height").as_int();
+	playerinfo.Crouching_Rect = { x,y,w,h };
+
+	//FORCES
+	playerinfo.Gravity = playernode.child("gravity").attribute("value").as_float();
+	playerinfo.Jump_Force = playernode.child("velocity").attribute("jump_force").as_float();
+	playerinfo.Double_Jump_Force = playernode.child("velocity").attribute("double_jump_force").as_float();
+
+	//VELOCITIES
+	playerinfo.God_Velocity = playernode.child("velocities").child("god_velocity").attribute("value").as_float();
+	playerinfo.Target_Velocity_x = playernode.child("velocities").child("target_velocity").attribute("value").as_float();
+	playerinfo.Crouch_Velocity_x = playernode.child("velocities").child("crouch_velocity").attribute("value").as_float();
+	playerinfo.Max_Speed.y = playernode.child("velocity").attribute("max_speed_y").as_float();
 
 	//SNAKE 
 	pugi::xml_node snakenode = config.child("snake");

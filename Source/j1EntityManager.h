@@ -59,6 +59,9 @@ public:
 	float				update_ms_cycle;
 	float				accumulated_time;
 
+	//Checking if the game is loaded
+	bool				loading;
+
 	int					entityID = 0;
 
 private:

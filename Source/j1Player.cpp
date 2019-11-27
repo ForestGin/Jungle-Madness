@@ -26,28 +26,24 @@ bool j1Player::Start()
 	LOG("Loading player");
 
 	playerinfo = manager->GetPlayerData();
-	//Entity_Collider_Rect = playerinfo.Player_Collider_Rect;
+	/*Entity_Collider_Rect = playerinfo.Player_Collider_Rect;*/
+	/*Entity_Collider_Rect = { 0,0,32,58 };*/
+	/*playerinfo.Crouching_Rect = { 0,0,32,32 };*/
 
-	Entity_Collider_Rect = { 0,0,32,58 };
-	playerinfo.Standing_Rect = Entity_Collider_Rect;
-	playerinfo.Crouching_Rect = { 0,0,32,32 };
-
-	Player_Collider_Margin = { 34, 14 };
+	Entity_Collider_Rect = playerinfo.Standing_Rect;
 
 
-	Entity_Collider = App->col->AddCollider(Entity_Collider_Rect, COLLIDER_PLAYER, (j1Module*)manager);
+	/*Entity_Collider = App->col->AddCollider(Entity_Collider_Rect, COLLIDER_PLAYER, (j1Module*)manager);*/
 
 	if (spritesheet == nullptr)
 	{
 		spritesheet = App->tex->Load(playerinfo.Texture.GetString());
 	}
 
-	Position.x = 200;
+	/*Position.x = 200;
 	Position.y = 600;
-
 	Future_Position = Position;
-
-	Player_Initial_Position = Position;
+	Player_Initial_Position = Position;*/
 
 	//------------
 	playermode = MODE::STANDING;
@@ -64,16 +60,14 @@ bool j1Player::Start()
 
 	Current_Velocity = { 0, 0 };
 
-	playerinfo.Target_Velocity_x = 250.0f;
+	/*playerinfo.Target_Velocity_x = 250.0f;
 	playerinfo.God_Velocity = 200.0f;
-	playerinfo.Crouch_Velocity_x = playerinfo.Target_Velocity_x / 2;
+	playerinfo.Crouch_Velocity_x = playerinfo.Target_Velocity_x / 2;*/
 
-	playerinfo.Gravity = 50.0f;
-	playerinfo.Max_Speed.y = 15.0f;
-	playerinfo.Jump_Force = -15.0f;
-	playerinfo.Double_Jump_Force = -10.0f;
-
-	loading = true;
+	/*playerinfo.Gravity = 50.0f;*/
+	/*playerinfo.Max_Speed.y = 15.0f;*/
+	/*playerinfo.Jump_Force = -15.0f;
+	playerinfo.Double_Jump_Force = -10.0f;*/
 
 	return true;
 }
@@ -113,12 +107,12 @@ bool j1Player::PostUpdate(float dt)
 	//Blitting player
 	if (playerdirection == DIRECTION::RIGHT)
 	{
-		App->render->Blit(spritesheet, Position.x - Player_Collider_Margin.x, Position.y - Player_Collider_Margin.y, &CurrentAnimation->GetCurrentFrame(dt));
+		App->render->Blit(spritesheet, Position.x - playerinfo.Animation_Offset.x, Position.y - playerinfo.Animation_Offset.y, &CurrentAnimation->GetCurrentFrame(dt));
 	}
 
 	else if (playerdirection == DIRECTION::LEFT)
 	{
-		App->render->Blit(spritesheet, Position.x - Player_Collider_Margin.x, Position.y - Player_Collider_Margin.y, &CurrentAnimation->GetCurrentFrame(dt), SDL_FLIP_HORIZONTAL);
+		App->render->Blit(spritesheet, Position.x - playerinfo.Animation_Offset.x, Position.y - playerinfo.Animation_Offset.y, &CurrentAnimation->GetCurrentFrame(dt), SDL_FLIP_HORIZONTAL);
 	}
 
 
@@ -216,7 +210,7 @@ void j1Player::HandleState(float dt)
 
 void j1Player::AddGravity(float dt)
 {
-	if (!loading && playermode != MODE::GOD)
+	if (App->entities->loading == false && playermode != MODE::GOD)
 	{
 		if (!CollidingGround)
 		{
@@ -323,8 +317,6 @@ void j1Player::StandingModeMovement(float dt)
 		}
 
 		playerdirection = DIRECTION::RIGHT;
-
-		loading = false;
 	}
 
 			// ---- BOTH ----
