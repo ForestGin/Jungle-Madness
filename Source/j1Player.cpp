@@ -26,24 +26,15 @@ bool j1Player::Start()
 	LOG("Loading player");
 
 	playerinfo = manager->GetPlayerData();
-	/*Entity_Collider_Rect = playerinfo.Player_Collider_Rect;*/
-	/*Entity_Collider_Rect = { 0,0,32,58 };*/
-	/*playerinfo.Crouching_Rect = { 0,0,32,32 };*/
 
 	Entity_Collider_Rect = playerinfo.Standing_Rect;
 
-
-	/*Entity_Collider = App->col->AddCollider(Entity_Collider_Rect, COLLIDER_PLAYER, (j1Module*)manager);*/
+	
 
 	if (spritesheet == nullptr)
 	{
 		spritesheet = App->tex->Load(playerinfo.Texture.GetString());
 	}
-
-	/*Position.x = 200;
-	Position.y = 600;
-	Future_Position = Position;
-	Player_Initial_Position = Position;*/
 
 	//------------
 	playermode = MODE::STANDING;
@@ -59,6 +50,17 @@ bool j1Player::Start()
 	CollidingCeiling = false;
 
 	Current_Velocity = { 0, 0 };
+
+	/*Entity_Collider_Rect = playerinfo.Player_Collider_Rect;*/
+	/*Entity_Collider_Rect = { 0,0,32,58 };*/
+	/*playerinfo.Crouching_Rect = { 0,0,32,32 };*/
+
+	/*Entity_Collider = App->col->AddCollider(Entity_Collider_Rect, COLLIDER_PLAYER, (j1Module*)manager);*/
+
+	/*Position.x = 200;
+	Position.y = 600;
+	Future_Position = Position;
+	Player_Initial_Position = Position;*/
 
 	/*playerinfo.Target_Velocity_x = 250.0f;
 	playerinfo.God_Velocity = 200.0f;
