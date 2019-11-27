@@ -589,7 +589,6 @@ void j1Player::CheckMovement()
 	CollidingCeiling = false;
 }
 
-
 void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 {
 
@@ -633,29 +632,24 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 	}
 
 	//ANTIGUO ONCOLLISION RESTOS
-	// if (c2->type == COLLIDER_DEADLY || c2->type == COLLIDER_SNAKE || c2->type == COLLIDER_BAT)
-	//{
-	//	//Colliding_Roof = false;
-	//	Must_Fall = false;
-	//	Double_Jump = false;
+	if (to_check->type == COLLIDER_DEADLY || to_check->type == COLLIDER_SNAKE || to_check->type == COLLIDER_BAT)
+	{
+		playerstate = STATE::DEAD;
 
-	//	if (!God_Mode)
-	//	{
-	//		CurrentAnimation = playerinfo.Death;
+		CurrentAnimation = playerinfo.Death;
 
-	//		if (CurrentAnimation->Finished())
-	//		{
-	//			if (!Dead)
-	//			{
-	//				Dead = true;
-	//			}
+		if (CurrentAnimation->Finished())
+		{
+			if (!Dead)
+			{
+					Dead = true;
+			}
 
-	//			/*App->LoadGame("save_game.xml");*/
-	//		}
+			/*App->LoadGame("save_game.xml");*/
+		}
 
-	//		//SFX?
-	//	}
-	//}
+			//SFX?
+	}
 
 	//
 
@@ -970,9 +964,6 @@ void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_chec
 		break;
 	}
 }
-
-
-
 
 bool j1Player::Load(pugi::xml_node &config)
 {
