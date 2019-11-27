@@ -30,7 +30,7 @@ bool j1Bat::Start()
 
 	Entity_Collider = App->col->AddCollider(Entity_Collider_Rect, COLLIDER_BAT, (j1Module*)manager);
 	Velocity = batinfo.Velocity;
-	gravity = batinfo.Gravity;
+	Gravity = batinfo.Gravity;
 	colliding_offset = batinfo.Colliding_Offset;
 
 	Entity_State = IDLE;
