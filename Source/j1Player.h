@@ -140,6 +140,7 @@ public:
 	void DoubleJump(float dt);
 	//void Slide();
 	//void WallSlide();
+	void CheckDeath();
 
 	void CheckMovement();
 

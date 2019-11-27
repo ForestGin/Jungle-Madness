@@ -86,6 +86,8 @@ bool j1Player::Update(float dt)
 {
 	bool ret = true;
 
+	CheckDeath();
+
 	HandleMode();
 
 	HandleState(dt);
@@ -130,6 +132,41 @@ bool j1Player::PostUpdate(float dt)
 
 
 	return ret;
+}
+
+void j1Player::CheckDeath()
+{
+	if (playerstate == STATE::DEAD)
+	{
+		if (CurrentAnimation->Finished())
+		{
+			if (SavedCheckPoint == true)
+			{
+				App->LoadGame("save_game.xml");
+			}
+
+			if (SavedCheckPoint == false && App->scene->scene1 == true)
+			{
+				App->scene->SceneChange(App->scene->scenes.start->data->GetString());
+				App->scene->scene1 = true;
+				App->scene->scene2 = false;
+			}
+
+			else
+			{
+				App->scene->SceneChange(App->scene->scenes.start->next->data->GetString());
+				App->scene->scene1 = false;
+				App->scene->scene2 = true;
+			}
+		}
+
+		CollidingGround = false;
+		CollidingLeftWall = false;
+		CollidingRightWall = false;
+		CollidingCeiling = false;
+
+		playerstate == STATE::FALLING;
+	}
 }
 
 void j1Player::HandleMode()
@@ -370,7 +407,6 @@ void j1Player::StandingModeMovement(float dt)
 	}
 }
 
-
 void j1Player::CrouchingModeMovenent(float dt)
 {
 	// ---- X AXIS MOVEMENT ----
@@ -583,11 +619,11 @@ void j1Player::CheckMovement()
 		}
 	}
 
-	////RESETING COLLIDING CHECKERS
-	//CollidingGround = false;
-	//CollidingLeftWall = false;
-	//CollidingRightWall = false;
-	//CollidingCeiling = false;
+	//RESETING COLLIDING CHECKERS
+	CollidingGround = false;
+	CollidingLeftWall = false;
+	CollidingRightWall = false;
+	CollidingCeiling = false;
 }
 
 void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
@@ -595,11 +631,11 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 	if (entitycollider->type == COLLIDER_TYPE::COLLIDER_PLAYER)
 	{
 
-		CollidingGround = false;
+		/*CollidingGround = false;
 		CollidingLeftWall = false;
 		CollidingRightWall = false;
 		CollidingCeiling = false;
-
+*/
 		switch (playermovement)
 		{
 		case MOVEMENT::UPLEFTWARDS:
@@ -635,18 +671,6 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 			playerstate = STATE::DEAD;
 
 			CurrentAnimation = playerinfo.Death;
-
-			if (CurrentAnimation->Finished())
-			{
-				if (SavedCheckPoint == true)
-				{
-					App->LoadGame("save_game.xml");
-				}
-				else
-				{
-					App->scene->RestartLevel();
-				}
-			}
 			//SFX?
 		}
 
@@ -1104,9 +1128,9 @@ void j1Player::LogicUpdate(float dt)
 	Update(dt);
 
 	// --- Set player pos, prevent surpassing colliders ---
-	Entity_Collider->SetPos(Position.x, Position.y);
+	/*Entity_Collider->SetPos(Position.x, Position.y);*/
 
 	App->col->Update(1.0f);
 
-	Entity_Collider->SetPos(Position.x, Position.y);
+	/*Entity_Collider->SetPos(Position.x, Position.y);*/
 }
