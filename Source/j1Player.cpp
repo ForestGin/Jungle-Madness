@@ -583,17 +583,23 @@ void j1Player::CheckMovement()
 		}
 	}
 
-	//RESETING COLLIDING CHECKERS
-	CollidingGround = false;
-	CollidingLeftWall = false;
-	CollidingRightWall = false;
-	CollidingCeiling = false;
+	////RESETING COLLIDING CHECKERS
+	//CollidingGround = false;
+	//CollidingLeftWall = false;
+	//CollidingRightWall = false;
+	//CollidingCeiling = false;
 }
 
 void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 {
 	if (entitycollider->type == COLLIDER_TYPE::COLLIDER_PLAYER)
 	{
+
+		CollidingGround = false;
+		CollidingLeftWall = false;
+		CollidingRightWall = false;
+		CollidingCeiling = false;
+
 		switch (playermovement)
 		{
 		case MOVEMENT::UPLEFTWARDS:

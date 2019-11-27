@@ -300,7 +300,7 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && scene1 == false)//FIRST
 	{
 	
-
+		App->entities->loading = true;
 		currentscene = scenes.start->data->GetString();
 		SceneChange(scenes.start->data->GetString());
 		scene1 = true;
@@ -311,7 +311,7 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && scene2 == false)//SECOND
 	{
-		
+		App->entities->loading = true;
 		currentscene = scenes.start->next->data->GetString();
 		SceneChange(scenes.start->next->data->GetString());
 		scene1 = false;
