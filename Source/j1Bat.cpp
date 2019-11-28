@@ -193,12 +193,12 @@ bool j1Bat::PostUpdate(float dt)
 	//Blitting Snake
 	if (going_right == true)
 	{
-		App->render->Blit(spritesheet, Position.x - Bat_Collider_Margin.x, Position.y - Bat_Collider_Margin.y, &CurrentAnimation->GetCurrentFrame(dt));
+		App->render->Blit(spritesheet, Position.x - batinfo.Print_offset.x, Position.y - batinfo.Print_offset.y, &CurrentAnimation->GetCurrentFrame(dt));
 	}
 
 	else
 	{
-		App->render->Blit(spritesheet, Position.x - Bat_Collider_Margin.x, Position.y - Bat_Collider_Margin.y, &CurrentAnimation->GetCurrentFrame(dt), SDL_FLIP_HORIZONTAL);
+		App->render->Blit(spritesheet, Position.x - batinfo.Print_offset.x, Position.y - batinfo.Print_offset.y, &CurrentAnimation->GetCurrentFrame(dt), SDL_FLIP_HORIZONTAL);
 	}
 		
 
