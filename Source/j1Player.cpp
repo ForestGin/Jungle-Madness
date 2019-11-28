@@ -140,23 +140,26 @@ void j1Player::CheckDeath()
 	{
 		if (CurrentAnimation->Finished())
 		{
-			if (SavedCheckPoint == true)
+			if (SavedCheckPoint)
 			{
-				App->LoadGame("save_game.xml");
-			}
-
-			if (SavedCheckPoint == false && App->scene->scene1 == true)
-			{
-				App->scene->SceneChange(App->scene->scenes.start->data->GetString());
-				App->scene->scene1 = true;
-				App->scene->scene2 = false;
+				bool result = App->LoadGame("save_game.xml");
 			}
 
 			else
 			{
-				App->scene->SceneChange(App->scene->scenes.start->next->data->GetString());
-				App->scene->scene1 = false;
-				App->scene->scene2 = true;
+				if (App->scene->scene1 == true)
+				{
+					App->scene->SceneChange(App->scene->scenes.start->data->GetString());
+					App->scene->scene1 = true;
+					App->scene->scene2 = false;
+				}
+
+				else
+				{
+					App->scene->SceneChange(App->scene->scenes.start->next->data->GetString());
+					App->scene->scene1 = false;
+					App->scene->scene2 = true;
+				}
 			}
 		}
 
@@ -192,6 +195,8 @@ void j1Player::HandleMode()
 
 			Entity_Collider->type = COLLIDER_PLAYER;
 			Entity_Collider->rect = playerinfo.Standing_Rect;
+
+			Current_Velocity = { 0,0 };
 		}
 	}
 
@@ -676,14 +681,17 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 
 		if (to_check->type == COLLIDER_CHECKPOINT)
 		{
-			LastCheckpointPostion = Future_Position;
-			if (Future_Position.x > LastCheckpointPostion.x - SavedCheckPointArea &&
-				Future_Position.x < LastCheckpointPostion.x + SavedCheckPointArea &&
-				Future_Position.y > LastCheckpointPostion.y - SavedCheckPointArea &&
-				Future_Position.y < LastCheckpointPostion.y + SavedCheckPointArea)
+			LastCheckpointPostion = Position;
+
+			if (Position.x > LastCheckpointPostion.x - SavedCheckPointArea &&
+				Position.x < LastCheckpointPostion.x + SavedCheckPointArea &&
+				Position.y > LastCheckpointPostion.y - SavedCheckPointArea &&
+				Position.y < LastCheckpointPostion.y + SavedCheckPointArea)
 			{
 				App->SaveGame("save_game.xml");
 			}
+			/*App->SaveGame("save_game.xml");*/
+
 			SavedCheckPoint = true;
 		}
 
@@ -996,7 +1004,6 @@ void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_chec
 
 bool j1Player::Load(pugi::xml_node &config)
 {
-
 	bool ret = true;
 
 	Position.x = config.child("Player").child("Playerx").attribute("value").as_float();
