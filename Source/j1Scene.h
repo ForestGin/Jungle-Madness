@@ -44,7 +44,7 @@ public:
 	bool Load(pugi::xml_node&config);
 
 	void EntityPosition(const char* scene);
-
+	void EntityDirection();//reset enti direction
 	
 
 public:
