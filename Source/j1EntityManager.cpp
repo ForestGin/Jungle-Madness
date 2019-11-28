@@ -141,6 +141,8 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	batinfo.Max_Speed_y = playernode.child("velocity").attribute("max_speed_y").as_float();
 	batinfo.Colliding_Offset = playernode.child("colliding_offset").attribute("value").as_float();
 	batinfo.Area_Of_Action = batnode.child("areaofaction").attribute("value").as_int();
+	batinfo.Print_offset.x = batnode.child("printingoffset").attribute("x").as_int();
+	batinfo.Print_offset.y = batnode.child("printingoffset").attribute("y").as_int();
 	batinfo.Reference_ID.x = batnode.child("ID").attribute("value1").as_int();
 	batinfo.Reference_ID.y = batnode.child("ID").attribute("value2").as_int();
 	/*batinfo.Move->speed = 0.15f;*/

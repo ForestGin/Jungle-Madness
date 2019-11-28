@@ -71,9 +71,9 @@
     <snake>
       <folder>animations/Snek.tmx</folder>
       <texture>Sprites/Cobra_SpriteSheet2x.png</texture>
-      <collider x="0" y="0" width="30" height="30"/>
+      <collider x="0" y="0" width="20" height="30"/>
       <colliding_offset value="5" />
-      <printingoffset x="24" y="-28"/>
+      <printingoffset x="22" y="38"/>
       <Velocity x="0.5" y="0.0" initalVx="2.0"/>
       <areaofaction value="100"/>
       <gravity value="-4.0"/>
@@ -83,7 +83,8 @@
     <bat>
       <folder>animations/Bat.tmx</folder>
       <texture>Sprites/Bat_Sprite_Sheet2x.png</texture>
-      <collider x="0" y="0" width="30" height="20"/>
+      <collider x="0" y="0" width="12" height="12"/>
+      <printingoffset x="10" y="10"/>
       <Velocity x="1" y="0.5" initalVx="2.0"/>
       <areaofaction value="100"/>
       <ID value1 ="2" value2 ="3"/>

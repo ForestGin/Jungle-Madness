@@ -49,6 +49,8 @@ bool j1Player::Start()
 
 	Entity_Collider = App->col->AddCollider(Entity_Collider_Rect, COLLIDER_PLAYER, (j1Module*)manager);
 
+	CurrentAnimation = playerinfo.Idle;
+
 	/* Entity_Collider_Rect = playerinfo.Player_Collider_Rect; /
 		/Entity_Collider_Rect = { 0,0,32,58 }; /
 		/playerinfo.Crouching_Rect = { 0,0,32,32 }; /
@@ -987,7 +989,7 @@ void j1Player::DownLeft_Collision(Collider * entitycollider, Collider * to_check
 
 	case COLLIDER_TYPE::COLLIDER_PLATFORM:
 		//CHECKING WHEN COLLIDING DOWN
-		if (Intersection.y + Intersection.h == entitycollider->rect.y + entitycollider->rect.h)
+		if (Intersection.y + Intersection.h == entitycollider->rect.y+entitycollider->rect.h)
 		{
 			if (Intersection.w / 2 >= Intersection.h)
 			{
