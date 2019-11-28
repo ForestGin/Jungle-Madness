@@ -14,6 +14,7 @@
 #include "j1Bat.h"
 #include "j1EntityManager.h"
 #include "j1PathFinding.h"
+#include "Brofiler\Brofiler.h"
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -198,6 +199,9 @@ bool j1Scene::Start()
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
+
+	BROFILER_CATEGORY("Scene_Pre__Update", Profiler::Color::DarkGoldenRod);
+
 	// debug pathfing ------------------
 	static iPoint origin;
 	static bool origin_selected = false;
@@ -294,6 +298,7 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
+	BROFILER_CATEGORY("Scene_Update", Profiler::Color::DarkGray);
 
 	//SCENE INTERACTION
 
@@ -430,6 +435,8 @@ bool j1Scene::Update(float dt)
 // Called each loop iteration
 bool j1Scene::PostUpdate(float dt)
 {
+	BROFILER_CATEGORY("Scene_Post_Update", Profiler::Color::DarkGreen);
+
 	bool ret = true;
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
