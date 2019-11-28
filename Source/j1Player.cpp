@@ -161,14 +161,14 @@ void j1Player::CheckDeath()
 					App->scene->scene2 = true;
 				}
 			}
+
+			CollidingGround = false;
+			CollidingLeftWall = false;
+			CollidingRightWall = false;
+			CollidingCeiling = false;
+
+			playerstate = STATE::FALLING;
 		}
-
-		CollidingGround = false;
-		CollidingLeftWall = false;
-		CollidingRightWall = false;
-		CollidingCeiling = false;
-
-		playerstate == STATE::FALLING;
 	}
 }
 
@@ -234,31 +234,19 @@ void j1Player::HandleState(float dt)
 		GodModeMovement(dt);
 	}
 
-	// ---- STANDING MOVEMENT ----
-
-	if (playermode == MODE::STANDING)
+	if (playerstate != STATE::DEAD)
 	{
-		StandingModeMovement(dt);
-	}
+		// ---- STANDING MOVEMENT ----
+		if (playermode == MODE::STANDING)
+		{
+			StandingModeMovement(dt);
+		}
 
 	// ---- CROUCHING MOVEMENT ---- 
 
-	if (playermode == MODE::CROUCHING)
-	{
-		CrouchingModeMovenent(dt);
-	}
-
-	//IDLE STATE WHEN NO MOVEMENT
-	if (Current_Velocity.x == 0 && CollidingGround == true)
-	{
-		if (playermode == MODE::STANDING)
-		{
-			playerstate = STATE::IDLE;
-		}
-
 		if (playermode == MODE::CROUCHING)
 		{
-			playerstate = STATE::CROUCHIDLE;
+			CrouchingModeMovenent(dt);
 		}
 	}
 }
@@ -673,7 +661,7 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 
 		if (to_check->type == COLLIDER_DEADLY || to_check->type == COLLIDER_SNAKE || to_check->type == COLLIDER_BAT)
 		{
-			playerstate = STATE::DEAD;
+ 			playerstate = STATE::DEAD;
 
 			CurrentAnimation = playerinfo.Death;
 			//SFX?
