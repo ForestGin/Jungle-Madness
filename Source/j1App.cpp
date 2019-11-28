@@ -15,6 +15,7 @@
 #include "j1App.h"
 #include "j1Pathfinding.h"
 #include "j1EntityManager.h"
+#include "Brofiler/Brofiler.h"
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -146,6 +147,9 @@ bool j1App::Start()
 // Called each loop iteration
 bool j1App::Update()
 {
+
+	BROFILER_CATEGORY("App_Update", Profiler::Color::Crimson);
+
 	bool ret = true;
 	PrepareUpdate();
 

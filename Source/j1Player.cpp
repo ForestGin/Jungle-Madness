@@ -68,7 +68,7 @@ bool j1Player::Start()
 		/playerinfo.Max_Speed.y = 15.0f; /
 		/playerinfo.Jump_Force = -15.0f;
 	playerinfo.Double_Jump_Force = -10.0f; */
-	
+
 	//-----------------
 	if (spritesheet == nullptr)
 	{
@@ -103,7 +103,7 @@ bool j1Player::Update(float dt)
 
 	return ret;
 
-	
+
 }
 
 bool j1Player::PostUpdate(float dt)
@@ -194,7 +194,7 @@ void j1Player::CheckWin()
 			App->scene->scene2 = true;
 		}
 
-		else 
+		else
 		{
 
 			App->entities->loading = true;
@@ -285,7 +285,7 @@ void j1Player::HandleState(float dt)
 			StandingModeMovement(dt);
 		}
 
-	// ---- CROUCHING MOVEMENT ---- 
+		// ---- CROUCHING MOVEMENT ---- 
 
 		if (playermode == MODE::CROUCHING)
 		{
@@ -723,7 +723,7 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 
 		if (to_check->type == COLLIDER_DEADLY || to_check->type == COLLIDER_SNAKE || to_check->type == COLLIDER_BAT)
 		{
- 			playerstate = STATE::DEAD;
+			playerstate = STATE::DEAD;
 
 			CurrentAnimation = playerinfo.Death;
 
@@ -759,7 +759,7 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 		{
 			DoubleJumpAvailable = true;
 		}
-	}	
+	}
 }
 
 void j1Player::UpLeft_Collision(Collider * entitycollider, Collider * to_check)
@@ -1248,3 +1248,4 @@ void j1Player::LogicUpdate(float dt)
 
 	/*Entity_Collider->SetPos(Position.x, Position.y);*/
 }
+

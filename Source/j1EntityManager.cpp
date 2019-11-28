@@ -2,9 +2,10 @@
 #include "p2Log.h"
 #include "j1App.h"
 #include "j1EntityManager.h"
+#include "Brofiler/Brofiler.h"
 
 
-j1EntityManager::j1EntityManager() : j1Module(), logic_updates_per_second(DEFAULT_LPS), accumulated_time(0.0f)
+j1EntityManager::j1EntityManager() : j1Module()
 {
 	name.create("entities");
 }
@@ -20,7 +21,7 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	LOG("Setting up Entity manager");
 	bool ret = true;
 
-	logic_updates_per_second = DEFAULT_LPS;
+	
 	update_ms_cycle = 1.0f / (float)App->framerate_cap;
 	
 	LOG("Loading Player Parser");
@@ -158,12 +159,15 @@ bool j1EntityManager::Start()
 // Called each loop iteration
 bool j1EntityManager::PreUpdate()
 {
-	logic = false;
+	BROFILER_CATEGORY("EntityManager_Pre_Update", Profiler::Color::BlanchedAlmond);
+
 	return true;
 }
 
 bool j1EntityManager::Update(float dt)
 {
+	BROFILER_CATEGORY("EntityManager_Update", Profiler::Color::BlueViolet);
+
 	/*accumulated_time += dt;
 
 	if (accumulated_time >= update_ms_cycle)
@@ -214,6 +218,9 @@ void j1EntityManager::EntityUpdate(float dt)
 
 bool j1EntityManager::PostUpdate(float dt)
 {
+
+	BROFILER_CATEGORY("EntityManager_Post_Update", Profiler::Color::BurlyWood);
+
 	p2List_item <j1Entity*> *entity = entities.start;
 
 	while (entity != NULL)

@@ -8,7 +8,7 @@
 #include "j1Snake.h"
 #include "j1Bat.h"
 
-#define DEFAULT_LPS 60//(LOGIC PER SEC)
+
 
 class j1Entity;
 
