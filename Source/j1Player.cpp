@@ -82,6 +82,8 @@ bool j1Player::Start()
 
 	ID = App->entities->entityID;
 
+	CurrentAnimation = playerinfo.Idle;
+
 	return true;
 }
 
@@ -178,6 +180,7 @@ void j1Player::CheckDeath()
 			CollidingCeiling = false;
 
 			playerstate = STATE::FALLING;
+			App->scene->EntityDirection();
 		}
 	}
 }

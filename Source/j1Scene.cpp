@@ -523,6 +523,9 @@ bool j1Scene::SceneChange(const char* scene)
 
 void j1Scene::RestartLevel()
 {
+	//reseting entities directions
+	EntityDirection();
+
 	if (player->playermode == MODE::GOD)
 		player->playermode == MODE::STANDING;
 
@@ -706,4 +709,21 @@ bool j1Scene::Load(pugi::xml_node &config)
 	}
 
 	return ret;
+}
+
+void j1Scene::EntityDirection()
+{
+	//reseting entities directions
+	bat->going_right = false;
+	bat->going_left = false;
+	bat->going_up = false;
+	bat->going_down = false;
+	bat2->going_right = false;
+	bat2->going_left = false;
+	bat2->going_up = false;
+	bat2->going_down = false;
+	snake->going_left = false;
+	snake->going_right = false;
+	snake2->going_left = false;
+	snake2->going_right = false;
 }

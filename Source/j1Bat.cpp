@@ -235,6 +235,52 @@ void j1Bat::LogicUpdate(float dt)
 
 void j1Bat::OnCollision(Collider * c1, Collider * c2)
 {
+	bool lateralcollision = true;
+
+	if (c1->rect.y - 4 + c1->rect.h == c2->rect.y)
+	{
+		lateralcollision = false;
+	}
+
+	if (c2->type == COLLIDER_FLOOR && dead == false && !lateralcollision)
+	{
+		if (going_right)
+		{
+			going_right = true;
+			Entity_State = RIGHT;
+			going_left = false;
+		}
+		else
+		{
+			Entity_State = LEFT;
+			going_left = true;
+			going_right = false;
+		}
+
+		batcolliding = true;
+	}
+
+	if (lateralcollision)
+	{
+		if (going_right)
+		{
+			Entity_State = LEFT;
+			going_left = true;
+			going_right = false;
+			c1->rect.x -= batinfo.Colliding_Offset;
+		}
+		else
+		{
+			going_right = true;
+			Entity_State = RIGHT;
+			going_left = false;
+			c1->rect.x += batinfo.Colliding_Offset;
+
+		}
+		batcolliding = true;
+
+		Position.x = c1->rect.x;
+	}
 	
 }
 
