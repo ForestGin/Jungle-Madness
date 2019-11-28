@@ -29,6 +29,7 @@ enum class STATE
 	SLIDING,
 	FLYING,
 
+	WINNER,
 	DEAD,
 
 	NONE
@@ -141,6 +142,8 @@ public:
 	//void Slide();
 	//void WallSlide();
 	void CheckDeath();
+
+	void CheckWin();
 
 	void CheckMovement();
 

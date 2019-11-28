@@ -24,12 +24,16 @@ bool j1Map::Awake(pugi::xml_node& config)
 	bool ret = true;
 
 	folder.create(config.child("folder").child_value());
+	
 	//colliders XML
 	RedCol = config.child("collision").attribute("red").as_int();
+	checkpoint = config.child("collision").attribute("checkpoint").as_int();//GreenCol
 	BlueCol = config.child("collision").attribute("blue").as_int();
 	PinkCol = config.child("collision").attribute("pink").as_int();
-	GreenCol = config.child("collision").attribute("green").as_int();
-	checkpoint = config.child("collision").attribute("checkpoint").as_int();
+	YellowCol = config.child("collision").attribute("yellow").as_int();
+	WhiteCol = config.child("collision").attribute("white").as_int();
+	CyanCol = config.child("collision").attribute("cyan").as_int();
+	
 	return ret;
 }
 
@@ -656,6 +660,10 @@ bool j1Map::MapCollisions(MapData& data)
 							{
 								App->col->AddCollider({ pos.x,pos.y,data.tile_width,data.tile_height }, COLLIDER_FLOOR, this);
 							}
+							else if (tile_id == checkpoint)
+							{
+								App->col->AddCollider({ pos.x,pos.y,data.tile_width,data.tile_height }, COLLIDER_CHECKPOINT, this);
+							}
 							else if (tile_id == BlueCol)
 							{
 								App->col->AddCollider({ pos.x,pos.y,data.tile_width,data.tile_height }, COLLIDER_DEADLY, this);
@@ -664,11 +672,10 @@ bool j1Map::MapCollisions(MapData& data)
 							{
 								App->col->AddCollider({ pos.x,pos.y,data.tile_width,data.tile_height }, COLLIDER_PLATFORM, this);
 							}
-							else if (tile_id == checkpoint)
+							else if (tile_id == CyanCol)
 							{
-								App->col->AddCollider({ pos.x,pos.y,data.tile_width,data.tile_height }, COLLIDER_CHECKPOINT, this);
+								App->col->AddCollider({ pos.x,pos.y,data.tile_width,data.tile_height }, COLLIDER_WIN, this);
 							}
-							
 						}
 					}
 				}

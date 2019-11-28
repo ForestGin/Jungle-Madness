@@ -168,13 +168,15 @@ private:
 	pugi::xml_document	map_file;
 	p2SString			folder;
 	bool				map_loaded;
+
 	//colliders
-	int checkpoint = NULL;
 	int RedCol = NULL;
+	int checkpoint = NULL;//GreenCol
 	int BlueCol = NULL;
 	int PinkCol = NULL;
-	int GreenCol = NULL;
-	
+	int YellowCol = NULL;
+	int WhiteCol = NULL;
+	int CyanCol = NULL;
 };
 
 #endif // __j1MAP_H__

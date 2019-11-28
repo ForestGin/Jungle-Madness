@@ -24,9 +24,8 @@
 
   <map>
     <folder>Map/</folder>
-    <collision red="841" pink="844" blue="843" green="845" checkpoint="842"/>
+    <collision red="841" checkpoint="842" blue="843" pink="844"  yellow="845" white="846" cyan="847"/>
   </map>
-
   <scene>
     <scene_name name="Map_Beta.tmx"/>
     <scene_name name="Map_alpha.tmx"/>
@@ -69,7 +68,6 @@
       </velocities>
       <gravity value="50.0"/>
     </player>
-
     <snake>
       <folder>animations/Snek.tmx</folder>
       <texture>Sprites/Cobra_SpriteSheet2x.png</texture>

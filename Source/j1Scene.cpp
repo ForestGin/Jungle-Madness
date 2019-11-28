@@ -229,7 +229,7 @@ bool j1Scene::PreUpdate()
 
 	//TODO: Win condition
 
-	if (scene1 && (player->Position.x >= App->map->data.FinishPoint.x))
+	/*if (scene1 && (player->Position.x >= App->map->data.FinishPoint.x))
 	{
 		App->entities->loading = true;
 
@@ -249,7 +249,7 @@ bool j1Scene::PreUpdate()
 		SceneChange(scenes.start->data->GetString());
 		scene1 = true;
 		scene2 = false;
-	}
+	}*/
 
 	//camera X axis
 	App->render->camera.x = (-player->Position.x*App->win->GetScale() - player->Entity_Collider->rect.w/2  + App->render->camera.w /2);

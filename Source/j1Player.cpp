@@ -88,6 +88,8 @@ bool j1Player::Update(float dt)
 
 	CheckDeath();
 
+	CheckWin();
+
 	HandleMode();
 
 	HandleState(dt);
@@ -149,13 +151,17 @@ void j1Player::CheckDeath()
 			{
 				if (App->scene->scene1 == true)
 				{
+					App->entities->loading = true;
+
 					App->scene->SceneChange(App->scene->scenes.start->data->GetString());
 					App->scene->scene1 = true;
 					App->scene->scene2 = false;
 				}
 
-				else
+				else if (App->scene->scene2 == true)
 				{
+					App->entities->loading = true;
+
 					App->scene->SceneChange(App->scene->scenes.start->next->data->GetString());
 					App->scene->scene1 = false;
 					App->scene->scene2 = true;
@@ -169,6 +175,40 @@ void j1Player::CheckDeath()
 
 			playerstate = STATE::FALLING;
 		}
+	}
+}
+
+void j1Player::CheckWin()
+{
+	if (playerstate == STATE::WINNER)
+	{
+		if (App->scene->scene1 == true)
+		{
+			App->entities->loading = true;
+
+			App->scene->currentscene = App->scene->scenes.start->next->data->GetString();
+			App->scene->SceneChange(App->scene->scenes.start->next->data->GetString());//Current scene?
+			App->scene->scene1 = false;
+			App->scene->scene2 = true;
+		}
+
+		else 
+		{
+
+			App->entities->loading = true;
+
+			App->scene->currentscene = App->scene->scenes.start->data->GetString();
+			App->scene->SceneChange(App->scene->scenes.start->data->GetString());//Current scene?
+			App->scene->scene1 = true;
+			App->scene->scene2 = false;
+		}
+
+		CollidingGround = false;
+		CollidingLeftWall = false;
+		CollidingRightWall = false;
+		CollidingCeiling = false;
+
+		playerstate = STATE::FALLING;
 	}
 }
 
@@ -234,7 +274,7 @@ void j1Player::HandleState(float dt)
 		GodModeMovement(dt);
 	}
 
-	if (playerstate != STATE::DEAD)
+	if (playerstate != STATE::DEAD && playerstate != STATE::WINNER)
 	{
 		// ---- STANDING MOVEMENT ----
 		if (playermode == MODE::STANDING)
@@ -253,7 +293,7 @@ void j1Player::HandleState(float dt)
 
 void j1Player::AddGravity(float dt)
 {
-	if (App->entities->loading == false && playermode != MODE::GOD)
+	if (App->entities->loading == false && playermode != MODE::GOD && playerstate != STATE::WINNER && playerstate != STATE::DEAD)
 	{
 		if (!CollidingGround)
 		{
@@ -681,6 +721,12 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 			/*App->SaveGame("save_game.xml");*/
 
 			SavedCheckPoint = true;
+		}
+
+		if (to_check->type == COLLIDER_WIN)
+		{
+			playerstate = STATE::WINNER;
+			//SFX?
 		}
 
 		//Reseting double jump if player landed
