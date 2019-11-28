@@ -49,6 +49,8 @@ bool j1Player::Start()
 
 	Entity_Collider = App->col->AddCollider(Entity_Collider_Rect, COLLIDER_PLAYER, (j1Module*)manager);
 
+	CurrentAnimation = playerinfo.Idle;
+
 	/* Entity_Collider_Rect = playerinfo.Player_Collider_Rect; /
 		/Entity_Collider_Rect = { 0,0,32,58 }; /
 		/playerinfo.Crouching_Rect = { 0,0,32,32 }; /

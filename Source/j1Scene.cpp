@@ -121,8 +121,8 @@ bool j1Scene::Start()
 		bat2->Position.x = App->map->data.Bat2.x;
 		bat2->Position.y = App->map->data.Bat2.y;
 
-		/*player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
-		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);*/
+		player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
+		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
 		snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
 		snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
 		bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
@@ -163,8 +163,8 @@ bool j1Scene::Start()
 		bat2->Position.x = App->map->data2.Bat2.x;
 		bat2->Position.y = App->map->data2.Bat2.y;
 
-		/*player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
-		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);*/
+		player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
+		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
 		snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
 		snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
 		bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);

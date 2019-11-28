@@ -4,7 +4,7 @@
   <image source="Jungle_terrain.png" width="896" height="960"/>
  </tileset>
  <tileset firstgid="841" name="Colliders" tilewidth="32" tileheight="32" tilecount="8" columns="2">
-  <image source="Colliders.png" width="64" height="128"/>
+  <image source="Colliders.png" width="64" height="64"/>
  </tileset>
  <tileset firstgid="849" name="objects" tilewidth="32" tileheight="32" tilecount="91" columns="13">
   <image source="objects.PNG" width="416" height="224"/>
@@ -18211,7 +18211,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="841"/>
    <tile/>
    <tile/>
    <tile/>
@@ -18291,6 +18291,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="841"/>
    <tile/>
    <tile/>
    <tile/>
@@ -18370,8 +18371,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="841"/>
    <tile/>
    <tile/>
    <tile/>
@@ -18451,7 +18451,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="841"/>
    <tile/>
    <tile/>
    <tile/>
@@ -18531,7 +18531,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="841"/>
    <tile/>
    <tile/>
    <tile/>
@@ -18611,7 +18611,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="841"/>
    <tile/>
    <tile/>
    <tile/>
@@ -18691,7 +18691,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
+   <tile gid="841"/>
    <tile/>
    <tile/>
    <tile/>
@@ -18770,45 +18770,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile/>
-   <tile gid="841"/>
-   <tile/>
-   <tile/>
-   <tile gid="841"/>
-   <tile gid="841"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="841"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="841"/>
-   <tile/>
-   <tile/>
-   <tile gid="841"/>
-   <tile/>
-   <tile gid="841"/>
    <tile gid="841"/>
    <tile gid="841"/>
    <tile gid="841"/>
@@ -18827,16 +18788,55 @@
    <tile gid="841"/>
    <tile gid="841"/>
    <tile/>
-   <tile/>
    <tile gid="841"/>
    <tile/>
    <tile/>
    <tile gid="841"/>
    <tile gid="841"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="841"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile gid="841"/>
+   <tile/>
+   <tile/>
+   <tile gid="841"/>
+   <tile/>
    <tile gid="841"/>
    <tile gid="841"/>
    <tile gid="841"/>
    <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile/>
+   <tile/>
+   <tile gid="841"/>
+   <tile/>
+   <tile/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
    <tile/>
    <tile/>
    <tile/>
@@ -18850,8 +18850,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="843"/>
-   <tile gid="843"/>
+   <tile gid="841"/>
+   <tile gid="841"/>
    <tile gid="841"/>
    <tile/>
    <tile/>
@@ -19336,7 +19336,7 @@
   <object id="2" x="2016" y="634" width="128" height="101.333"/>
  </objectgroup>
  <objectgroup id="20" name="StartPoint">
-  <object id="1" x="143.333" y="510" width="38.6667" height="85.3333"/>
+  <object id="1" x="147.333" y="638" width="38.6667" height="85.3333"/>
  </objectgroup>
  <objectgroup id="22" name="SnakeSpawn1">
   <object id="3" x="288.059" y="666.333" width="31.9487" height="31.9727"/>
