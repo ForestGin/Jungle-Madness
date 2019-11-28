@@ -24,7 +24,7 @@
   <object id="331" x="0" y="48" width="32" height="48"/>
  </objectgroup>
  <objectgroup color="#ffffff" id="55" name="Collider_Bat">
-  <object id="283" x="10" y="10" width="11.9091" height="11.8615"/>
+  <object id="283" x="10" y="10" width="12" height="12"/>
  </objectgroup>
  <imagelayer id="3" name="Sprites">
   <image source="../Sprites/Bat_Sprite_Sheet2x.png" width="128" height="192"/>
