@@ -105,8 +105,8 @@ private:
 	p2SString			title;
 	p2SString			organization;
 
-	mutable bool		want_to_save;
-	mutable bool		want_to_load;
+	mutable bool		want_to_save = false;
+	mutable bool		want_to_load = false;
 	
 	p2SString			load_game;
 	mutable p2SString	save_game;

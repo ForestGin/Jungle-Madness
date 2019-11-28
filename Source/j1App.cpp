@@ -21,6 +21,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 {
 	want_to_save = want_to_load = false;
 
+	PERF_START(ptimer);
+
 	input = new j1Input();
 	win = new j1Window();
 	render = new j1Render();
@@ -47,6 +49,8 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 
 	// render last to swap buffer
 	AddModule(render);
+
+	PERF_PEEK(ptimer);
 }
 
 // Destructor
@@ -73,6 +77,8 @@ void j1App::AddModule(j1Module* module)
 // Called before render is available
 bool j1App::Awake()
 {
+	PERF_START(ptimer);
+
 	pugi::xml_document	config_file;
 	pugi::xml_node		config;
 	pugi::xml_node		app_config;
@@ -88,6 +94,13 @@ bool j1App::Awake()
 		app_config = config.child("app");
 		title.create(app_config.child("title").child_value());
 		organization.create(app_config.child("organization").child_value());
+
+		framerate_cap = app_config.attribute("framerate_cap").as_uint();
+
+		if (framerate_cap > 0.0f)
+		{
+			capped_ms = 1000.0f / framerate_cap;
+		}
 	}
 
 	if (ret == true)
@@ -102,6 +115,8 @@ bool j1App::Awake()
 		}
 	}
 
+	PERF_PEEK(ptimer);
+
 	return ret;
 }
 
@@ -109,6 +124,9 @@ bool j1App::Awake()
 bool j1App::Start()
 {
 	bool ret = true;
+
+	PERF_START(ptimer);
+
 	p2List_item<j1Module*>* item;
 	item = modules.start;
 
@@ -117,6 +135,10 @@ bool j1App::Start()
 		ret = item->data->Start();
 		item = item->next;
 	}
+
+	startup_time.Start();
+
+	PERF_PEEK(ptimer);
 
 	return ret;
 }
@@ -298,6 +320,9 @@ bool j1App::PostUpdate()
 bool j1App::CleanUp()
 {
 	bool ret = true;
+
+	PERF_START(ptimer);
+
 	p2List_item<j1Module*>* item;
 	item = modules.end;
 
@@ -306,6 +331,8 @@ bool j1App::CleanUp()
 		ret = item->data->CleanUp();
 		item = item->prev;
 	}
+
+	PERF_PEEK(ptimer);
 
 	return ret;
 }

@@ -334,6 +334,9 @@ bool j1Scene::Update(float dt)
 	{
 		bool result = App->LoadGame("save_game.xml");
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+		App->cap_on = !App->cap_on;
 	
 
 //-----------------------------------------

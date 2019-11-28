@@ -704,6 +704,8 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
  			playerstate = STATE::DEAD;
 
 			CurrentAnimation = playerinfo.Death;
+
+			Current_Velocity = { 0,0 };
 			//SFX?
 		}
 
@@ -727,6 +729,7 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 		{
 			playerstate = STATE::WINNER;
 			//SFX?
+			Current_Velocity = { 0,0 };
 		}
 
 		//Reseting double jump if player landed

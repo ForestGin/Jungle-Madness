@@ -19,8 +19,9 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 {
 	LOG("Setting up Entity manager");
 	bool ret = true;
+
 	logic_updates_per_second = DEFAULT_LPS;
-	update_ms_cycle = 1.0f / (float)logic_updates_per_second;
+	update_ms_cycle = 1.0f / (float)App->framerate_cap;
 	
 	LOG("Loading Player Parser");
 	pugi::xml_node playernode = config.child("player");
@@ -163,7 +164,7 @@ bool j1EntityManager::PreUpdate()
 
 bool j1EntityManager::Update(float dt)
 {
-	accumulated_time += dt;
+	/*accumulated_time += dt;
 
 	if (accumulated_time >= update_ms_cycle)
 	{
@@ -175,7 +176,10 @@ bool j1EntityManager::Update(float dt)
 	if (logic == true)
 	{
 		accumulated_time = accumulated_time - update_ms_cycle;
-	}
+	}*/
+
+	if (dt < update_ms_cycle*1.25f)
+		EntityUpdate(dt);
 
 	return true;
 }
