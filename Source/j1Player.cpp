@@ -38,6 +38,7 @@ bool j1Player::Start()
 	DoubleJumpAvailable = true;
 
 	CollidingGround = false;
+	CollidingPlatform = false;
 	CollidingLeftWall = false;
 	CollidingRightWall = false;
 	CollidingCeiling = false;
@@ -67,7 +68,7 @@ bool j1Player::Start()
 		/playerinfo.Max_Speed.y = 15.0f; /
 		/playerinfo.Jump_Force = -15.0f;
 	playerinfo.Double_Jump_Force = -10.0f; */
-	
+
 	//-----------------
 	if (spritesheet == nullptr)
 	{
@@ -102,7 +103,7 @@ bool j1Player::Update(float dt)
 
 	return ret;
 
-	
+
 }
 
 bool j1Player::PostUpdate(float dt)
@@ -169,6 +170,7 @@ void j1Player::CheckDeath()
 			}
 
 			CollidingGround = false;
+			CollidingPlatform = false;
 			CollidingLeftWall = false;
 			CollidingRightWall = false;
 			CollidingCeiling = false;
@@ -192,7 +194,7 @@ void j1Player::CheckWin()
 			App->scene->scene2 = true;
 		}
 
-		else 
+		else
 		{
 
 			App->entities->loading = true;
@@ -204,6 +206,7 @@ void j1Player::CheckWin()
 		}
 
 		CollidingGround = false;
+		CollidingPlatform = false;
 		CollidingLeftWall = false;
 		CollidingRightWall = false;
 		CollidingCeiling = false;
@@ -282,7 +285,7 @@ void j1Player::HandleState(float dt)
 			StandingModeMovement(dt);
 		}
 
-	// ---- CROUCHING MOVEMENT ---- 
+		// ---- CROUCHING MOVEMENT ---- 
 
 		if (playermode == MODE::CROUCHING)
 		{
@@ -295,7 +298,7 @@ void j1Player::AddGravity(float dt)
 {
 	if (App->entities->loading == false && playermode != MODE::GOD && playerstate != STATE::WINNER && playerstate != STATE::DEAD)
 	{
-		if (!CollidingGround)
+		if (!CollidingGround && !CollidingPlatform)
 		{
 			//Real gravity when not on ground
 			Current_Velocity.y += playerinfo.Gravity*dt;
@@ -380,7 +383,7 @@ void j1Player::StandingModeMovement(float dt)
 		Current_Velocity.x = -playerinfo.Target_Velocity_x;
 		Future_Position.x = (Position.x + Current_Velocity.x*dt);
 
-		if (CollidingGround == true)
+		if (CollidingGround || CollidingPlatform)
 		{
 			playerstate = STATE::RUNNING;
 		}
@@ -394,7 +397,7 @@ void j1Player::StandingModeMovement(float dt)
 		Current_Velocity.x = playerinfo.Target_Velocity_x;
 		Future_Position.x = (Position.x + Current_Velocity.x*dt);
 
-		if (CollidingGround == true)
+		if (CollidingGround || CollidingPlatform)
 		{
 			playerstate = STATE::RUNNING;
 		}
@@ -417,24 +420,25 @@ void j1Player::StandingModeMovement(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		if (CollidingGround == true)
+		if (CollidingGround || CollidingPlatform)
 		{
 			Jump(dt);
 		}
 
-		else if (CollidingGround == false && DoubleJumpAvailable == true)
+		else if (!CollidingGround && !CollidingPlatform && DoubleJumpAvailable)
 		{
 			DoubleJump(dt);
 		}
 	}
 
 	// ---- IDLE CONDITION ----
-	if (Current_Velocity.x == 0 && CollidingGround == true)
+	if (Current_Velocity.x == 0 && CollidingGround || Current_Velocity.x == 0 && CollidingPlatform)
 	{
 		playerstate = STATE::IDLE;
 	}
 
-	if (Current_Velocity.y > 0 && CollidingGround == false)
+	// ---- FALLING CONDITION ----
+	if (Current_Velocity.y > 0 && !CollidingGround && !CollidingPlatform)
 	{
 		playerstate = STATE::FALLING;
 	}
@@ -450,7 +454,7 @@ void j1Player::CrouchingModeMovenent(float dt)
 		Current_Velocity.x = -playerinfo.Crouch_Velocity_x;
 		Future_Position.x = (Position.x + Current_Velocity.x*dt);
 
-		if (CollidingGround == true)
+		if (CollidingGround || CollidingPlatform)
 		{
 			playerstate = STATE::CROUCHWALKING;
 		}
@@ -464,7 +468,7 @@ void j1Player::CrouchingModeMovenent(float dt)
 		Current_Velocity.x = playerinfo.Crouch_Velocity_x;
 		Future_Position.x = (Position.x + Current_Velocity.x*dt);
 
-		if (CollidingGround == true)
+		if (CollidingGround || CollidingPlatform)
 		{
 			playerstate = STATE::CROUCHWALKING;
 		}
@@ -485,15 +489,29 @@ void j1Player::CrouchingModeMovenent(float dt)
 
 	AddGravity(dt);
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && CollidingGround == true)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		Jump(dt);
+		if (CollidingGround || CollidingPlatform)
+		{
+			Jump(dt);
+		}
+
+		else if (!CollidingGround && !CollidingPlatform && DoubleJumpAvailable)
+		{
+			DoubleJump(dt);
+		}
 	}
 
 	// ---- Idle Condition ---- 
-	if (Current_Velocity.x == 0 && CollidingGround == true)
+	if (Current_Velocity.x == 0 && CollidingGround || Current_Velocity.x == 0 && CollidingPlatform)
 	{
 		playerstate = STATE::CROUCHIDLE;
+	}
+
+	// ---- FALLING CONDITION ----
+	if (Current_Velocity.y > 0 && !CollidingGround && !CollidingPlatform)
+	{
+		playerstate = STATE::FALLING;
 	}
 }
 
@@ -508,6 +526,7 @@ void j1Player::Jump(float dt)
 	playerstate = STATE::JUMPING;
 
 	CollidingGround = false;
+	CollidingPlatform = false;
 }
 
 void j1Player::DoubleJump(float dt)
@@ -522,6 +541,7 @@ void j1Player::DoubleJump(float dt)
 	DoubleJumpAvailable = false;
 
 	CollidingGround = false;
+	CollidingPlatform = false;
 }
 
 void j1Player::HandleAnimations()
@@ -654,6 +674,7 @@ void j1Player::CheckMovement()
 
 	//RESETING COLLIDING CHECKERS
 	CollidingGround = false;
+	CollidingPlatform = false;
 	CollidingLeftWall = false;
 	CollidingRightWall = false;
 	CollidingCeiling = false;
@@ -665,10 +686,11 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 	{
 
 		/*CollidingGround = false;
+		CollidingPlatform = false;
 		CollidingLeftWall = false;
 		CollidingRightWall = false;
-		CollidingCeiling = false;
-*/
+		CollidingCeiling = false;*/
+
 		switch (playermovement)
 		{
 		case MOVEMENT::UPLEFTWARDS:
@@ -701,7 +723,7 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 
 		if (to_check->type == COLLIDER_DEADLY || to_check->type == COLLIDER_SNAKE || to_check->type == COLLIDER_BAT)
 		{
- 			playerstate = STATE::DEAD;
+			playerstate = STATE::DEAD;
 
 			CurrentAnimation = playerinfo.Death;
 
@@ -733,11 +755,11 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 		}
 
 		//Reseting double jump if player landed
-		if (CollidingGround == true)
+		if (CollidingGround || CollidingPlatform)
 		{
 			DoubleJumpAvailable = true;
 		}
-	}	
+	}
 }
 
 void j1Player::UpLeft_Collision(Collider * entitycollider, Collider * to_check)
@@ -957,7 +979,22 @@ void j1Player::DownLeft_Collision(Collider * entitycollider, Collider * to_check
 			}
 
 			CollidingGround = true;
+		}
+		break;
 
+	case COLLIDER_TYPE::COLLIDER_PLATFORM:
+		//CHECKING WHEN COLLIDING DOWN
+		if (Intersection.y + Intersection.h == entitycollider->rect.y + entitycollider->rect.h)
+		{
+			if (Intersection.w / 2 >= Intersection.h)
+			{
+				//Colliding Down
+				entitycollider->rect.y -= Intersection.h;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+
+				CollidingPlatform = true;
+			}
 		}
 		break;
 	default:
@@ -972,12 +1009,29 @@ void j1Player::Down_Collision(Collider * entitycollider, Collider * to_check)
 	switch (to_check->type)
 	{
 	case COLLIDER_TYPE::COLLIDER_FLOOR:
+		//CHECKING WHEN COLLIDING DOWN
+		//Colliding Down
 		entitycollider->rect.y -= Intersection.h;
 		Future_Position.x = entitycollider->rect.x;
 		Future_Position.y = entitycollider->rect.y;
 
 		CollidingGround = true;
 
+		break;
+	case COLLIDER_TYPE::COLLIDER_PLATFORM:
+		//CHECKING WHEN COLLIDING DOWN
+		if (Intersection.y + Intersection.h == entitycollider->rect.y + entitycollider->rect.h)
+		{
+			if (Intersection.w / 2 >= Intersection.h)
+			{
+				//Colliding Down
+				entitycollider->rect.y -= Intersection.h;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+
+				CollidingPlatform = true;
+			}
+		}
 		break;
 	default:
 		break;
@@ -1032,6 +1086,22 @@ void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_chec
 			}
 
 			CollidingGround = true;
+		}
+		break;
+
+	case COLLIDER_TYPE::COLLIDER_PLATFORM:
+		//CHECKING WHEN COLLIDING DOWN
+		if (Intersection.y + Intersection.h == entitycollider->rect.y + entitycollider->rect.h)
+		{
+			if (Intersection.w / 2 >= Intersection.h)
+			{
+				//Colliding Down
+				entitycollider->rect.y -= Intersection.h;
+				Future_Position.x = entitycollider->rect.x;
+				Future_Position.y = entitycollider->rect.y;
+
+				CollidingPlatform = true;
+			}
 		}
 		break;
 	default:
@@ -1178,3 +1248,4 @@ void j1Player::LogicUpdate(float dt)
 
 	/*Entity_Collider->SetPos(Position.x, Position.y);*/
 }
+

@@ -164,6 +164,7 @@ public:
 
 	//Collisions
 	bool CollidingGround;
+	bool CollidingPlatform;
 	bool CollidingLeftWall;
 	bool CollidingRightWall;
 	bool CollidingCeiling;
