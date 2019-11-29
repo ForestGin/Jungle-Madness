@@ -90,24 +90,29 @@ bool j1Player::Start()
 bool j1Player::Update(float dt)
 {
 	bool ret = true;
-
+	
+	//Checks if the player died
 	CheckDeath();
 
+	//Checks if the player got to the finish of the level
 	CheckWin();
 
+	//Handles switching between player modes
 	HandleMode();
-
+	
+	//Handles the player movement and updates the player state
 	HandleState(dt);
 
+	//Checks the movement direction (used mainly for collisions)
 	CheckMovement();
 
+	//Updates the collider position to the "Future Position"
 	UpdateColliderPos();
 
+	//Handles the animations depending on the player states
 	HandleAnimations();
 
 	return ret;
-
-
 }
 
 bool j1Player::PostUpdate(float dt)
@@ -119,8 +124,8 @@ bool j1Player::PostUpdate(float dt)
 	UpdateColliderPos();
 
 	//Calculation for Parallax
-	Player_Displacement.x = Player_Initial_Position.x - Position.x;
-	App->map->PX = Player_Displacement.x;
+	/*Player_Displacement.x = Player_Initial_Position.x - Position.x;
+	App->map->PX = Player_Displacement.x;*/
 
 	//Player position being controlled
 
@@ -147,6 +152,8 @@ void j1Player::CheckDeath()
 	{
 		if (CurrentAnimation->Finished())
 		{
+			playerinfo.Death->Reset();
+
 			if (SavedCheckPoint)
 			{
 				bool result = App->LoadGame("save_game.xml");
@@ -434,6 +441,11 @@ void j1Player::StandingModeMovement(float dt)
 		{
 			DoubleJump(dt);
 		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && CollidingPlatform)
+	{
+		Future_Position.y += 20;
 	}
 
 	// ---- IDLE CONDITION ----

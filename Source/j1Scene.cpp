@@ -299,6 +299,10 @@ bool j1Scene::PreUpdate()
 		App->render->camera.y = (-App->map->data.height*App->map->data.tile_height*App->win->GetScale() + App->render->camera.h);
 	}
 
+	//check utility of this when doing player
+	camera_displacement.x = App->render->camera_initial_pos.x - App->render->camera.x;
+	App->map->PX = -camera_displacement.x;
+
 	return true;
 }
 
@@ -363,9 +367,6 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x -= 10;
-
-	//check utility of this when doing player
-	camera_displacement.x = App->render->camera_initial_pos.x - App->render->camera.x;
 	
 	//App->map->Draw(App->map->data);
 
