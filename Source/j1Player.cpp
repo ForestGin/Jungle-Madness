@@ -90,6 +90,7 @@ bool j1Player::Start()
 bool j1Player::Update(float dt)
 {
 	bool ret = true;
+	
 
 	CheckDeath();
 

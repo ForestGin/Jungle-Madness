@@ -6,23 +6,23 @@
 	<audio />
 	<entities>
 		<Player>
-			<Playerx value="479" />
-			<Playery value="678" />
+			<Playerx value="531" />
+			<Playery value="646" />
 		</Player>
 		<Bat1>
 			<Batx value="877" />
 			<Baty value="524" />
 		</Bat1>
 		<Bat2>
-			<Batx value="485" />
-			<Baty value="523" />
+			<Batx value="526" />
+			<Baty value="535" />
 		</Bat2>
 		<Snake1>
-			<Snakex value="299" />
+			<Snakex value="309" />
 			<Snakey value="710" />
 		</Snake1>
 		<Snake2>
-			<Snakex value="396.5" />
+			<Snakex value="405.5" />
 			<Snakey value="710" />
 		</Snake2>
 	</entities>
@@ -34,6 +34,6 @@
 		<scene2 value="false" />
 	</scene>
 	<renderer>
-		<camera x="-462" y="-760" />
+		<camera x="-566" y="-1000" />
 	</renderer>
 </game_state>
