@@ -45,6 +45,8 @@ bool j1Player::Start()
 
 	SavedCheckPointArea = 64;
 
+	playerinfo.Animation_Offset = playerinfo.Animation_Offset_St;
+
 	Current_Velocity = { 0, 0 };
 
 	Entity_Collider = App->col->AddCollider(Entity_Collider_Rect, COLLIDER_PLAYER, (j1Module*)manager);
@@ -123,13 +125,9 @@ bool j1Player::PostUpdate(float dt)
 
 	UpdateColliderPos();
 
-	//Calculation for Parallax
+	//OLD Calculation for Parallax -> Moved to camera
 	/*Player_Displacement.x = Player_Initial_Position.x - Position.x;
 	App->map->PX = Player_Displacement.x;*/
-
-	//Player position being controlled
-
-
 
 	//Blitting player
 	if (playerdirection == DIRECTION::RIGHT)
@@ -261,20 +259,24 @@ void j1Player::HandleMode()
 	{
 		if (playermode == MODE::STANDING)
 		{
+			//PLAYER CROUCHING PACK
 			playermode = MODE::CROUCHING;
+			Entity_Collider->rect = playerinfo.Crouching_Rect;
+			playerinfo.Animation_Offset = playerinfo.Animation_Offset_Cr;
+			Future_Position.y += 26; //colliders height difference
 
 			playerstate = STATE::CROUCHIDLE;
-
-			Entity_Collider->rect = playerinfo.Crouching_Rect;
 		}
 
 		else if (playermode == MODE::CROUCHING)
 		{
+			//PLAYER STANDING PACK
 			playermode = MODE::STANDING;
+			Entity_Collider->rect = playerinfo.Standing_Rect;
+			playerinfo.Animation_Offset = playerinfo.Animation_Offset_St;
+			Future_Position.y -= 26; //colliders height difference
 
 			playerstate = STATE::IDLE;
-
-			Entity_Collider->rect = playerinfo.Standing_Rect;
 		}
 	}
 }
@@ -318,9 +320,16 @@ void j1Player::AddGravity(float dt)
 		}
 		else
 		{
-			//Fake gravity when on ground to avoid collision problems
-			Current_Velocity.y = playerinfo.Target_Velocity_x;
-			Future_Position.y += Current_Velocity.y*dt;
+			if (playermode == MODE::CROUCHING)
+			{
+				Current_Velocity.y = playerinfo.Crouch_Velocity_x;
+				Future_Position.y += Current_Velocity.y*dt;
+			}
+			else
+			{
+				Current_Velocity.y = playerinfo.Target_Velocity_x;
+				Future_Position.y += Current_Velocity.y*dt;
+			}
 		}
 	}
 
@@ -388,7 +397,7 @@ void j1Player::GodModeMovement(float dt)
 void j1Player::StandingModeMovement(float dt)
 {
 	// ---- X AXIS MOVEMENT ----
-
+	playerinfo.Animation_Offset = playerinfo.Animation_Offset_St;
 			// ---- LEFT ----
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
@@ -519,6 +528,11 @@ void j1Player::CrouchingModeMovenent(float dt)
 		}
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && CollidingPlatform)
+	{
+		Future_Position.y += 20;
+	}
+
 	// ---- Idle Condition ---- 
 	if (Current_Velocity.x == 0 && CollidingGround || Current_Velocity.x == 0 && CollidingPlatform)
 	{
@@ -528,6 +542,14 @@ void j1Player::CrouchingModeMovenent(float dt)
 	// ---- FALLING CONDITION ----
 	if (Current_Velocity.y > 0 && !CollidingGround && !CollidingPlatform)
 	{
+		//If player falls is not crouching anymore
+
+		//PLAYER STANDING PACK
+		playermode = MODE::STANDING;
+		Entity_Collider->rect = playerinfo.Standing_Rect;
+		playerinfo.Animation_Offset = playerinfo.Animation_Offset_St;
+		Future_Position.y -= 26; //colliders height difference
+
 		playerstate = STATE::FALLING;
 	}
 }
@@ -538,7 +560,13 @@ void j1Player::Jump(float dt)
 	Current_Velocity.y = playerinfo.Jump_Force;
 	Future_Position.y = (Position.y + Current_Velocity.y*dt);
 
+	//If player jumps is not crouching anymore
+
+	//PLAYER STANDING PACK
 	playermode = MODE::STANDING;
+	Entity_Collider->rect = playerinfo.Standing_Rect;
+	playerinfo.Animation_Offset = playerinfo.Animation_Offset_St;
+	Future_Position.y -= 26; //colliders height difference
 
 	playerstate = STATE::JUMPING;
 
@@ -619,14 +647,7 @@ void j1Player::HandleAnimations()
 
 void j1Player::UpdateColliderPos()
 {
-	if (playermode == MODE::STANDING || playermode == MODE::GOD)
-	{
-		Entity_Collider->SetPos(Future_Position.x, Future_Position.y);
-	}
-	else
-	{
-		Entity_Collider->SetPos(Future_Position.x, Future_Position.y + 26);
-	}
+	Entity_Collider->SetPos(Future_Position.x, Future_Position.y);
 }
 
 void j1Player::CheckMovement()
@@ -795,6 +816,8 @@ void j1Player::UpLeft_Collision(Collider * entitycollider, Collider * to_check)
 				entitycollider->rect.x += Intersection.w;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
+
+				CollidingLeftWall = true;
 			}
 			else if (Intersection.w < Intersection.h)
 			{
@@ -802,9 +825,9 @@ void j1Player::UpLeft_Collision(Collider * entitycollider, Collider * to_check)
 				entitycollider->rect.x += Intersection.w;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
-			}
 
-			CollidingLeftWall = true;
+				CollidingLeftWall = true;
+			}
 		}
 
 		//CHECKING WHEN COLLIDING UP
@@ -816,6 +839,8 @@ void j1Player::UpLeft_Collision(Collider * entitycollider, Collider * to_check)
 				entitycollider->rect.y += Intersection.h;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
+
+				CollidingCeiling = true;
 			}
 			else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
 			{
@@ -823,9 +848,9 @@ void j1Player::UpLeft_Collision(Collider * entitycollider, Collider * to_check)
 				entitycollider->rect.y += Intersection.h;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
-			}
 
-			CollidingCeiling = true;
+				CollidingCeiling = true;
+			}
 		}
 		break;
 	default:
@@ -869,6 +894,8 @@ void j1Player::UpRight_Collision(Collider * entitycollider, Collider * to_check)
 				entitycollider->rect.x -= Intersection.w;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
+
+				CollidingRightWall = true;
 			}
 			else if (Intersection.w < Intersection.h)
 			{
@@ -876,10 +903,9 @@ void j1Player::UpRight_Collision(Collider * entitycollider, Collider * to_check)
 				entitycollider->rect.x -= Intersection.w;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
+
+				CollidingRightWall = true;
 			}
-
-			CollidingRightWall = true;
-
 		}
 
 		//CHECKING WHEN COLLIDING UP
@@ -891,6 +917,8 @@ void j1Player::UpRight_Collision(Collider * entitycollider, Collider * to_check)
 				entitycollider->rect.y += Intersection.h;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
+
+				CollidingCeiling = true;
 			}
 			else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
 			{
@@ -898,10 +926,9 @@ void j1Player::UpRight_Collision(Collider * entitycollider, Collider * to_check)
 				entitycollider->rect.y += Intersection.h;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
+
+				CollidingCeiling = true;
 			}
-
-			CollidingCeiling = true;
-
 		}
 		break;
 	default:
@@ -964,6 +991,8 @@ void j1Player::DownLeft_Collision(Collider * entitycollider, Collider * to_check
 				entitycollider->rect.x += Intersection.w;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
+
+				CollidingLeftWall = true;
 			}
 			else if (Intersection.w < Intersection.h)
 			{
@@ -971,10 +1000,9 @@ void j1Player::DownLeft_Collision(Collider * entitycollider, Collider * to_check
 				entitycollider->rect.x += Intersection.w;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
+				
+				CollidingLeftWall = true;
 			}
-
-			CollidingLeftWall = true;
-
 		}
 
 		//CHECKING WHEN COLLIDING DOWN
@@ -986,6 +1014,8 @@ void j1Player::DownLeft_Collision(Collider * entitycollider, Collider * to_check
 				entitycollider->rect.y -= Intersection.h;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
+				
+				CollidingGround = true;
 			}
 			else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
 			{
@@ -993,9 +1023,9 @@ void j1Player::DownLeft_Collision(Collider * entitycollider, Collider * to_check
 				entitycollider->rect.y -= Intersection.h;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
-			}
 
-			CollidingGround = true;
+				CollidingGround = true;
+			}
 		}
 		break;
 
@@ -1071,6 +1101,8 @@ void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_chec
 				entitycollider->rect.x -= Intersection.w;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
+
+				CollidingRightWall = true;
 			}
 			else if (Intersection.w < Intersection.h)
 			{
@@ -1078,9 +1110,11 @@ void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_chec
 				entitycollider->rect.x -= Intersection.w;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
+
+				CollidingRightWall = true;
 			}
 
-			CollidingRightWall = true;
+			
 
 		}
 
@@ -1093,6 +1127,8 @@ void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_chec
 				entitycollider->rect.y -= Intersection.h;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
+
+				CollidingGround = true;
 			}
 			else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
 			{
@@ -1100,9 +1136,11 @@ void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_chec
 				entitycollider->rect.y -= Intersection.h;
 				Future_Position.x = entitycollider->rect.x;
 				Future_Position.y = entitycollider->rect.y;
+
+				CollidingGround = true;
 			}
 
-			CollidingGround = true;
+			
 		}
 		break;
 

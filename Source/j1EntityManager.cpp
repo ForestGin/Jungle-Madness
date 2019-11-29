@@ -51,9 +51,13 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	playerinfo.God = LoadAnimation(playerinfo.folder.GetString(), "God_Mode");
 
 	//ANIMATIONS OFFSET
-	x = playernode.child("animation_offset").attribute("x").as_int();
-	y = playernode.child("animation_offset").attribute("y").as_int();
-	playerinfo.Animation_Offset = { x,y };
+	x = playernode.child("animation_offset").child("st").attribute("x").as_int();
+	y = playernode.child("animation_offset").child("st").attribute("y").as_int();
+	playerinfo.Animation_Offset_St = { x,y };
+
+	x = playernode.child("animation_offset").child("cr").attribute("x").as_int();
+	y = playernode.child("animation_offset").child("cr").attribute("y").as_int();
+	playerinfo.Animation_Offset_Cr = { x,y };
 
 	//ANIMATIONS TWEAKING
 	playerinfo.DoubleJump->speed = 20.0f;

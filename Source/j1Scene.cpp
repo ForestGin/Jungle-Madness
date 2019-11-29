@@ -299,7 +299,7 @@ bool j1Scene::PreUpdate()
 		App->render->camera.y = (-App->map->data.height*App->map->data.tile_height*App->win->GetScale() + App->render->camera.h);
 	}
 
-	//check utility of this when doing player
+	//Parallax calculation
 	camera_displacement.x = App->render->camera_initial_pos.x - App->render->camera.x;
 	App->map->PX = -camera_displacement.x;
 

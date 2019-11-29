@@ -75,6 +75,8 @@ struct PlayerData {
 	SDL_Rect Crouching_Rect = { 0,0,0,0 };
 
 	iPoint Animation_Offset = { 0,0 };
+	iPoint Animation_Offset_St = { 0,0 };
+	iPoint Animation_Offset_Cr = { 0,0 };
 
 	//Velocities
 	float Target_Velocity_x = 0;
