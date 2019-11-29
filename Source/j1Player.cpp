@@ -217,7 +217,10 @@ void j1Player::CheckWin()
 		CollidingCeiling = false;
 
 		playerstate = STATE::FALLING;
+		/*App->SaveGame("save_game.xml");*/
 	}
+
+	
 }
 
 void j1Player::HandleMode()
