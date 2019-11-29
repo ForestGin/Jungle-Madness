@@ -991,7 +991,7 @@ void j1Player::DownLeft_Collision(Collider * entitycollider, Collider * to_check
 		//CHECKING WHEN COLLIDING DOWN
 		if (Intersection.y + Intersection.h == entitycollider->rect.y+entitycollider->rect.h)
 		{
-			if (Intersection.w / 2 >= Intersection.h)
+			if (Intersection.w >= Intersection.h)
 			{
 				//Colliding Down
 				entitycollider->rect.y -= Intersection.h;
@@ -1027,7 +1027,7 @@ void j1Player::Down_Collision(Collider * entitycollider, Collider * to_check)
 		//CHECKING WHEN COLLIDING DOWN
 		if (Intersection.y + Intersection.h == entitycollider->rect.y + entitycollider->rect.h)
 		{
-			if (Intersection.w / 2 >= Intersection.h)
+			if (Intersection.w >= Intersection.h)
 			{
 				//Colliding Down
 				entitycollider->rect.y -= Intersection.h;
@@ -1098,7 +1098,7 @@ void j1Player::DownRight_Collision(Collider * entitycollider, Collider * to_chec
 		//CHECKING WHEN COLLIDING DOWN
 		if (Intersection.y + Intersection.h == entitycollider->rect.y + entitycollider->rect.h)
 		{
-			if (Intersection.w / 2 >= Intersection.h)
+			if (Intersection.w >= Intersection.h)
 			{
 				//Colliding Down
 				entitycollider->rect.y -= Intersection.h;

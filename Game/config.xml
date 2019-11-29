@@ -60,11 +60,11 @@
         <crouching x="0" y="0" width="32" height="32"/>
       </collider> />
       <animation_offset x="34" y="14"/>
-      <velocity x="250.0" y="0.0"  max_speed_y="15.0" initalVx="250.0" jump_force="-15.0" double_jump_force="-10.0"/>
+      <velocity x="300.0" y="0.0"  max_speed_y="15.0" initalVx="300.0" jump_force="-20.0" double_jump_force="-12.0"/>
       <velocities>
         <god_velocity value="500.0"/>
-        <target_velocity value="250.0"/>
-        <crouch_velocity value="125.0"/>
+        <target_velocity value="300.0"/>
+        <crouch_velocity value="150.0"/>
       </velocities>
       <gravity value="50.0"/>
     </player>
@@ -75,7 +75,7 @@
       <colliding_offset value="5" />
       <printingoffset x="22" y="38"/>
       <Velocity x="0.5" y="0.0" initalVx="2.0"/>
-      <areaofaction value="100"/>
+      <areaofaction value="200"/>
       <gravity value="-4.0"/>
       <ID value1 ="4" value2 ="5"/>
     </snake>
@@ -86,7 +86,7 @@
       <collider x="0" y="0" width="12" height="12"/>
       <printingoffset x="10" y="10"/>
       <Velocity x="1" y="0.5" initalVx="2.0"/>
-      <areaofaction value="100"/>
+      <areaofaction value="150"/>
       <ID value1 ="2" value2 ="3"/>
     </bat>
     

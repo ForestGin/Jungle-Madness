@@ -209,6 +209,7 @@ bool j1Scene::PreUpdate()
 	int x, y;
 	App->input->GetMousePosition(x, y);
 	iPoint p = App->render->ScreenToWorld(x, y);
+
 	if (scene1)
 	{
 		p = App->map->WorldToMap(p.x, p.y, App->map->data);
@@ -217,6 +218,7 @@ bool j1Scene::PreUpdate()
 	{
 		p = App->map->WorldToMap(p.x, p.y, App->map->data2);
 	}
+
 	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
 		if (origin_selected == true)
@@ -258,9 +260,9 @@ bool j1Scene::PreUpdate()
 	//camera X axis
 	App->render->camera.x = (-player->Position.x*App->win->GetScale() - player->Entity_Collider->rect.w/2  + App->render->camera.w /2);
 
-	if (-App->render->camera.x <= player->playerinfo.Initial_Velocity_x)
+	if (-App->render->camera.x <= 2)
 	{
-		App->render->camera.x = -player->playerinfo.Initial_Velocity_x;
+		App->render->camera.x = -2;
 	}
 
 	if (-App->render->camera.x + App->render->camera.w >= App->map->data.width*App->map->data.tile_width*App->win->GetScale())
@@ -271,27 +273,32 @@ bool j1Scene::PreUpdate()
 	// camera up y axis
 	if (player->Position.y*App->win->GetScale() <= -App->render->camera.y + App->render->camera.h / 6)
 	{
-		if (App->render->camera.y + (-player->gravity * 8) < 0)
-			App->render->camera.y += (-player->gravity * 8);
+		if (App->render->camera.y + 8 < 0)
+			App->render->camera.y = -(player->Position.y * App->win->GetScale() - App->render->camera.h / 6);
 	}
 
 	//camera down y axis
 	
-	if (App->col->Player_Touch == 0)
+	if (player->Position.y*App->win->GetScale() + player->Entity_Collider->rect.h >= -App->render->camera.y + App->render->camera.h - App->render->camera.h / 6)
 	{
-		App->render->camera.y = -1000;
+		/*if (player->playerstate != STATE::FALLING)*/
+			App->render->camera.y = -(player->Position.y * App->win->GetScale() + player->Entity_Collider->rect.h - App->render->camera.h + App->render->camera.h / 6);
+		/*else
+			App->render->camera.y -= 8;*/
 	}
 
-	if (App->col->Player_Touch > 0 && player->Position.y*App->win->GetScale() > -App->render->camera.y + App->render->camera.h - App->render->camera.h / 6)
+
+	if (player->Position.y*App->win->GetScale() > -App->render->camera.y + App->render->camera.h - App->render->camera.h / 6)
 	{
-		App->render->camera.y -= -(player->gravity * 8) + 150;
+		App->render->camera.y -= 10;
 	}
 
 
-	if (App->col->Player_Touch > 0 && -App->render->camera.y + App->render->camera.h > App->map->data.height*App->map->data.tile_height*App->win->GetScale())
+	if (-App->render->camera.y + App->render->camera.h > App->map->data.height*App->map->data.tile_height*App->win->GetScale())
 	{
 		App->render->camera.y = (-App->map->data.height*App->map->data.tile_height*App->win->GetScale() + App->render->camera.h);
 	}
+
 	return true;
 }
 
