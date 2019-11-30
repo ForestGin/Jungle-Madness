@@ -111,7 +111,6 @@ bool j1Scene::Start()
 		player->Position.x = App->map->data.StartPoint.x;
 		player->Position.y = App->map->data.StartPoint.y;
 		player->Future_Position = player->Position;
-		player->Player_Initial_Position = player->Position;
 		snake->Position.x = App->map->data.Snake1.x;
 		snake->Position.y = App->map->data.Snake1.y;
 		bat->Position.x = App->map->data.Bat1.x;
@@ -153,7 +152,6 @@ bool j1Scene::Start()
 		player->Position.x = App->map->data2.StartPoint.x;
 		player->Position.y = App->map->data2.StartPoint.y;
 		player->Future_Position = player->Position;
-		player->Player_Initial_Position = player->Position;
 		snake->Position.x = App->map->data2.Snake1.x;
 		snake->Position.y = App->map->data2.Snake1.y;
 		bat->Position.x = App->map->data2.Bat1.x;
@@ -349,6 +347,7 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN )
 	{
 		bool result = App->LoadGame("save_game.xml");
+		
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
@@ -590,8 +589,7 @@ void j1Scene::EntityPosition(const char* scene)
 	// Colliders
 	player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
 	player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
-	player->Future_Position = player->Position;
-	/*player->Player_Initial_Position = player->Position;*/
+	/*player->Future_Position = player->Position;*/
 	snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
 	snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
 	bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
@@ -618,7 +616,7 @@ bool j1Scene::Save(pugi::xml_node &config) const
 
 bool j1Scene::Load(pugi::xml_node &config)
 {
-
+	
 	bool ret = true;
 	int x = player->Position.x;
 	int y = player->Position.y;
@@ -630,6 +628,13 @@ bool j1Scene::Load(pugi::xml_node &config)
 	int bat2y = bat2->Position.y;
 	int snake2x = snake2->Position.x;
 	int snake2y = snake2->Position.y;
+	//save & load working with this
+	player->Future_Position = player->Position;
+
+
+	//THIS SHOULNDT BREAK THE SAVE AND LOAD, BUT...
+	/*player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
+	player->Entity_Collider->SetPos(player->Position.x, player->Position.y);*/
 
 	scene1Loaded = config.child("scene1").attribute("value").as_bool();
 	scene2Loaded= config.child("scene2").attribute("value").as_bool();
@@ -644,7 +649,7 @@ bool j1Scene::Load(pugi::xml_node &config)
 			SceneChange(scenes.start->next->data->GetString());
 			scene2 = true;
 			scene1 = false;
-			player->Position.x = x;
+			/*player->Position.x = x;
 			player->Position.y = y;
 			bat->Position.x = batx;
 			bat->Position.y = baty;
@@ -653,7 +658,7 @@ bool j1Scene::Load(pugi::xml_node &config)
 			bat2->Position.x = bat2x;
 			bat2->Position.y = bat2y;
 			snake2->Position.x = snake2x;
-			snake2->Position.y = snake2y;
+			snake2->Position.y = snake2y;*/
 		}
 
 		else
@@ -662,7 +667,7 @@ bool j1Scene::Load(pugi::xml_node &config)
 			SceneChange(scenes.start->data->GetString());
 			scene1 = true;
 			scene2 = false;
-			player->Position.x = x;
+			/*player->Position.x = x;
 			player->Position.y = y;
 			bat->Position.x = batx;
 			bat->Position.y = baty;
@@ -671,7 +676,7 @@ bool j1Scene::Load(pugi::xml_node &config)
 			bat2->Position.x = bat2x;
 			bat2->Position.y = bat2y;
 			snake2->Position.x = snake2x;
-			snake2->Position.y = snake2y;
+			snake2->Position.y = snake2y;*/
 		}
 
 	}
@@ -685,7 +690,7 @@ bool j1Scene::Load(pugi::xml_node &config)
 			SceneChange(scenes.start->data->GetString());
 			scene1 = true;
 			scene2 = false;
-			player->Position.x = x;
+			/*player->Position.x = x;
 			player->Position.y = y;
 			bat->Position.x = batx;
 			bat->Position.y = baty;
@@ -694,7 +699,7 @@ bool j1Scene::Load(pugi::xml_node &config)
 			bat2->Position.x = bat2x;
 			bat2->Position.y = bat2y;
 			snake2->Position.x = snake2x;
-			snake2->Position.y = snake2y;
+			snake2->Position.y = snake2y;*/
 		}
 
 		else
@@ -703,7 +708,7 @@ bool j1Scene::Load(pugi::xml_node &config)
 			SceneChange(scenes.start->next->data->GetString());
 			scene1 = false;
 			scene2 = true;
-			player->Position.x = x;
+			/*player->Position.x = x;
 			player->Position.y = y;
 			bat->Position.x = batx;
 			bat->Position.y = baty;
@@ -712,7 +717,7 @@ bool j1Scene::Load(pugi::xml_node &config)
 			bat2->Position.x = bat2x;
 			bat2->Position.y = bat2y;
 			snake2->Position.x = snake2x;
-			snake2->Position.y = snake2y;
+			snake2->Position.y = snake2y;*/
 		}
 	}
 
