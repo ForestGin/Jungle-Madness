@@ -342,7 +342,9 @@ bool j1Scene::Update(float dt)
 //SAVE & LOAD SCENE
 
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+	{
 		App->SaveGame("save_game.xml");
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN )
 	{
@@ -355,7 +357,7 @@ bool j1Scene::Update(float dt)
 	
 
 //-----------------------------------------
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	/*if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		App->render->camera.y += 10;
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
@@ -366,7 +368,7 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x -= 10;
-	
+	*/
 	//App->map->Draw(App->map->data);
 
 	int x, y;
@@ -489,7 +491,7 @@ bool j1Scene::SceneChange(const char* scene)
 
 		p2SString stageMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->data->GetString());
 		App->audio->PlayMusic(stageMusic.GetString());
-
+		player->playerstate = STATE::FALLING;
 		
 
 		//pathfinding map1
@@ -511,7 +513,7 @@ bool j1Scene::SceneChange(const char* scene)
 
 		p2SString stageMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->next->data->GetString());
 		App->audio->PlayMusic(stageMusic.GetString());
-
+		player->playerstate = STATE::FALLING;
 
 		//pathfinding map2
 		int w, h;
@@ -524,6 +526,7 @@ bool j1Scene::SceneChange(const char* scene)
 	}
 
 	App->entities->loading = false;
+	/*App->SaveGame("save_game.xml");*/
 
 	return ret;
 }
@@ -589,7 +592,8 @@ void j1Scene::EntityPosition(const char* scene)
 	// Colliders
 	player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
 	player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
-	/*player->Future_Position = player->Position;*/
+	player->Future_Position = player->Position;
+
 	snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
 	snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
 	bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
@@ -620,16 +624,21 @@ bool j1Scene::Load(pugi::xml_node &config)
 	bool ret = true;
 	int x = player->Position.x;
 	int y = player->Position.y;
+	player->Future_Position = player->Position;
+
 	int batx = bat->Position.x;
 	int baty = bat->Position.y;
+
 	int snakex = snake->Position.x;
 	int snakey = snake->Position.y;
+
 	int bat2x = bat2->Position.x;
 	int bat2y = bat2->Position.y;
+
 	int snake2x = snake2->Position.x;
 	int snake2y = snake2->Position.y;
 	//save & load working with this
-	player->Future_Position = player->Position;
+	
 
 
 	//THIS SHOULNDT BREAK THE SAVE AND LOAD, BUT...
@@ -720,6 +729,23 @@ bool j1Scene::Load(pugi::xml_node &config)
 			snake2->Position.y = snake2y;*/
 		}
 	}
+
+	
+	player->Position.x = x;
+	player->Position.y = y;
+	player->Future_Position = player->Position;
+
+	bat->Position.x = batx;
+	bat->Position.y = baty;
+
+	snake->Position.x = snakex;
+	snake->Position.y = snakey;
+
+	bat2->Position.x = bat2x;
+	bat2->Position.y = bat2y;
+
+	snake2->Position.x = snake2x;
+	snake2->Position.y = snake2y;
 
 	return ret;
 }

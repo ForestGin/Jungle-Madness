@@ -150,7 +150,6 @@ void j1Player::CheckDeath()
 	{
 		if (CurrentAnimation->Finished())
 		{
-			playerinfo.Death->Reset();
 
 			if (SavedCheckPoint)
 			{
@@ -159,7 +158,8 @@ void j1Player::CheckDeath()
 
 			else
 			{
-				if (App->scene->scene1 == true)
+				App->scene->RestartLevel();
+				/*if (App->scene->scene1 == true)
 				{
 					App->entities->loading = true;
 
@@ -175,8 +175,10 @@ void j1Player::CheckDeath()
 					App->scene->SceneChange(App->scene->scenes.start->next->data->GetString());
 					App->scene->scene1 = false;
 					App->scene->scene2 = true;
-				}
+				}*/
 			}
+
+			playerinfo.Death->Reset();
 
 			CollidingGround = false;
 			CollidingPlatform = false;
@@ -194,6 +196,8 @@ void j1Player::CheckWin()
 {
 	if (playerstate == STATE::WINNER)
 	{
+		SavedCheckPoint = false;
+
 		if (App->scene->scene1 == true)
 		{
 			App->entities->loading = true;

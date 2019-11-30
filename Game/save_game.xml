@@ -6,34 +6,34 @@
 	<audio />
 	<entities>
 		<Player>
-			<Playerx value="733.000061" />
-			<Playery value="552.27002" />
+			<Playerx value="921" />
+			<Playery value="678" />
 		</Player>
 		<Bat1>
-			<Batx value="855" />
-			<Baty value="525.5" />
+			<Batx value="154" />
+			<Baty value="663" />
 		</Bat1>
 		<Bat2>
-			<Batx value="579" />
-			<Baty value="548.5" />
+			<Batx value="295" />
+			<Baty value="553" />
 		</Bat2>
 		<Snake1>
-			<Snakex value="289.5" />
+			<Snakex value="144" />
 			<Snakey value="710" />
 		</Snake1>
 		<Snake2>
-			<Snakex value="396" />
-			<Snakey value="710" />
+			<Snakex value="654.5" />
+			<Snakey value="582" />
 		</Snake2>
 	</entities>
 	<collision />
 	<map />
 	<pathfinding />
 	<scene>
-		<scene1 value="true" />
-		<scene2 value="false" />
+		<scene1 value="false" />
+		<scene2 value="true" />
 	</scene>
 	<renderer>
-		<camera x="-950" y="-774" />
+		<camera x="-1346" y="-877" />
 	</renderer>
 </game_state>
