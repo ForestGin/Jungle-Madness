@@ -35,6 +35,7 @@ bool j1Player::Start()
 	playermovement = MOVEMENT::STATIC;
 	playerstate = STATE::IDLE;
 
+	Want_to_Stand_Up = false;
 	DoubleJumpAvailable = true;
 
 	CollidingGround = false;
@@ -159,23 +160,6 @@ void j1Player::CheckDeath()
 			else
 			{
 				App->scene->RestartLevel();
-				/*if (App->scene->scene1 == true)
-				{
-					App->entities->loading = true;
-
-					App->scene->SceneChange(App->scene->scenes.start->data->GetString());
-					App->scene->scene1 = true;
-					App->scene->scene2 = false;
-				}
-
-				else if (App->scene->scene2 == true)
-				{
-					App->entities->loading = true;
-
-					App->scene->SceneChange(App->scene->scenes.start->next->data->GetString());
-					App->scene->scene1 = false;
-					App->scene->scene2 = true;
-				}*/
 			}
 
 			playerinfo.Death->Reset();
@@ -226,7 +210,6 @@ void j1Player::CheckWin()
 		CollidingCeiling = false;
 
 		playerstate = STATE::FALLING;
-		/*App->SaveGame("save_game.xml");*/
 	}
 
 	
@@ -262,11 +245,33 @@ void j1Player::HandleMode()
 
 	//CROUCH/STAND HANDELING
 
+	if (playermode == MODE::CROUCHING)//this checks if player can stand up
+	{
+		if (Want_to_Stand_Up == true)
+		{
+			if (!CollidingCeiling)
+			{
+				//PLAYER STANDING PACK
+				playermode = MODE::STANDING;
+				Entity_Collider->rect = playerinfo.Standing_Rect;
+				playerinfo.Animation_Offset = playerinfo.Animation_Offset_St;
+				Future_Position.y -= 26; //colliders height difference
+
+				playerstate = STATE::IDLE;
+			}
+			else
+			{
+				Want_to_Stand_Up = false;
+			}
+		}
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
 	{
 		if (playermode == MODE::STANDING)
 		{
 			//PLAYER CROUCHING PACK
+			Want_to_Stand_Up = false;
 			playermode = MODE::CROUCHING;
 			Entity_Collider->rect = playerinfo.Crouching_Rect;
 			playerinfo.Animation_Offset = playerinfo.Animation_Offset_Cr;
@@ -277,15 +282,10 @@ void j1Player::HandleMode()
 
 		else if (playermode == MODE::CROUCHING)
 		{
-			//PLAYER STANDING PACK
-			playermode = MODE::STANDING;
-			Entity_Collider->rect = playerinfo.Standing_Rect;
-			playerinfo.Animation_Offset = playerinfo.Animation_Offset_St;
-			Future_Position.y -= 26; //colliders height difference
-
-			playerstate = STATE::IDLE;
+			Want_to_Stand_Up = true;
 		}
 	}
+
 }
 
 void j1Player::HandleState(float dt)
@@ -329,8 +329,16 @@ void j1Player::AddGravity(float dt)
 		{
 			if (playermode == MODE::CROUCHING)
 			{
-				Current_Velocity.y = playerinfo.Crouch_Velocity_x;
-				Future_Position.y += Current_Velocity.y*dt;
+				if (Want_to_Stand_Up == true)
+				{
+					Current_Velocity.y = -playerinfo.Crouch_Velocity_x/50; //inverting gravity so we can check if player can stand up
+					Future_Position.y += Current_Velocity.y*dt;
+				}
+				else
+				{
+					Current_Velocity.y = playerinfo.Crouch_Velocity_x;
+					Future_Position.y += Current_Velocity.y*dt;
+				}
 			}
 			else
 			{
@@ -350,7 +358,7 @@ void j1Player::GodModeMovement(float dt)
 {
 	// ---- X AXIS MOVEMENT ----
 
-			// ---- LEFT ----
+	// ---- LEFT ----
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 		Current_Velocity.x = -playerinfo.God_Velocity;
@@ -446,6 +454,7 @@ void j1Player::StandingModeMovement(float dt)
 
 	AddGravity(dt);
 
+	// ---- JUMPING ----
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		if (CollidingGround || CollidingPlatform)
@@ -459,6 +468,7 @@ void j1Player::StandingModeMovement(float dt)
 		}
 	}
 
+	// ---- FALLING DOWN PLATFORM ----
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && CollidingPlatform)
 	{
 		Future_Position.y += 20;
@@ -471,7 +481,7 @@ void j1Player::StandingModeMovement(float dt)
 	}
 
 	// ---- FALLING CONDITION ----
-	if (Current_Velocity.y > 0 && !CollidingGround && !CollidingPlatform)
+	if (Current_Velocity.y > 0 && !CollidingGround && !CollidingPlatform && !Want_to_Stand_Up)
 	{
 		playerstate = STATE::FALLING;
 	}
@@ -481,7 +491,7 @@ void j1Player::CrouchingModeMovenent(float dt)
 {
 	// ---- X AXIS MOVEMENT ----
 
-			// ---- LEFT ----
+	// ---- LEFT ----
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 		Current_Velocity.x = -playerinfo.Crouch_Velocity_x;
@@ -520,8 +530,27 @@ void j1Player::CrouchingModeMovenent(float dt)
 
 	// ---- Y AXIS MOVEMENT ----
 
+	// ---- CHECKING IF PLAYER JUMPED WHILE CROUCHING BETWEEN 1 TILE SPACE ---
+	if (playerstate == STATE::JUMPING)//If player jumps (and there's no immediate ceiling) is not crouching anymore
+	{
+		if (!CollidingCeiling)
+		{
+			//PLAYER STANDING PACK
+			playermode = MODE::STANDING;
+			Entity_Collider->rect = playerinfo.Standing_Rect;
+			playerinfo.Animation_Offset = playerinfo.Animation_Offset_St;
+			Future_Position.y -= 26; //colliders height difference
+		}
+		else
+		{
+			playerstate = STATE::CROUCHIDLE;
+			Current_Velocity.y = 0;
+		}
+	}
+
 	AddGravity(dt);
 
+	// ---- JUMPING ----
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		if (CollidingGround || CollidingPlatform)
@@ -535,9 +564,16 @@ void j1Player::CrouchingModeMovenent(float dt)
 		}
 	}
 
+	// ---- FALLING DOWN PLATFORM ----
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && CollidingPlatform)
 	{
 		Future_Position.y += 20;
+
+		//PLAYER STANDING PACK
+		playermode = MODE::STANDING;
+		Entity_Collider->rect = playerinfo.Standing_Rect;
+		playerinfo.Animation_Offset = playerinfo.Animation_Offset_St;
+		Future_Position.y -= 26; //colliders height difference
 	}
 
 	// ---- Idle Condition ---- 
@@ -547,7 +583,7 @@ void j1Player::CrouchingModeMovenent(float dt)
 	}
 
 	// ---- FALLING CONDITION ----
-	if (Current_Velocity.y > 0 && !CollidingGround && !CollidingPlatform)
+	if (Current_Velocity.y > 0 && !CollidingGround && !CollidingPlatform && !CollidingCeiling && !Want_to_Stand_Up)
 	{
 		//If player falls is not crouching anymore
 
@@ -566,14 +602,6 @@ void j1Player::Jump(float dt)
 	//Adding Y velocity
 	Current_Velocity.y = playerinfo.Jump_Force;
 	Future_Position.y = (Position.y + Current_Velocity.y*dt);
-
-	//If player jumps is not crouching anymore
-
-	//PLAYER STANDING PACK
-	playermode = MODE::STANDING;
-	Entity_Collider->rect = playerinfo.Standing_Rect;
-	playerinfo.Animation_Offset = playerinfo.Animation_Offset_St;
-	Future_Position.y -= 26; //colliders height difference
 
 	playerstate = STATE::JUMPING;
 
@@ -814,49 +842,67 @@ void j1Player::UpLeft_Collision(Collider * entitycollider, Collider * to_check)
 	switch (to_check->type)
 	{
 	case COLLIDER_TYPE::COLLIDER_FLOOR:
-		//CHECKING WHEN COLLIDING LEFT
-		if (Intersection.x == entitycollider->rect.x)
+
+		if (playermode == MODE::CROUCHING)//this is for preventing problems when crouching and jumping between 1 tile space
 		{
-			if (Intersection.y > entitycollider->rect.y)
-			{
-				//Colliding Left
-				entitycollider->rect.x += Intersection.w;
-				Future_Position.x = entitycollider->rect.x;
-				Future_Position.y = entitycollider->rect.y;
+			//Colliding Up
+			entitycollider->rect.y += Intersection.h;
+			Future_Position.x = entitycollider->rect.x;
+			Future_Position.y = entitycollider->rect.y;
 
-				CollidingLeftWall = true;
-			}
-			else if (Intersection.w < Intersection.h)
-			{
-				//Colliding Left
-				entitycollider->rect.x += Intersection.w;
-				Future_Position.x = entitycollider->rect.x;
-				Future_Position.y = entitycollider->rect.y;
-
-				CollidingLeftWall = true;
-			}
+			CollidingCeiling = true;
+			Want_to_Stand_Up = false;
 		}
-
-		//CHECKING WHEN COLLIDING UP
-		if (Intersection.y == entitycollider->rect.y)
+		else
 		{
-			if (Intersection.x > entitycollider->rect.x)
+			//CHECKING WHEN COLLIDING LEFT
+			if (Intersection.x == entitycollider->rect.x)
 			{
-				//Colliding Up
-				entitycollider->rect.y += Intersection.h;
-				Future_Position.x = entitycollider->rect.x;
-				Future_Position.y = entitycollider->rect.y;
+				if (Intersection.y > entitycollider->rect.y)
+				{
+					//Colliding Left
+					entitycollider->rect.x += Intersection.w;
+					Future_Position.x = entitycollider->rect.x;
+					Future_Position.y = entitycollider->rect.y;
 
-				CollidingCeiling = true;
+					CollidingLeftWall = true;
+				}
+				else if (Intersection.w < Intersection.h)
+				{
+					//Colliding Left
+					entitycollider->rect.x += Intersection.w;
+					Future_Position.x = entitycollider->rect.x;
+					Future_Position.y = entitycollider->rect.y;
+
+					CollidingLeftWall = true;
+				}
 			}
-			else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
-			{
-				//Colliding Up
-				entitycollider->rect.y += Intersection.h;
-				Future_Position.x = entitycollider->rect.x;
-				Future_Position.y = entitycollider->rect.y;
 
-				CollidingCeiling = true;
+			//CHECKING WHEN COLLIDING UP
+			if (Intersection.y == entitycollider->rect.y)
+			{
+				if (Intersection.x > entitycollider->rect.x)
+				{
+					//Colliding Up
+					entitycollider->rect.y += Intersection.h;
+					Future_Position.x = entitycollider->rect.x;
+					Future_Position.y = entitycollider->rect.y;
+
+					CollidingCeiling = true;
+					Want_to_Stand_Up = false;
+				}
+				else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
+				{
+					//Colliding Up
+					entitycollider->rect.y += Intersection.h;
+					Future_Position.x = entitycollider->rect.x;
+					Future_Position.y = entitycollider->rect.y;
+
+					CollidingCeiling = true;
+					Want_to_Stand_Up = false;
+				}
+
+				/*Current_Velocity.y = 0;*/
 			}
 		}
 		break;
@@ -878,6 +924,9 @@ void j1Player::Up_Collision(Collider * entitycollider, Collider * to_check)
 		Future_Position.y = entitycollider->rect.y;
 
 		CollidingCeiling = true;
+		Want_to_Stand_Up = false;
+
+		/*Current_Velocity.y = 0;*/
 
 		break;
 	default:
@@ -892,49 +941,68 @@ void j1Player::UpRight_Collision(Collider * entitycollider, Collider * to_check)
 	switch (to_check->type)
 	{
 	case COLLIDER_TYPE::COLLIDER_FLOOR:
-		//CHECKING WHEN COLLIDING RIGHT
-		if (Intersection.x > entitycollider->rect.x)
+
+		if (playermode == MODE::CROUCHING)//this is for preventing problems when crouching and jumping between 1 tile space
 		{
-			if (Intersection.y == entitycollider->rect.y)
-			{
-				//Colliding Right
-				entitycollider->rect.x -= Intersection.w;
-				Future_Position.x = entitycollider->rect.x;
-				Future_Position.y = entitycollider->rect.y;
+			//Colliding Up
+			entitycollider->rect.y += Intersection.h;
+			Future_Position.x = entitycollider->rect.x;
+			Future_Position.y = entitycollider->rect.y;
 
-				CollidingRightWall = true;
-			}
-			else if (Intersection.w < Intersection.h)
-			{
-				//Colliding Right
-				entitycollider->rect.x -= Intersection.w;
-				Future_Position.x = entitycollider->rect.x;
-				Future_Position.y = entitycollider->rect.y;
-
-				CollidingRightWall = true;
-			}
+			CollidingCeiling = true;
+			Want_to_Stand_Up = false;
 		}
 
-		//CHECKING WHEN COLLIDING UP
-		if (Intersection.y > entitycollider->rect.y)
+		else
 		{
-			if (Intersection.x == entitycollider->rect.x)
+			//CHECKING WHEN COLLIDING RIGHT
+			if (Intersection.x > entitycollider->rect.x)
 			{
-				//Colliding Up
-				entitycollider->rect.y += Intersection.h;
-				Future_Position.x = entitycollider->rect.x;
-				Future_Position.y = entitycollider->rect.y;
+				if (Intersection.y == entitycollider->rect.y)
+				{
+					//Colliding Right
+					entitycollider->rect.x -= Intersection.w;
+					Future_Position.x = entitycollider->rect.x;
+					Future_Position.y = entitycollider->rect.y;
 
-				CollidingCeiling = true;
+					CollidingRightWall = true;
+				}
+				else if (Intersection.w < Intersection.h)
+				{
+					//Colliding Right
+					entitycollider->rect.x -= Intersection.w;
+					Future_Position.x = entitycollider->rect.x;
+					Future_Position.y = entitycollider->rect.y;
+
+					CollidingRightWall = true;
+				}
 			}
-			else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
-			{
-				//Colliding Up
-				entitycollider->rect.y += Intersection.h;
-				Future_Position.x = entitycollider->rect.x;
-				Future_Position.y = entitycollider->rect.y;
 
-				CollidingCeiling = true;
+			//CHECKING WHEN COLLIDING UP
+			if (Intersection.y > entitycollider->rect.y)
+			{
+				if (Intersection.x == entitycollider->rect.x)
+				{
+					//Colliding Up
+					entitycollider->rect.y += Intersection.h;
+					Future_Position.x = entitycollider->rect.x;
+					Future_Position.y = entitycollider->rect.y;
+
+					CollidingCeiling = true;
+					Want_to_Stand_Up = false;
+				}
+				else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
+				{
+					//Colliding Up
+					entitycollider->rect.y += Intersection.h;
+					Future_Position.x = entitycollider->rect.x;
+					Future_Position.y = entitycollider->rect.y;
+
+					CollidingCeiling = true;
+					Want_to_Stand_Up = false;
+				}
+
+				/*Current_Velocity.y = 0;*/
 			}
 		}
 		break;

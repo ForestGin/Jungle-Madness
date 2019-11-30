@@ -162,6 +162,7 @@ public:
 	DIRECTION playerdirection;
 	MOVEMENT playermovement;
 
+	bool Want_to_Stand_Up;
 	bool DoubleJumpAvailable;
 
 	//Collisions
