@@ -50,11 +50,12 @@ bool j1Player::Start()
 	CollidingCeiling = false;
 
 	//Surrounding Collider
-	Surr_Cr_Rect = { 0,0,32,10 };//It will check for immediate ceiling
-	Surr_Entity_Collider = App->col->AddCollider(Surr_Cr_Rect, COLLIDER_CHECKSURROUNDING, (j1Module*)manager);
+	Surr_Entity_Collider_Rect = playerinfo.Crouching_Rect;//It will check for immediate ceiling
+	Surr_Entity_Collider_Rect.h += 17;
+	Surr_Entity_Collider = App->col->AddCollider(Surr_Entity_Collider_Rect, COLLIDER_CHECKSURROUNDING, (j1Module*)manager);
 
 	//Surrounding booleans
-	Rubbing_Ceiling = false;
+	RubbingCeiling_Cr = false;
 
 	//Animation init
 	CurrentAnimation = playerinfo.Idle;
@@ -159,6 +160,7 @@ void j1Player::CheckDeath()
 			CollidingLeftWall = false;
 			CollidingRightWall = false;
 			CollidingCeiling = false;
+			RubbingCeiling_Cr = false;
 
 			playerstate = STATE::FALLING;
 			App->scene->EntityDirection();
@@ -198,6 +200,7 @@ void j1Player::CheckWin()
 		CollidingLeftWall = false;
 		CollidingRightWall = false;
 		CollidingCeiling = false;
+		RubbingCeiling_Cr = false;
 
 		playerstate = STATE::FALLING;
 	}
@@ -257,7 +260,7 @@ void j1Player::HandleMode()
 			playerstate = STATE::CROUCHIDLE;
 		}
 
-		else if (playermode == MODE::CROUCHING)
+		else if (playermode == MODE::CROUCHING && !RubbingCeiling_Cr)
 		{
 			//PLAYER STANDING PACK
 			playermode = MODE::STANDING;
@@ -447,7 +450,7 @@ void j1Player::StandingModeMovement(float dt)
 	// ---- FALLING DOWN PLATFORM ----
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && CollidingPlatform)
 	{
-		Future_Position.y += 20;
+		Future_Position.y += 32;
 	}
 
 	// ---- IDLE CONDITION ----
@@ -513,7 +516,10 @@ void j1Player::CrouchingModeMovenent(float dt)
 	{
 		if (CollidingGround || CollidingPlatform)
 		{
-			Jump(dt);
+			if (!RubbingCeiling_Cr)
+			{
+				Jump(dt);
+			}
 		}
 
 		else if (!CollidingGround && !CollidingPlatform && DoubleJumpAvailable)
@@ -525,7 +531,7 @@ void j1Player::CrouchingModeMovenent(float dt)
 	// ---- FALLING DOWN PLATFORM ----
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && CollidingPlatform)
 	{
-		Future_Position.y += 20;
+		Future_Position.y += 32;
 
 		//PLAYER STANDING PACK
 		playermode = MODE::STANDING;
@@ -542,7 +548,7 @@ void j1Player::CrouchingModeMovenent(float dt)
 	}
 
 	// ---- FALLING CONDITION ----
-	if (Current_Velocity.y > 0 && !CollidingGround && !CollidingPlatform && !CollidingCeiling)
+	if (Current_Velocity.y > 0 && !CollidingGround && !CollidingPlatform && !RubbingCeiling_Cr)
 	{
 		//If player falls is not crouching anymore
 
@@ -652,7 +658,7 @@ void j1Player::UpdateColliderPos()
 {
 	Entity_Collider->SetPos(Future_Position.x, Future_Position.y);
 
-	Surr_Entity_Collider->SetPos(Future_Position.x, Future_Position.y -5);//So it sticks out 1 pixel and can check if is rubbing the ceiling
+	Surr_Entity_Collider->SetPos(Future_Position.x, Future_Position.y -17);//So it sticks out 1 pixel and can check if is rubbing the ceiling
 }
 
 void j1Player::CheckMovement()
@@ -721,6 +727,7 @@ void j1Player::CheckMovement()
 	CollidingLeftWall = false;
 	CollidingRightWall = false;
 	CollidingCeiling = false;
+	RubbingCeiling_Cr = false;
 }
 
 void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
@@ -802,23 +809,22 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 		{
 			DoubleJumpAvailable = true;
 		}
-
-		if (to_check->type == COLLIDER_TYPE::COLLIDER_CHECKSURROUNDING)
-		{
-			bool tel;
-		}
 	}
 
 	if (entitycollider->type == COLLIDER_TYPE::COLLIDER_CHECKSURROUNDING)
 	{
-		if (to_check->type == COLLIDER_TYPE::COLLIDER_FLOOR)
+		if (playermode == MODE::CROUCHING)
 		{
-			SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
-
-			//CHECKING WHEN COLLIDING UP
-			if (Intersection.y == entitycollider->rect.y)
+			if (to_check->type == COLLIDER_TYPE::COLLIDER_FLOOR)
 			{
-				Rubbing_Ceiling = true;
+				SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
+
+				//CHECKING WHEN COLLIDING UP
+				if (Intersection.y == entitycollider->rect.y)
+				{
+					/*entitycollider->rect.y += Intersection.h;*/
+					RubbingCeiling_Cr = true;
+				}
 			}
 		}
 	}

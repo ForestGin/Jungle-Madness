@@ -87,6 +87,7 @@ public:
 	Collider*     Entity_Collider = nullptr;
 	Collider* Surr_Entity_Collider = nullptr;
 	SDL_Rect Entity_Collider_Rect;
+	SDL_Rect Surr_Entity_Collider_Rect;
 	float colliding_offset = 0;
 
 	// entityinfo

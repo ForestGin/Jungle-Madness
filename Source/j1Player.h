@@ -174,7 +174,7 @@ public:
 	//Surrounding collisions
 	SDL_Rect Surr_Cr_Rect = { 0,0,0,0 };
 	SDL_Rect Surr_St_Rect = { 0,0,0,0 };
-	bool Rubbing_Ceiling;
+	bool RubbingCeiling_Cr;
 
 	SDL_Rect Intersection = { 0,0,0,0 };
 

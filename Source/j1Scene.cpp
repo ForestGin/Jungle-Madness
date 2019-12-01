@@ -111,6 +111,7 @@ bool j1Scene::Start()
 		player->Position.x = App->map->data.StartPoint.x;
 		player->Position.y = App->map->data.StartPoint.y;
 		player->Future_Position = player->Position;
+
 		snake->Position.x = App->map->data.Snake1.x;
 		snake->Position.y = App->map->data.Snake1.y;
 		bat->Position.x = App->map->data.Bat1.x;
@@ -122,6 +123,9 @@ bool j1Scene::Start()
 
 		player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
 		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
+		player->Surr_Entity_Collider = App->col->AddCollider(player->Surr_Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_CHECKSURROUNDING, App->entities);
+		player->Surr_Entity_Collider->SetPos(player->Position.x, player->Position.y - 17);
+
 		snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
 		snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
 		bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
@@ -163,6 +167,9 @@ bool j1Scene::Start()
 
 		player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
 		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
+		player->Surr_Entity_Collider = App->col->AddCollider(player->Surr_Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_CHECKSURROUNDING, App->entities);
+		player->Surr_Entity_Collider->SetPos(player->Position.x, player->Position.y - 17);
+
 		snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
 		snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
 		bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
@@ -592,6 +599,8 @@ void j1Scene::EntityPosition(const char* scene)
 	// Colliders
 	player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
 	player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
+	player->Surr_Entity_Collider = App->col->AddCollider(player->Surr_Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_CHECKSURROUNDING, App->entities);
+	player->Surr_Entity_Collider->SetPos(player->Position.x, player->Position.y - 17);
 	player->Future_Position = player->Position;
 
 	snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);

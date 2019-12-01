@@ -296,11 +296,25 @@ void j1EntityManager::OnCollision(Collider * c1, Collider * c2)
 
 	while (entity != NULL)
 	{
+		bool breakit = false;
+
 		if (entity->data->Entity_Collider == c1)
 		{
 			entity->data->OnCollision(c1, c2);
+			breakit = true;
+		}
+
+		if (entity->data->Surr_Entity_Collider == c1)
+		{
+ 			entity->data->OnCollision(c1, c2);
+			breakit = true;
+		}
+
+		if (breakit)
+		{
 			break;
 		}
+
 		entity = entity->next;
 	}
 }
