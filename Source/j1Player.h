@@ -162,7 +162,6 @@ public:
 	DIRECTION playerdirection;
 	MOVEMENT playermovement;
 
-	bool Want_to_Stand_Up;
 	bool DoubleJumpAvailable;
 
 	//Collisions
@@ -171,14 +170,19 @@ public:
 	bool CollidingLeftWall;
 	bool CollidingRightWall;
 	bool CollidingCeiling;
+	
+	//Surrounding collisions
+	SDL_Rect Surr_Cr_Rect = { 0,0,0,0 };
+	SDL_Rect Surr_St_Rect = { 0,0,0,0 };
+	bool Rubbing_Ceiling;
 
 	SDL_Rect Intersection = { 0,0,0,0 };
 
+	//This position recieves all the modifications of Update, in PostUpdate it's updated to the actual Position 
 	fPoint Future_Position = { 0,0 };
-	//
 
-	fPoint Player_Initial_Position = { 0,0 };
-	fPoint Player_Displacement = { 0,0 };
+	/*fPoint Player_Initial_Position = { 0,0 };
+	fPoint Player_Displacement = { 0,0 };*/
 	
 	bool SavedCheckPoint = false;
 	fPoint LastCheckpointPostion = { 0,0 };

@@ -17,6 +17,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_FLOOR][COLLIDER_DEADLY] = false;
 	matrix[COLLIDER_FLOOR][COLLIDER_PLATFORM] = false;
 	matrix[COLLIDER_FLOOR][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_FLOOR][COLLIDER_CHECKSURROUNDING] = false;
 	matrix[COLLIDER_FLOOR][COLLIDER_BAT] = true;
 	matrix[COLLIDER_FLOOR][COLLIDER_SNAKE] = true;
 	matrix[COLLIDER_FLOOR][COLLIDER_CHECKPOINT] = false;
@@ -26,6 +27,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_DEADLY][COLLIDER_DEADLY] = false;
 	matrix[COLLIDER_DEADLY][COLLIDER_PLATFORM] = false;
 	matrix[COLLIDER_DEADLY][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_DEADLY][COLLIDER_CHECKSURROUNDING] = false;
 	matrix[COLLIDER_DEADLY][COLLIDER_BAT] = true;
 	matrix[COLLIDER_DEADLY][COLLIDER_SNAKE] = true;
 	matrix[COLLIDER_DEADLY][COLLIDER_CHECKPOINT] = false;
@@ -35,6 +37,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_PLATFORM][COLLIDER_DEADLY] = false;
 	matrix[COLLIDER_PLATFORM][COLLIDER_PLATFORM] = false;
 	matrix[COLLIDER_PLATFORM][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_PLATFORM][COLLIDER_CHECKSURROUNDING] = false;
 	matrix[COLLIDER_PLATFORM][COLLIDER_BAT] = true;
 	matrix[COLLIDER_PLATFORM][COLLIDER_SNAKE] = true;
 	matrix[COLLIDER_PLATFORM][COLLIDER_CHECKPOINT] = false;
@@ -44,15 +47,27 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_PLAYER][COLLIDER_DEADLY] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLATFORM] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_PLAYER][COLLIDER_CHECKSURROUNDING] = false;
 	matrix[COLLIDER_PLAYER][COLLIDER_BAT] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_SNAKE] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_CHECKPOINT] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_WIN] = true;
 
+	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_FLOOR] = true;
+	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_DEADLY] = false;
+	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_PLATFORM] = false;
+	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_CHECKSURROUNDING] = false;
+	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_BAT] = false;
+	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_SNAKE] = false;
+	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_CHECKPOINT] = false;
+	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_WIN] = false;
+
 	matrix[COLLIDER_SNAKE][COLLIDER_FLOOR] = true;
 	matrix[COLLIDER_SNAKE][COLLIDER_DEADLY] = false;
 	matrix[COLLIDER_SNAKE][COLLIDER_PLATFORM] = true;
 	matrix[COLLIDER_SNAKE][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_SNAKE][COLLIDER_CHECKSURROUNDING] = false;
 	matrix[COLLIDER_SNAKE][COLLIDER_SNAKE] = false;
 	matrix[COLLIDER_SNAKE][COLLIDER_BAT] = false;
 	matrix[COLLIDER_SNAKE][COLLIDER_CHECKPOINT] = false;
@@ -62,6 +77,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_BAT][COLLIDER_DEADLY] = false;
 	matrix[COLLIDER_BAT][COLLIDER_PLATFORM] = true;
 	matrix[COLLIDER_BAT][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_BAT][COLLIDER_CHECKSURROUNDING] = false;
 	matrix[COLLIDER_BAT][COLLIDER_SNAKE] = false;
 	matrix[COLLIDER_BAT][COLLIDER_BAT] = false;
 	matrix[COLLIDER_BAT][COLLIDER_CHECKPOINT] = false;
@@ -71,6 +87,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_DEADLY] = false;
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_PLATFORM] = false;
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_CHECKPOINT][COLLIDER_CHECKSURROUNDING] = false;
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_SNAKE] = false;
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_BAT] = false;
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_CHECKPOINT] = false;
@@ -80,6 +97,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_WIN][COLLIDER_DEADLY] = false;
 	matrix[COLLIDER_WIN][COLLIDER_PLATFORM] = false;
 	matrix[COLLIDER_WIN][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_WIN][COLLIDER_CHECKSURROUNDING] = false;
 	matrix[COLLIDER_WIN][COLLIDER_SNAKE] = false;
 	matrix[COLLIDER_WIN][COLLIDER_BAT] = false;
 	matrix[COLLIDER_WIN][COLLIDER_CHECKPOINT] = false;
@@ -104,7 +122,11 @@ bool j1Collision::PreUpdate()
 	while (item != NULL)
 	{
 		if (item->data->to_delete == true)
+		{
 			RELEASE(item->data);
+			delete item;
+		}
+		
 
 		item = item->next;
 	}
@@ -140,6 +162,7 @@ bool j1Collision::Update(float dt)
 
 		//check for entity colliders
 		if (c1->data->type == COLLIDER_PLAYER || c2->data->type == COLLIDER_PLAYER ||
+			c1->data->type == COLLIDER_CHECKSURROUNDING || c2->data->type == COLLIDER_CHECKSURROUNDING ||
 			c1->data->type == COLLIDER_SNAKE || c2->data->type == COLLIDER_SNAKE ||
 			c1->data->type == COLLIDER_BAT || c2->data->type == COLLIDER_BAT)
 		{
@@ -263,19 +286,16 @@ void j1Collision::DebugDraw()
 		case COLLIDER_FLOOR: // red
 			App->render->DrawQuad(item->data->rect, 255, 0, 0, alpha);
 			break;
-		case COLLIDER_PLAYER: // green
-			App->render->DrawQuad(item->data->rect, 0, 255, 0, alpha);
-			break;
 		case COLLIDER_DEADLY: // blue
 			App->render->DrawQuad(item->data->rect, 0, 0, 255, alpha);
 			break;
 		case COLLIDER_PLATFORM: // magenta
 			App->render->DrawQuad(item->data->rect, 255, 0, 255, alpha);
 			break;
-		case  COLLIDER_WIN: // pink
-			App->render->DrawQuad(item->data->rect, 255, 0, 128, alpha);
+		case COLLIDER_CHECKSURROUNDING: // white
+			App->render->DrawQuad(item->data->rect, 255, 255, 255, alpha);
 			break;
-		case COLLIDER_CHECKPOINT: // green
+		case COLLIDER_PLAYER: // green
 			App->render->DrawQuad(item->data->rect, 0, 255, 0, alpha);
 			break;
 		case COLLIDER_SNAKE: // cyan
@@ -283,6 +303,12 @@ void j1Collision::DebugDraw()
 			break;
 		case COLLIDER_BAT: // cyan
 			App->render->DrawQuad(item->data->rect, 0, 255, 255, alpha);
+			break;
+		case COLLIDER_CHECKPOINT: // green
+			App->render->DrawQuad(item->data->rect, 0, 255, 0, alpha);
+			break;
+		case  COLLIDER_WIN: // pink
+			App->render->DrawQuad(item->data->rect, 255, 0, 128, alpha);
 			break;
 		}
 		item = item->next;
