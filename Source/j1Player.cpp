@@ -405,7 +405,7 @@ void j1Player::StandingModeMovement(float dt)
 	// ---- LEFT ----
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		if (!OnLeftWall || !LandedOnLeftWall)
+		if (!OnLeftWall || !LandedOnLeftWall)//REVISION
 		{
 			Current_Velocity.x = -playerinfo.Target_Velocity_x;
 			Future_Position.x = (Position.x + Current_Velocity.x*dt);
@@ -422,7 +422,7 @@ void j1Player::StandingModeMovement(float dt)
 	// ---- RIGHT ----
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		if (!OnRightWall || !LandedOnRightWall)
+		if (!OnRightWall || !LandedOnRightWall)//REVISION
 		{
 			Current_Velocity.x = playerinfo.Target_Velocity_x;
 			Future_Position.x = (Position.x + Current_Velocity.x*dt);
