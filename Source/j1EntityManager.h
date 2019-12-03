@@ -42,6 +42,7 @@ public:
 	void OnCollision(Collider* c1, Collider* c2);
 	
 	Animation* LoadAnimation(const char* animationPath, const char* animationName);
+	SDL_Rect LoadColliderRect(const char* colliderPath, const char* colliderName);
 	
 	PlayerData& GetPlayerData() { return playerinfo; }//player info
 	BatData& GetBatData() { return batinfo; }

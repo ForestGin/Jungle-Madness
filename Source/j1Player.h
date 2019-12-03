@@ -70,9 +70,10 @@ struct PlayerData {
 	p2SString Texture = nullptr;
 
 	//Collider Rects
-	SDL_Rect Player_Collider_Rect = { 0,0,0,0 };
 	SDL_Rect Standing_Rect = { 0,0,0,0 };
 	SDL_Rect Crouching_Rect = { 0,0,0,0 };
+	SDL_Rect Surr_Standing_Rect = { 0,0,0,0 };
+	SDL_Rect Surr_Crouching_Rect = { 0,0,0,0 };
 
 	iPoint Animation_Offset = { 0,0 };
 	iPoint Animation_Offset_St = { 0,0 };
@@ -116,6 +117,7 @@ public:
 
 	//Collisions
 	void OnCollision(Collider * entitycollider, Collider * to_check);
+
 	void UpRight_Collision(Collider * entitycollider, Collider * to_check);
 	void Up_Collision(Collider * entitycollider, Collider * to_check);
 	void UpLeft_Collision(Collider * entitycollider, Collider * to_check);
@@ -128,8 +130,6 @@ public:
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
-	Animation* LoadAnimation(const char* animationPath, const char* animationName);
-	SDL_Rect LoadColliderRect(const char* colliderPath, const char* colliderName);
 	//
 	void HandleMode();
 
@@ -165,16 +165,18 @@ public:
 	bool DoubleJumpAvailable;
 
 	//Collisions
-	bool CollidingGround;
-	bool CollidingPlatform;
-	bool CollidingLeftWall;
-	bool CollidingRightWall;
-	bool CollidingCeiling;
+	bool LandedOnGround;
+	bool LandedOnPlatform;
+	bool LandedOnLeftWall;
+	bool LandedOnRightWall;
+	bool LandedOnCeiling;
 	
 	//Surrounding collisions
-	SDL_Rect Surr_Cr_Rect = { 0,0,0,0 };
-	SDL_Rect Surr_St_Rect = { 0,0,0,0 };
-	bool RubbingCeiling_Cr;
+	bool OnGround;
+	bool OnPlatform;
+	bool OnLeftWall;
+	bool OnRightWall;
+	bool OnCeiling;
 
 	SDL_Rect Intersection = { 0,0,0,0 };
 
