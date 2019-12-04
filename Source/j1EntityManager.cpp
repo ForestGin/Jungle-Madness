@@ -44,10 +44,11 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	playerinfo.CrouchWalk = LoadAnimation(playerinfo.folder.GetString(), "Crouch_Walk_Sword_Sheathed");
 	playerinfo.Jump = LoadAnimation(playerinfo.folder.GetString(), "Jump");
 	playerinfo.DoubleJump = LoadAnimation(playerinfo.folder.GetString(), "Double_Jump");
+	playerinfo.WallJump = LoadAnimation(playerinfo.folder.GetString(), "Wall_Jump");
 	playerinfo.Fall = LoadAnimation(playerinfo.folder.GetString(), "Fall");
 	playerinfo.Death = LoadAnimation(playerinfo.folder.GetString(), "Knockout");
 	playerinfo.Slide = LoadAnimation(playerinfo.folder.GetString(), "Slide");
-	playerinfo.Wall_Slide = LoadAnimation(playerinfo.folder.GetString(), "Wall_Slide");
+	playerinfo.WallSlide = LoadAnimation(playerinfo.folder.GetString(), "Wall_Slide");
 	playerinfo.God = LoadAnimation(playerinfo.folder.GetString(), "God_Mode");
 
 	//ANIMATIONS OFFSET

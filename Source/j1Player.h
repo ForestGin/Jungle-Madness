@@ -60,9 +60,11 @@ struct PlayerData {
 	Animation* CrouchWalk = nullptr;
 	Animation* Jump = nullptr;
 	Animation* DoubleJump = nullptr;
+	Animation* Jump = nullptr;
+	Animation* WallJump = nullptr;
 	Animation* Fall = nullptr;
 	Animation* Slide = nullptr;
-	Animation* Wall_Slide = nullptr;
+	Animation* WallSlide = nullptr;
 	Animation* Death = nullptr;
 	Animation* God = nullptr;
 

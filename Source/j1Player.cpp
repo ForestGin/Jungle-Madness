@@ -405,7 +405,7 @@ void j1Player::StandingModeMovement(float dt)
 	// ---- LEFT ----
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		if (!OnLeftWall && !LandedOnLeftWall)//REVISION
+		if (!OnLeftWall && !LandedOnLeftWall)
 		{
 			Current_Velocity.x = -playerinfo.Target_Velocity_x;
 			Future_Position.x = (Position.x + Current_Velocity.x*dt);
@@ -422,7 +422,7 @@ void j1Player::StandingModeMovement(float dt)
 	// ---- RIGHT ----
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		if (!OnRightWall && !LandedOnRightWall)//REVISION
+		if (!OnRightWall && !LandedOnRightWall)
 		{
 			Current_Velocity.x = playerinfo.Target_Velocity_x;
 			Future_Position.x = (Position.x + Current_Velocity.x*dt);
@@ -490,13 +490,15 @@ void j1Player::CrouchingModeMovenent(float dt)
 	// ---- LEFT ----
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-
-		Current_Velocity.x = -playerinfo.Crouch_Velocity_x;
-		Future_Position.x = (Position.x + Current_Velocity.x*dt);
-
-		if (OnGround || OnGround)
+		if (!OnLeftWall && !LandedOnLeftWall)
 		{
-			playerstate = STATE::CROUCHWALKING;
+			Current_Velocity.x = -playerinfo.Crouch_Velocity_x;
+			Future_Position.x = (Position.x + Current_Velocity.x*dt);
+
+			if (OnGround || OnGround)
+			{
+				playerstate = STATE::CROUCHWALKING;
+			}
 		}
 
 		playerdirection = DIRECTION::LEFT;
@@ -505,12 +507,15 @@ void j1Player::CrouchingModeMovenent(float dt)
 	// ---- RIGHT ----
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && !OnRightWall && !LandedOnRightWall)
 	{
-		Current_Velocity.x = playerinfo.Crouch_Velocity_x;
-		Future_Position.x = (Position.x + Current_Velocity.x*dt);
-
-		if (OnGround || OnGround)
+		if (!OnRightWall && !LandedOnRightWall)
 		{
-			playerstate = STATE::CROUCHWALKING;
+			Current_Velocity.x = playerinfo.Crouch_Velocity_x;
+			Future_Position.x = (Position.x + Current_Velocity.x*dt);
+
+			if (OnGround || OnGround)
+			{
+				playerstate = STATE::CROUCHWALKING;
+			}
 		}
 
 		playerdirection = DIRECTION::RIGHT;
