@@ -23,7 +23,9 @@ enum class STATE
 	ATTACKING,
 	JUMPING,
 	DOUBLEJUMPING,
+	WALLJUMPING,
 	FALLING,
+	WALLSLIDING,
 	CROUCHIDLE,
 	CROUCHWALKING,
 	SLIDING,
@@ -60,7 +62,6 @@ struct PlayerData {
 	Animation* CrouchWalk = nullptr;
 	Animation* Jump = nullptr;
 	Animation* DoubleJump = nullptr;
-	Animation* Jump = nullptr;
 	Animation* WallJump = nullptr;
 	Animation* Fall = nullptr;
 	Animation* Slide = nullptr;

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<game_state>
+	<input />
+	<window />
+	<textures />
+	<audio />
+	<entities>
+		<Player>
+			<Playerx value="926.300049" />
+			<Playery value="627.52002" />
+		</Player>
+		<Bat1>
+			<Batx value="1380" />
+			<Baty value="297" />
+		</Bat1>
+		<Bat2>
+			<Batx value="1977" />
+			<Baty value="526" />
+		</Bat2>
+		<Snake1>
+			<Snakex value="460" />
+			<Snakey value="708" />
+		</Snake1>
+		<Snake2>
+			<Snakex value="222" />
+			<Snakey value="709" />
+		</Snake2>
+	</entities>
+	<collision />
+	<map />
+	<pathfinding />
+	<scene>
+		<scene1 value="true" />
+		<scene2 value="false" />
+	</scene>
+	<renderer>
+		<camera x="-1356" y="-775" />
+	</renderer>
+</game_state>

@@ -337,10 +337,24 @@ void j1Player::AddGravity(float dt)
 	}
 
 	//Limiting Velocity.y
-	if (Current_Velocity.y > playerinfo.Max_Speed.y)
+	if (playerstate == STATE::WALLSLIDING)
 	{
-		Current_Velocity.y = playerinfo.Max_Speed.y;
+		if (Current_Velocity.y > playerinfo.Max_Speed.y / 4)
+		{
+			Current_Velocity.y = playerinfo.Max_Speed.y / 4;
+
+		}
 	}
+
+	else 
+	{
+		if (Current_Velocity.y > playerinfo.Max_Speed.y)
+		{
+			Current_Velocity.y = playerinfo.Max_Speed.y;
+
+		}
+	}
+	
 }
 
 void j1Player::GodModeMovement(float dt)
@@ -447,6 +461,15 @@ void j1Player::StandingModeMovement(float dt)
 
 	// ---- Y AXIS MOVEMENT ----
 
+	// ---- WALL-SLIDING ----
+	if (playerstate == STATE::FALLING)
+	{
+		if (LandedOnLeftWall || OnLeftWall ||LandedOnRightWall || OnRightWall)
+		{
+			playerstate = STATE::WALLSLIDING;
+		}
+	}
+
 	AddGravity(dt);
 
 	// ---- JUMPING ----
@@ -477,7 +500,7 @@ void j1Player::StandingModeMovement(float dt)
 	}
 
 	// ---- FALLING CONDITION ----
-	if (Current_Velocity.y > 0 && !OnGround && !OnPlatform && !LandedOnGround && !LandedOnPlatform)
+	if (Current_Velocity.y > 0 && !OnGround && !OnPlatform && !LandedOnGround && !LandedOnPlatform && playerstate != STATE::WALLSLIDING)
 	{
 		playerstate = STATE::FALLING;
 	}
@@ -632,24 +655,35 @@ void j1Player::HandleAnimations()
 	{
 		CurrentAnimation = playerinfo.Idle;
 	}
+
 	if (playerstate == STATE::RUNNING)
 	{
 		CurrentAnimation = playerinfo.Run;
 	}
+
 	if (playerstate == STATE::ATTACKING)
 	{
 
 	}
+
 	if (playerstate == STATE::JUMPING)
 	{
 		playerinfo.Jump->Reset();
 		CurrentAnimation = playerinfo.Jump;
 	}
+
 	if (playerstate == STATE::DOUBLEJUMPING)
 	{
 		playerinfo.DoubleJump->Reset();
 		CurrentAnimation = playerinfo.DoubleJump;
 	}
+
+	if (playerstate == STATE::WALLJUMPING)
+	{
+		playerinfo.WallJump->Reset();
+		CurrentAnimation = playerinfo.WallJump;
+	}
+
 	if (playerstate == STATE::FALLING)
 	{
 		if (CurrentAnimation == playerinfo.DoubleJump || CurrentAnimation == playerinfo.DoubleJump)
@@ -659,23 +693,33 @@ void j1Player::HandleAnimations()
 				CurrentAnimation = playerinfo.Fall;
 			}
 		}
+
 		else
 		{
 			CurrentAnimation = playerinfo.Fall;
 		}
 	}
+
+	if (playerstate == STATE::WALLSLIDING)
+	{
+		CurrentAnimation = playerinfo.WallSlide;
+	}
+
 	if (playerstate == STATE::CROUCHIDLE)
 	{
 		CurrentAnimation = playerinfo.CrouchIdle;
 	}
+
 	if (playerstate == STATE::CROUCHWALKING)
 	{
 		CurrentAnimation = playerinfo.CrouchWalk;
 	}
+
 	if (playerstate == STATE::SLIDING)
 	{
 
 	}
+
 	if (playerstate == STATE::FLYING)
 	{
 		CurrentAnimation = playerinfo.God;
