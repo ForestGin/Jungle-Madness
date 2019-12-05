@@ -342,7 +342,6 @@ void j1Player::AddGravity(float dt)
 		if (Current_Velocity.y > playerinfo.Max_Speed.y / 4)
 		{
 			Current_Velocity.y = playerinfo.Max_Speed.y / 4;
-
 		}
 	}
 
@@ -351,10 +350,8 @@ void j1Player::AddGravity(float dt)
 		if (Current_Velocity.y > playerinfo.Max_Speed.y)
 		{
 			Current_Velocity.y = playerinfo.Max_Speed.y;
-
 		}
 	}
-	
 }
 
 void j1Player::GodModeMovement(float dt)
@@ -419,7 +416,7 @@ void j1Player::StandingModeMovement(float dt)
 	// ---- LEFT ----
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		if (!OnLeftWall && !LandedOnLeftWall)
+		if (!OnLeftWall && !LandedOnLeftWall && playerstate != STATE::WALLJUMPING)
 		{
 			Current_Velocity.x = -playerinfo.Target_Velocity_x;
 			Future_Position.x = (Position.x + Current_Velocity.x*dt);
@@ -436,7 +433,7 @@ void j1Player::StandingModeMovement(float dt)
 	// ---- RIGHT ----
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		if (!OnRightWall && !LandedOnRightWall)
+		if (!OnRightWall && !LandedOnRightWall && playerstate != STATE::WALLJUMPING)
 		{
 			Current_Velocity.x = playerinfo.Target_Velocity_x;
 			Future_Position.x = (Position.x + Current_Velocity.x*dt);
@@ -459,14 +456,56 @@ void j1Player::StandingModeMovement(float dt)
 		playerdirection = DIRECTION::RIGHT;
 	}
 
+	// ---- WALL-JUMPING X AXIS MOVEMENT----
+	if (playerstate == STATE::WALLJUMPING)
+	{
+		if (playerdirection == DIRECTION::LEFT)
+		{
+			Current_Velocity.x = -playerinfo.Target_Velocity_x;
+			Future_Position.x = (Position.x + Current_Velocity.x*dt);
+		}
+
+		if (playerdirection == DIRECTION::RIGHT)
+		{
+			Current_Velocity.x = playerinfo.Target_Velocity_x;
+			Future_Position.x = (Position.x + Current_Velocity.x*dt);
+		}
+	}
+
 	// ---- Y AXIS MOVEMENT ----
 
 	// ---- WALL-SLIDING ----
 	if (playerstate == STATE::FALLING)
 	{
-		if (LandedOnLeftWall || OnLeftWall ||LandedOnRightWall || OnRightWall)
+		if (LandedOnLeftWall || OnLeftWall || LandedOnRightWall || OnRightWall)
 		{
 			playerstate = STATE::WALLSLIDING;
+		}
+	}
+
+	if (playerstate == STATE::WALLJUMPING)
+	{
+		if (playerdirection == DIRECTION::LEFT && OnLeftWall || playerdirection == DIRECTION::LEFT && LandedOnLeftWall)
+		{
+			playerstate = STATE::WALLSLIDING;
+		}
+		
+		if (playerdirection == DIRECTION::RIGHT && OnRightWall || playerdirection == DIRECTION::LEFT && LandedOnRightWall)
+		{
+			playerstate = STATE::WALLSLIDING;
+		}
+	}
+
+	if (playerstate == STATE::WALLSLIDING) //Makes sure player direction is correct preventing rare case
+	{
+		if (OnLeftWall || LandedOnLeftWall)
+		{
+			playerdirection = DIRECTION::LEFT;
+		}
+
+		if (OnRightWall || LandedOnRightWall)
+		{
+			playerdirection = DIRECTION::RIGHT;
 		}
 	}
 
@@ -475,7 +514,7 @@ void j1Player::StandingModeMovement(float dt)
 	// ---- JUMPING ----
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		if (OnGround || OnPlatform || LandedOnGround || LandedOnPlatform)
+		if (playerstate == STATE::IDLE || playerstate == STATE::RUNNING || playerstate == STATE::WALLSLIDING)
 		{
 			Jump(dt);
 		}
@@ -500,9 +539,12 @@ void j1Player::StandingModeMovement(float dt)
 	}
 
 	// ---- FALLING CONDITION ----
-	if (Current_Velocity.y > 0 && !OnGround && !OnPlatform && !LandedOnGround && !LandedOnPlatform && playerstate != STATE::WALLSLIDING)
+	if (Current_Velocity.y > 0 && !OnGround && !OnPlatform && !LandedOnGround && !LandedOnPlatform)
 	{
-		playerstate = STATE::FALLING;
+		if (playerstate != STATE::WALLSLIDING)
+		{
+			playerstate = STATE::FALLING;
+		}
 	}
 }
 
@@ -614,24 +656,56 @@ void j1Player::CrouchingModeMovenent(float dt)
 
 void j1Player::Jump(float dt)
 {
-	//Adding Y velocity
-	Current_Velocity.y = playerinfo.Jump_Force;
-	Future_Position.y = (Position.y + Current_Velocity.y*dt);
-	
-	if (playermode == MODE::CROUCHING)
+	if (playerstate == STATE::WALLSLIDING)
 	{
-		//PLAYER STANDING PACK
-		playermode = MODE::STANDING;
-		Future_Position.y -= 26; //colliders height difference
-		Entity_Collider->rect = playerinfo.Standing_Rect;
-		Surr_Entity_Collider->rect = playerinfo.Surr_Standing_Rect;
-		playerinfo.Animation_Offset = playerinfo.Animation_Offset_St;
+		//Adding Y velocity
+		Current_Velocity.y = playerinfo.Jump_Force;
+		Future_Position.y = (Position.y + Current_Velocity.y*dt);
+
+		//Switching direction
+		if (playerdirection == DIRECTION::LEFT)
+		{
+			playerdirection = DIRECTION::RIGHT;
+		}
+
+		else if (playerdirection == DIRECTION::RIGHT)
+		{
+			playerdirection = DIRECTION::LEFT;
+		}
+		
+		playerstate = STATE::WALLJUMPING;
+
+		OnLeftWall = false;
+		OnRightWall = false;
+
+		LandedOnLeftWall = false;
+		LandedOnRightWall = false;
 	}
 
-	playerstate = STATE::JUMPING;
+	else
+	{	
+		//Adding Y velocity
+		Current_Velocity.y = playerinfo.Jump_Force;
+		Future_Position.y = (Position.y + Current_Velocity.y*dt);
 
-	OnGround = false;
-	OnPlatform = false;
+		if (playermode == MODE::CROUCHING)
+		{
+			//PLAYER STANDING PACK
+			playermode = MODE::STANDING;
+			Future_Position.y -= 26; //colliders height difference
+			Entity_Collider->rect = playerinfo.Standing_Rect;
+			Surr_Entity_Collider->rect = playerinfo.Surr_Standing_Rect;
+			playerinfo.Animation_Offset = playerinfo.Animation_Offset_St;
+		}
+
+		playerstate = STATE::JUMPING;
+
+		OnGround = false;
+		OnPlatform = false;
+
+		LandedOnGround = false;
+		LandedOnPlatform = false;
+	}
 }
 
 void j1Player::DoubleJump(float dt)

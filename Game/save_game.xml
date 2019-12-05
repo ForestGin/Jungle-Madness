@@ -6,8 +6,8 @@
 	<audio />
 	<entities>
 		<Player>
-			<Playerx value="926.300049" />
-			<Playery value="627.52002" />
+			<Playerx value="940.199951" />
+			<Playery value="625.870056" />
 		</Player>
 		<Bat1>
 			<Batx value="1380" />
@@ -34,6 +34,6 @@
 		<scene2 value="false" />
 	</scene>
 	<renderer>
-		<camera x="-1356" y="-775" />
+		<camera x="-1404" y="-761" />
 	</renderer>
 </game_state>
