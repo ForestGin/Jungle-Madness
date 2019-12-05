@@ -44,10 +44,11 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	playerinfo.CrouchWalk = LoadAnimation(playerinfo.folder.GetString(), "Crouch_Walk_Sword_Sheathed");
 	playerinfo.Jump = LoadAnimation(playerinfo.folder.GetString(), "Jump");
 	playerinfo.DoubleJump = LoadAnimation(playerinfo.folder.GetString(), "Double_Jump");
+	playerinfo.WallJump = LoadAnimation(playerinfo.folder.GetString(), "Wall_Jump");
 	playerinfo.Fall = LoadAnimation(playerinfo.folder.GetString(), "Fall");
 	playerinfo.Death = LoadAnimation(playerinfo.folder.GetString(), "Knockout");
 	playerinfo.Slide = LoadAnimation(playerinfo.folder.GetString(), "Slide");
-	playerinfo.Wall_Slide = LoadAnimation(playerinfo.folder.GetString(), "Wall_Slide");
+	playerinfo.WallSlide = LoadAnimation(playerinfo.folder.GetString(), "Wall_Slide");
 	playerinfo.God = LoadAnimation(playerinfo.folder.GetString(), "God_Mode");
 
 	//ANIMATIONS OFFSET
@@ -78,6 +79,20 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	w = playernode.child("collider").child("crouching").attribute("width").as_int();
 	h = playernode.child("collider").child("crouching").attribute("height").as_int();
 	playerinfo.Crouching_Rect = { x,y,w,h };
+
+	//Surr_Standing
+	x = playernode.child("surr_collider").child("standing").attribute("x").as_int();
+	y = playernode.child("surr_collider").child("standing").attribute("y").as_int();
+	w = playernode.child("surr_collider").child("standing").attribute("width").as_int();
+	h = playernode.child("surr_collider").child("standing").attribute("height").as_int();
+	playerinfo.Surr_Standing_Rect = { x,y,w,h };
+
+	//Surr_Crouching
+	x = playernode.child("surr_collider").child("crouching").attribute("x").as_int();
+	y = playernode.child("surr_collider").child("crouching").attribute("y").as_int();
+	w = playernode.child("surr_collider").child("crouching").attribute("width").as_int();
+	h = playernode.child("surr_collider").child("crouching").attribute("height").as_int();
+	playerinfo.Surr_Crouching_Rect = { x,y,w,h };
 
 	//Player config
 	
@@ -388,5 +403,53 @@ Animation* j1EntityManager::LoadAnimation(const char* animationPath, const char*
 		return animation;
 	else
 		return nullptr;
+
+}
+
+SDL_Rect j1EntityManager::LoadColliderRect(const char* colliderPath, const char* colliderName)
+{
+	SDL_Rect colliderRect;
+
+	bool rect = false;
+
+	pugi::xml_document colliderDocument;
+	pugi::xml_parse_result result = colliderDocument.load_file(colliderPath);
+
+	if (result == NULL)
+	{
+		LOG("Issue loading Collider Rect");
+	}
+
+	pugi::xml_node objgroup;
+	for (objgroup = colliderDocument.child("map").child("objectgroup"); objgroup; objgroup = objgroup.next_sibling("objectgroup"))
+	{
+		p2SString name = objgroup.attribute("name").as_string();
+		if (name == colliderName)
+		{
+			rect = true;
+			int x, y, h, w;
+
+			for (pugi::xml_node sprite = objgroup.child("object"); sprite; sprite = sprite.next_sibling("object"))
+			{
+				x = sprite.attribute("x").as_int();
+				y = sprite.attribute("y").as_int();
+				w = sprite.attribute("width").as_int();
+				h = sprite.attribute("height").as_int();
+
+				colliderRect = { x, y, w, h };
+			}
+
+		}
+	}
+
+	if (rect = true)
+	{
+		return colliderRect;
+	}
+
+	else
+	{
+		return { 0, 0, 10, 10 };
+	}
 
 }

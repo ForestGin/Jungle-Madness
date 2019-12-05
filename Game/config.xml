@@ -58,7 +58,11 @@
       <collider>
         <standing x="0" y="0" width="32" height="58"/>
         <crouching x="0" y="0" width="32" height="32"/>
-      </collider> />
+      </collider>
+      <surr_collider>
+        <standing x="0" y="0" width="34" height="60"/>
+        <crouching x="0" y="0" width="34" height="34"/>
+      </surr_collider>
       <animation_offset>
         <st x="34" y="14"/>
         <cr x="34" y="40"/>
