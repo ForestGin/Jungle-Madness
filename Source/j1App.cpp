@@ -191,6 +191,7 @@ void j1App::PrepareUpdate()
 	last_sec_frame_count++;
 
 	dt = frame_time.ReadSec();
+	LOG("differential time %f ", dt);
 	frame_time.Start();
 }
 
@@ -247,11 +248,15 @@ void j1App::FinishUpdate()
 
 	App->win->SetTitle(title);
 
-	if (capped_ms > 0 && last_frame_ms < capped_ms)
+	if (cap_on)
 	{
-		j1PerfTimer t;
-		if (cap_on)
-			SDL_Delay(capped_ms - last_frame_ms);
+		dt = 1000 / framerate_cap;
+		int delay = dt - last_frame_ms;
+
+		DelayTimer.Start();
+		if (delay >0)
+			SDL_Delay((uint32)delay);
+		LOG("we waited %u and got back %f", delay, DelayTimer.ReadMs());
 	}
 }
 

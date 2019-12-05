@@ -138,6 +138,8 @@ public:
 
 	void AddGravity(float dt);
 
+	float Lerp(float Goal, float Current, float dt);
+
 	void HandleState(float dt);
 	void GodModeMovement(float dt);
 	void StandingModeMovement(float dt);
@@ -145,7 +147,6 @@ public:
 	void Jump(float dt);
 	void DoubleJump(float dt);
 	//void Slide();
-	//void WallSlide();
 	void CheckDeath();
 
 	void CheckWin();
@@ -155,6 +156,8 @@ public:
 	void HandleAnimations();
 
 	void UpdateColliderPos();
+
+	
 
 public:
 

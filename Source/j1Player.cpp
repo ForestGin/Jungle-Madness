@@ -354,15 +354,34 @@ void j1Player::AddGravity(float dt)
 	}
 }
 
+float j1Player::Lerp(float Goal, float Current, float dt)
+{
+	float Difference = Goal - Current;
+
+	if (Difference > dt)
+	{
+		return Current + dt;
+	}
+
+	if (Difference < -dt)
+	{
+		return Current - dt;
+	}
+
+	return Goal;
+}
+
 void j1Player::GodModeMovement(float dt)
 {
 	// ---- X AXIS MOVEMENT ----
-
+	bool move = false;
 	// ---- LEFT ----
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		Current_Velocity.x = -playerinfo.God_Velocity;
-		Future_Position.x = (Position.x + Current_Velocity.x*dt);
+		/*Current_Velocity.x = -playerinfo.God_Velocity;
+		Future_Position.x = (Position.x + Current_Velocity.x*dt);*/
+		Current_Velocity.x = Lerp(-playerinfo.God_Velocity, Current_Velocity.x, dt * 500);
+		Future_Position.x = (Position.x + Current_Velocity.x);
 
 		playerdirection = DIRECTION::LEFT;
 	}
@@ -370,12 +389,16 @@ void j1Player::GodModeMovement(float dt)
 	// ---- RIGHT ----
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		Current_Velocity.x = playerinfo.God_Velocity;
-		Future_Position.x = (Position.x + Current_Velocity.x*dt);
+		Current_Velocity.x = Lerp(playerinfo.God_Velocity, Current_Velocity.x, dt*500);
+		Future_Position.x = (Position.x + Current_Velocity.x);
 
 		playerdirection = DIRECTION::RIGHT;
 	}
 
+	/*if (move == false)
+	{
+		Current_Velocity.x = Lerp(0, Current_Velocity.x, dt * 100);
+	}*/
 	// ---- BOTH ----
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{

@@ -112,6 +112,7 @@ private:
 	mutable p2SString	save_game;
 
 	j1PerfTimer			ptimer;
+	j1PerfTimer			DelayTimer;
 	uint64				frame_count = 0;
 	j1Timer				startup_time;
 	j1Timer				frame_time;
