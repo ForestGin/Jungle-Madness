@@ -24137,16 +24137,16 @@
  </layer>
  <objectgroup id="21" name="FinishPoint"/>
  <objectgroup id="20" name="StartPoint">
-  <object id="1" x="333.333" y="626" width="38.6667" height="85.3333"/>
+  <object id="1" x="334.666" y="537.333" width="38.6667" height="85.3333"/>
  </objectgroup>
  <objectgroup id="22" name="SnakeSpawn1">
-  <object id="3" x="456.059" y="584.333" width="31.9487" height="31.9727"/>
+  <object id="3" x="448.726" y="628.333" width="31.9487" height="31.9727"/>
  </objectgroup>
  <objectgroup id="23" name="BatSpawn1">
   <object id="4" x="1380" y="297" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="24" name="SnakeSpawn2">
-  <object id="5" x="227" y="605" width="32" height="32"/>
+  <object id="5" x="225" y="627.667" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="25" name="BatSpawn2">
   <object id="6" x="1977" y="526.333" width="32" height="32"/>

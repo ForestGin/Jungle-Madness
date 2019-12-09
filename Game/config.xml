@@ -50,6 +50,10 @@
     
   </audio>
 
+  <gui>
+    <atlas file="gui/atlas.png"/>
+  </gui>
+  
   <entities>
     
     <player>
