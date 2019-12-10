@@ -106,6 +106,7 @@
     <ClInclude Include="UI_Text.h">
       <Filter>UI\Elements</Filter>
     </ClInclude>
+    <ClInclude Include="UI_Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="p2Log.cpp">
@@ -163,5 +164,6 @@
     <ClCompile Include="UI_Text.cpp">
       <Filter>UI\Elements</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Scene.cpp" />
   </ItemGroup>
 </Project>
