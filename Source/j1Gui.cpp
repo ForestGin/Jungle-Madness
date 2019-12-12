@@ -13,7 +13,7 @@
 #include "UI_Text.h"
 #include "UI_Button.h"
 #include "UI_Window.h"
-//#include "j1UIScene.h"
+#include "UI_Scene.h"
 #include "UI_Slider.h"
 #include "UI_Clock.h"
 
@@ -52,89 +52,89 @@ bool j1Gui::Start()
 }
 
 // Update all guis
-//bool j1Gui::PreUpdate()
-//{
-//	bool ret = true;
-//
-//	SDL_SetTextureAlphaMod(atlas, alpha_value);
-//	int x, y;
-//	App->input->GetMousePosition(x, y);
-//	int scale = App->win->GetScale();
-//	UI_element* element = nullptr;
-//
-//	//Get element to interact with
-//	if (draggingElement != nullptr)
-//		element = draggingElement;
-//	else
-//	{
-//		if (App->ui_scene->current_menu != nullptr)
-//		{
-//			for (std::list <UI_element*>::reverse_iterator item = App->ui_scene->current_menu->elements.rbegin(); item != App->ui_scene->current_menu->elements.rend(); ++item)
-//			{
-//				iPoint globalPos = (*item)->calculateAbsolutePosition();
-//				if (x > globalPos.x && x < globalPos.x + (*item)->section.w / scale && y > globalPos.y && y < globalPos.y + (*item)->section.h / scale && element == nullptr && (*item)->solid)
-//				{
-//					element = *item;
-//				}
-//				else if ((*item)->hovering)
-//				{
-//					(*item)->hovering = false;
-//					if ((*item)->callback != nullptr)
-//						(*item)->callback->OnUIEvent(*item, MOUSE_LEAVE);
-//				}
-//			}
-//		}
-//	}
-//
-//	//Send events related to UI elements
-//	if (element != nullptr)
-//	{
-//		if (!element->hovering)
-//		{
-//			element->hovering = true;
-//			if (element->callback != nullptr)
-//				element->callback->OnUIEvent(element, MOUSE_ENTER);
-//		}
-//		else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-//		{
-//			if (element->callback != nullptr)
-//			{
-//				ret = element->callback->OnUIEvent(element, MOUSE_LEFT_CLICK);
-//			}
-//			if (element->dragable)
-//			{
-//				element->Start_Drag();
-//				draggingElement = element;
-//			}
-//			if (element->element_type == BUTTON || element->element_type == SWITCH)
-//				App->audio->PlayFx(button_click_fx, 0);
-//		}
-//		else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
-//		{
-//			if (element->callback != nullptr)
-//			{
-//				element->callback->OnUIEvent(element, MOUSE_LEFT_RELEASE);
-//			}
-//			if (element->dragable)
-//			{
-//				element->End_Drag();
-//				draggingElement = nullptr;
-//			}
-//		}
-//		else if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
-//		{
-//			if (element->callback != nullptr)
-//				ret = element->callback->OnUIEvent(element, MOUSE_RIGHT_CLICK);
-//		}
-//		else if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
-//		{
-//			if (element->callback != nullptr)
-//				element->callback->OnUIEvent(element, MOUSE_RIGHT_RELEASE);
-//		}
-//	}
-//
-//	return ret;
-//}
+bool j1Gui::PreUpdate()
+{
+	bool ret = true;
+
+	SDL_SetTextureAlphaMod(atlas, alpha_value);
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	int scale = App->win->GetScale();
+	UI_element* element = nullptr;
+
+	//Get element to interact with
+	if (draggingElement != nullptr)
+		element = draggingElement;
+	else
+	{
+		if (App->ui_scene->current_menu != nullptr)
+		{
+			for (std::list <UI_element*>::reverse_iterator item = App->ui_scene->current_menu->elements.rbegin(); item != App->ui_scene->current_menu->elements.rend(); ++item)
+			{
+				iPoint globalPos = (*item)->calculateAbsolutePosition();
+				if (x > globalPos.x && x < globalPos.x + (*item)->section.w / scale && y > globalPos.y && y < globalPos.y + (*item)->section.h / scale && element == nullptr && (*item)->solid)
+				{
+					element = *item;
+				}
+				else if ((*item)->hovering)
+				{
+					(*item)->hovering = false;
+					if ((*item)->callback != nullptr)
+						(*item)->callback->OnUIEvent(*item, MOUSE_LEAVE);
+				}
+			}
+		}
+	}
+
+	//Send events related to UI elements
+	if (element != nullptr)
+	{
+		if (!element->hovering)
+		{
+			element->hovering = true;
+			if (element->callback != nullptr)
+				element->callback->OnUIEvent(element, MOUSE_ENTER);
+		}
+		else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+		{
+			if (element->callback != nullptr)
+			{
+				ret = element->callback->OnUIEvent(element, MOUSE_LEFT_CLICK);
+			}
+			if (element->dragable)
+			{
+				element->Start_Drag();
+				draggingElement = element;
+			}
+			if (element->element_type == BUTTON || element->element_type == SWITCH)
+				App->audio->PlayFx(button_click_fx, 0);
+		}
+		else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
+		{
+			if (element->callback != nullptr)
+			{
+				element->callback->OnUIEvent(element, MOUSE_LEFT_RELEASE);
+			}
+			if (element->dragable)
+			{
+				element->End_Drag();
+				draggingElement = nullptr;
+			}
+		}
+		else if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_DOWN)
+		{
+			if (element->callback != nullptr)
+				ret = element->callback->OnUIEvent(element, MOUSE_RIGHT_CLICK);
+		}
+		else if (App->input->GetMouseButtonDown(SDL_BUTTON_RIGHT) == KEY_UP)
+		{
+			if (element->callback != nullptr)
+				element->callback->OnUIEvent(element, MOUSE_RIGHT_RELEASE);
+		}
+	}
+
+	return ret;
+}
 
 bool j1Gui::Update(float dt)
 {
@@ -145,32 +145,32 @@ bool j1Gui::Update(float dt)
 }
 
 // Called after all Updates
-//bool j1Gui::PostUpdate(float dt)
-//{
-//	if (App->ui_scene->current_menu != nullptr)
-//	{
-//		for (std::list <UI_element*>::const_iterator item = App->ui_scene->current_menu->elements.begin(); item != App->ui_scene->current_menu->elements.end(); ++item)
-//		{
-//			if ((*item)->moving)
-//			{
-//				(*item)->Mouse_Drag();
-//				if ((*item)->parent != nullptr && (*item)->parent->element_type == SLIDER)
-//				{
-//					Slider* parent = (Slider*)(*item)->parent;
-//					parent->setProgress((parent->button->localPosition.x + parent->button->section.w / (2 / App->gui->UI_scale)) / ((parent->bar_length) * App->gui->UI_scale));
-//				}
-//				(*item)->state = CLICKED;
-//			}
-//
-//			if ((*item)->parent == nullptr)
-//				(*item)->BlitElement();
-//		}
-//	}
-//	if (UI_Debug)
-//		UIDebugDraw();
-//
-//	return true;
-//}
+bool j1Gui::PostUpdate(float dt)
+{
+	if (App->ui_scene->current_menu != nullptr)
+	{
+		for (std::list <UI_element*>::const_iterator item = App->ui_scene->current_menu->elements.begin(); item != App->ui_scene->current_menu->elements.end(); ++item)
+		{
+			if ((*item)->moving)
+			{
+				(*item)->Mouse_Drag();
+				if ((*item)->parent != nullptr && (*item)->parent->element_type == SLIDER)
+				{
+					Slider* parent = (Slider*)(*item)->parent;
+					parent->setProgress((parent->button->localPosition.x + parent->button->section.w / (2 / App->gui->UI_scale)) / ((parent->bar_length) * App->gui->UI_scale));
+				}
+				(*item)->state = CLICKED;
+			}
+
+			if ((*item)->parent == nullptr)
+				(*item)->BlitElement();
+		}
+	}
+	if (UI_Debug)
+		UIDebugDraw();
+
+	return true;
+}
 
 // Called before quitting
 bool j1Gui::CleanUp()
@@ -189,20 +189,20 @@ bool j1Gui::CleanUp()
 	return true;
 }
 
-//void j1Gui::UIDebugDraw()
-//{
-//	for (std::list <UI_element*>::const_iterator item = App->ui_scene->current_menu->elements.begin(); item != App->ui_scene->current_menu->elements.end(); ++item)
-//	{
-//		SDL_Rect box;
-//		int scale = App->win->GetScale();
-//		box.x = (*item)->calculateAbsolutePosition().x * scale;
-//		box.y = (*item)->calculateAbsolutePosition().y * scale;
-//		box.w = (*item)->section.w;
-//		box.h = (*item)->section.h;
-//		App->render->DrawQuad(box, 255, 0, 0, 255, false, false);
-//	}
-//
-//}
+void j1Gui::UIDebugDraw()
+{
+	for (std::list <UI_element*>::const_iterator item = App->ui_scene->current_menu->elements.begin(); item != App->ui_scene->current_menu->elements.end(); ++item)
+	{
+		SDL_Rect box;
+		int scale = App->win->GetScale();
+		box.x = (*item)->calculateAbsolutePosition().x * scale;
+		box.y = (*item)->calculateAbsolutePosition().y * scale;
+		box.w = (*item)->section.w;
+		box.h = (*item)->section.h;
+		App->render->DrawQuad(box, 255, 0, 0, 255, false, false);
+	}
+
+}
 // const getter for atlas
 const SDL_Texture* j1Gui::GetAtlas() const
 {

@@ -2,6 +2,38 @@
 #define __UI_SCENE_H__
 
 #include "j1Module.h"
+#include <list>
+
+class UI_element;
+class Clock;
+class Button;
+
+
+enum menu_id
+{
+	START_MENU,
+	SETTINGS_MENU,
+	INGAME_MENU,
+	SELECTION_MENU,
+	PAUSE_MENU,
+	CREDITS_MENU,
+	FINAL_MENU
+};
+struct menu
+{
+	menu(menu_id id) : id(id)
+	{}
+	std::list <UI_element*> elements;
+	menu_id id;
+
+};
+
+struct settings_values
+{
+	bool fullscreen = false;
+	float music = 0.5f;
+	float fx = 0.5f;
+};
 
 class UIScene : public j1Module
 {
@@ -10,5 +42,25 @@ public:
 	UIScene();
 	// Destructor
 	virtual ~UIScene();
+	bool Awake(pugi::xml_node& config);
+	bool Start();
+	bool PreUpdate();
+	bool Update(float dt);
+	bool PostUpdate(float dt);
+	bool CleanUp();
+
+	bool LoadMenu(menu_id id);
+
+
+public:
+	std::list <menu*> menus;
+	menu* current_menu = nullptr;
+	settings_values newValues;
+	settings_values startValues;
+	settings_values defaultValues;
+	Clock* clock = nullptr;
+	Button* continueButton = nullptr;
+	menu_id previous_menu;
+	menu_id actual_menu = START_MENU;
 };
 #endif
