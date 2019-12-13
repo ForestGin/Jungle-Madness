@@ -48,9 +48,14 @@ public:
 	bool Update(float dt);
 	bool PostUpdate(float dt);
 	bool CleanUp();
+	bool Save(pugi::xml_node& config) const;
+	bool Load(pugi::xml_node& config);
+	bool OnUIEvent(UI_element* element, event_type event_type);
 
-	bool LoadMenu(menu_id id);
-
+	bool MenuLoad(menu_id id);
+	void ApplySettings(settings_values values);
+	void PauseClock();
+	void PlayClock();
 
 public:
 	std::list <menu*> menus;
