@@ -14,6 +14,7 @@
 #include "j1Bat.h"
 #include "j1EntityManager.h"
 #include "j1PathFinding.h"
+#include "UI_Scene.h"
 #include "Brofiler\Brofiler.h"
 
 j1Scene::j1Scene() : j1Module()
@@ -774,4 +775,9 @@ void j1Scene::EntityDirection()
 	snake->going_right = false;
 	snake2->going_left = false;
 	snake2->going_right = false;
+}
+
+void j1Scene::LoadLvl(int num)
+{
+	App->ui_scene->MenuLoad(START_MENU);
 }

@@ -46,6 +46,7 @@ public:
 	void EntityPosition(const char* scene);
 	void EntityDirection();//reset enti direction
 	
+	void LoadLvl(int num = 0);
 
 public:
 
