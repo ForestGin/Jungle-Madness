@@ -1,7 +1,11 @@
-#ifndef __j1SCENE_H__
-#define __j1SCENE_H__
+
+#ifndef __j1_SCENE_H__
+#define __j1_SCENE_H__
 
 #include "j1Module.h"
+#include "p2Point.h"
+#include "SDL/include/SDL_rect.h"
+#include "p2List.h"
 
 struct SDL_Texture;
 class SDL_Rect;
@@ -73,6 +77,10 @@ public:
 	j1Bat*				bat2 = nullptr;
 	//pathfind
 	SDL_Rect debug_Tex_rect = { 32,96,32,32 };
+
+	//Transition
+	bool load_lvl = false;
+	int newLvl = 0;
 };
 
 #endif // __j1SCENE_H__

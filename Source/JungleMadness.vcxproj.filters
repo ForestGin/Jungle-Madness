@@ -107,6 +107,7 @@
       <Filter>UI\Elements</Filter>
     </ClInclude>
     <ClInclude Include="UI_Scene.h" />
+    <ClInclude Include="j1Transition.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="p2Log.cpp">
@@ -165,5 +166,6 @@
       <Filter>UI\Elements</Filter>
     </ClCompile>
     <ClCompile Include="UI_Scene.cpp" />
+    <ClCompile Include="j1Transition.cpp" />
   </ItemGroup>
 </Project>

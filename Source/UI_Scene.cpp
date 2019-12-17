@@ -105,6 +105,7 @@ bool UIScene::Start()
 		startMenu->elements.push_back(exit_text);
 		startMenu->elements.push_back(credits);
 		startMenu->elements.push_back(settings_start_menu);
+
 		menus.push_back(startMenu);
 	}
 
