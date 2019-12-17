@@ -11,6 +11,7 @@
 #include "UI_Image.h"
 #include "UI_Window.h"
 #include "j1Render.h"
+#include "j1Transition.h"
 
 UIScene::UIScene() : j1Module()
 {
@@ -242,19 +243,17 @@ bool UIScene::Update(float dt)
 		}
 		else if (actual_menu == INGAME_MENU)
 		{
-			/*App->on_GamePause = true;*/
+			App->on_GamePause = true;
 			actual_menu = PAUSE_MENU;
-			/*App->transition->menuTransition(PAUSE_MENU);
-			App->arena_interactions->PauseStorm();*/
+			App->transition->MenuTransition(PAUSE_MENU);
 			ret = true;
 
 		}
 		else if (actual_menu == PAUSE_MENU)
 		{
-			/*App->on_GamePause = false;*/
+			App->on_GamePause = false;
 			actual_menu = INGAME_MENU;
-			/*App->transition->menuTransition(INGAME_MENU);
-			App->arena_interactions->ContinueStorm();*/
+			App->transition->MenuTransition(INGAME_MENU);
 			ret = true;
 
 		}
@@ -415,8 +414,7 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 		case NEW_GAME:
 		{
 			actual_menu = INGAME_MENU;
-			/*App->transition->menuTransition(INGAME_MENU, 0.3);*/
-			//App->arena_interactions->StartStorm();
+			App->transition->MenuTransition(INGAME_MENU, 0.3);
 			break;
 		}
 		case RESTART:
@@ -431,7 +429,7 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 		break;
 		case SETTINGS:
 			actual_menu = SETTINGS_MENU;
-			/*App->transition->menuTransition(SETTINGS_MENU, 0.1);*/
+			App->transition->MenuTransition(SETTINGS_MENU, 0.1);
 			break;
 		case CREDITS:
 
@@ -451,14 +449,13 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 		case BACK:
 			if (actual_menu == SETTINGS_MENU)
 			{
-				/*App->transition->menuTransition(previous_menu, 0.3);*/
+				App->transition->MenuTransition(previous_menu, 0.3);
 				actual_menu = START_MENU;
 			}
 			if (actual_menu == PAUSE_MENU)
 			{
-				//App->on_GamePause = false;
-				////App->arena_interactions->DestroyStorm();
-				//App->transition->menuTransition(START_MENU, 0.3);
+				App->on_GamePause = false;
+				App->transition->MenuTransition(START_MENU, 0.3);
 				actual_menu = START_MENU;
 			}
 			break;
