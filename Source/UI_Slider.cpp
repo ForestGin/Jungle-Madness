@@ -29,7 +29,7 @@ void Slider::BlitElement()
 	BROFILER_CATEGORY("Slider Blit", Profiler::Color::GreenYellow);
 
 	iPoint globalPos = calculateAbsolutePosition();
-	App->render->Blit(texture, globalPos.x, globalPos.y, &section);
+	App->render->Blit(texture, globalPos.x, globalPos.y + 190, &section);
 	button->localPosition.y = -2;
 
 	//p2SString newText("%.0f", (progress * 100));
@@ -43,7 +43,7 @@ void Slider::BlitElement()
 	else if (progress > 1)
 		progress = 1;
 	full.w = ((bar_length)* progress);
-	App->render->Blit(texture, globalPos.x, globalPos.y, &full);
+	App->render->Blit(texture, globalPos.x, globalPos.y + 190, &full);
 	button->BlitElement();
 	progress_num->BlitElement();
 }

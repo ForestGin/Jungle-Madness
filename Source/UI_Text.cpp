@@ -75,9 +75,9 @@ void Text::BlitElement()
 		if (outlined)
 		{
 
-			App->render->Blit(outline, globalPos.x + outline_offset.x, globalPos.y + outline_offset.y, NULL);
+			App->render->Blit(outline, globalPos.x + outline_offset.x, globalPos.y + outline_offset.y + 190, NULL);
 		}
-		App->render->Blit(texture, globalPos.x, globalPos.y, NULL, SDL_FLIP_NONE, App->gui->UI_scale);
+		App->render->Blit(texture, globalPos.x, globalPos.y + 190, NULL, SDL_FLIP_NONE, App->gui->UI_scale);
 	}
 }
 
