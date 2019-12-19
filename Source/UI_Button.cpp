@@ -2,6 +2,9 @@
 #include "j1App.h"
 #include "j1Render.h"
 #include "Brofiler\Brofiler.h"
+#include "j1Scene.h"
+#include "j1Player.h"
+#include "j1EntityManager.h"
 
 void Button::setOutlined(bool isOutlined)
 {
@@ -37,18 +40,61 @@ void Button::BlitElement()
 	{
 	case STANDBY:
 		if (!active)
-			App->render->Blit(texture, globalPos.x, globalPos.y + 190, &section);
+		{
+			if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+			{
+				App->render->Blit(texture, globalPos.x, globalPos.y + 190, &section);
+			}
+			else
+			{
+				App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
+			}
+		}
 		else
-			App->render->Blit(texture, globalPos.x, globalPos.y + 190, &sectionActive);
+		{
+			if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+			{
+				App->render->Blit(texture, globalPos.x, globalPos.y + 190, &sectionActive);
+			}
+			else
+			{
+				App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
+			}
+		}
 		break;
 	case MOUSEOVER:
 		if (!active)
-			App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnMouse);
+		{
+			if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+			{
+				App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnMouse);
+			}
+			else
+			{
+				App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
+			}
+		}
 		else
-			App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnMouseActive);
+		{
+			if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+			{
+				App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnMouseActive);
+			}
+			else
+			{
+				App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
+			}
+		}
 		break;
 	case CLICKED:
-		App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnClick);
+		if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+		{
+			App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnClick);
+		}
+		else
+		{
+			App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
+		}
 		break;
 	}
 

@@ -536,6 +536,8 @@ bool j1Scene::SceneChange(const char* scene)
 	App->entities->loading = false;
 	/*App->SaveGame("save_game.xml");*/
 
+	player->StartUI = false;
+
 	return ret;
 }
 

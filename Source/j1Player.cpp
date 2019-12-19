@@ -175,7 +175,9 @@ void j1Player::CheckDeath()
 			playerstate = STATE::FALLING;
 			App->scene->EntityDirection();
 		}
+		StartUI = false;
 	}
+	
 }
 
 void j1Player::CheckWin()

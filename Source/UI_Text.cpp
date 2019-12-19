@@ -4,6 +4,9 @@
 #include "j1Fonts.h"
 #include "j1Render.h"
 #include "Brofiler\Brofiler.h"
+#include "j1Scene.h"
+#include "j1Player.h"
+#include "j1EntityManager.h"
 
 Text::~Text()
 {
@@ -74,10 +77,25 @@ void Text::BlitElement()
 
 		if (outlined)
 		{
-
-			App->render->Blit(outline, globalPos.x + outline_offset.x, globalPos.y + outline_offset.y + 190, NULL);
+			if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+			{
+				App->render->Blit(outline, globalPos.x + outline_offset.x, globalPos.y + outline_offset.y + 190, NULL);
+			}
+			else
+			{
+				App->render->Blit(outline, globalPos.x + App->scene->player->Future_Position.x - 500 + outline_offset.x, globalPos.y + outline_offset.y + 190, NULL);
+			}
+			
 		}
-		App->render->Blit(texture, globalPos.x, globalPos.y + 190, NULL, SDL_FLIP_NONE, App->gui->UI_scale);
+
+		if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+		{
+			App->render->Blit(texture, globalPos.x, globalPos.y + 190, NULL, SDL_FLIP_NONE, App->gui->UI_scale);
+		}
+		else//player has moved
+		{
+			App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
+		}
 	}
 }
 
