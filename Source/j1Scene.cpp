@@ -450,7 +450,7 @@ bool j1Scene::Update(float dt)
 }
 
 // Called each loop iteration
-bool j1Scene::PostUpdate(float dt)
+bool j1Scene::PostUpdate()
 {
 	BROFILER_CATEGORY("Scene_Post_Update", Profiler::Color::DarkGreen);
 

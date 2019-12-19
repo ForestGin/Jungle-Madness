@@ -6,11 +6,11 @@
 	<audio />
 	<entities>
 		<Player>
-			<Playerx value="959.800049" />
-			<Playery value="678" />
+			<Playerx value="959.049988" />
+			<Playery value="704" />
 		</Player>
 		<Bat1>
-			<Batx value="1289" />
+			<Batx value="1209" />
 			<Baty value="297" />
 		</Bat1>
 		<Bat2>
@@ -35,8 +35,9 @@
 	</scene>
 	<fonts />
 	<gui />
+	<transition />
 	<ui_scene />
 	<renderer>
-		<camera x="-453" y="-192" />
+		<camera x="-457" y="-192" />
 	</renderer>
 </game_state>

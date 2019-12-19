@@ -5,6 +5,9 @@
 #include "p2Defs.h"
 #include "j1Gui.h"
 #include "j1Render.h"
+#include "j1Scene.h"
+#include "j1Player.h"
+#include "j1EntityManager.h"
 #include "Brofiler\Brofiler.h"
 
 void Window::appendChild(int x, int y, UI_element * child)
@@ -33,7 +36,7 @@ void Window::BlitElement()
 
 	SDL_SetTextureAlphaMod(texture, App->gui->alpha_value);
 	iPoint globalPos = calculateAbsolutePosition();
-	App->render->Blit(texture, globalPos.x, globalPos.y + 190, &section);
+	App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x -500, globalPos.y  + 190, &section);
 
 	for (std::list <UI_element*>::const_iterator item = content.begin(); item != content.end(); ++item)
 	{

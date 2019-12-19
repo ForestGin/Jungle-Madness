@@ -2,6 +2,10 @@
 #include "j1App.h"
 #include "j1Render.h"
 #include "Brofiler\Brofiler.h"
+#include "j1App.h"
+#include "j1Scene.h"
+#include "j1Player.h"
+#include "j1EntityManager.h"
 
 void Image::BlitElement()
 {
