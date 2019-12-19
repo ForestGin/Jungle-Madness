@@ -36,7 +36,15 @@ void Window::BlitElement()
 
 	SDL_SetTextureAlphaMod(texture, App->gui->alpha_value);
 	iPoint globalPos = calculateAbsolutePosition();
-	App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x -500, globalPos.y  + 190, &section);
+
+	if (App->scene->player->StartUI == false)//player hasn't moved yet
+	{
+		App->render->Blit(texture, globalPos.x /*+ App->scene->player->Future_Position.x -500*/, globalPos.y + 190, &section);//with player pos
+	}
+	else//player has moved
+	{
+		App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x -500, globalPos.y + 190, &section);//with player pos
+	}
 
 	for (std::list <UI_element*>::const_iterator item = content.begin(); item != content.end(); ++item)
 	{

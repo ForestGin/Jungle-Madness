@@ -192,6 +192,8 @@ public:
 	bool SavedCheckPoint = false;
 	fPoint LastCheckpointPostion = { 0,0 };
 	int SavedCheckPointArea = 0;
+	//GUI
+	bool StartUI = false;
 };
 
 #endif // __j1Player_H__
