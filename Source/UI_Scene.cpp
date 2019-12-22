@@ -235,6 +235,16 @@ bool UIScene::Update(float dt)
 {
 	bool ret = true;
 
+	//pause game if on main menu
+	if (actual_menu == START_MENU)
+	{
+		App->on_GamePause = true;
+	}
+	else if (actual_menu == INGAME_MENU)
+	{
+		App->on_GamePause = false;
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 	{
 		if (actual_menu == START_MENU)
@@ -413,6 +423,7 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 		{
 		case NEW_GAME:
 		{
+			App->scene->RestartLevel();
 			actual_menu = INGAME_MENU;
 			App->transition->MenuTransition(INGAME_MENU, 0.3);
 			break;
