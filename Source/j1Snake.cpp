@@ -167,19 +167,23 @@ bool j1Snake::CleanUp()
 
 void j1Snake::FixedUpdate(float dt)
 {
-	PostUpdate(dt);
+	if(App->on_GamePause == false)
+		PostUpdate(dt);
 }
 
 void j1Snake::LogicUpdate(float dt)
 {
-	Update(dt);
+	if (App->on_GamePause == false)
+	{
+		Update(dt);
 
-	
-	Entity_Collider->SetPos(Position.x, Position.y);
 
-	App->col->Update(1.0f);
+		Entity_Collider->SetPos(Position.x, Position.y);
 
-	Entity_Collider->SetPos(Position.x, Position.y);
+		App->col->Update(1.0f);
+
+		Entity_Collider->SetPos(Position.x, Position.y);
+	}
 }
 
 void j1Snake::OnCollision(Collider * c1, Collider * c2)

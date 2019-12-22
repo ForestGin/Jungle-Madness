@@ -218,19 +218,25 @@ bool j1Bat::CleanUp()
 
 void j1Bat::FixedUpdate(float dt)
 {
-	PostUpdate(dt);
+	if (App->on_GamePause == false)
+	{
+		PostUpdate(dt);
+	}
 }
 
 void j1Bat::LogicUpdate(float dt)
 {
-	Update(dt);
+	if (App->on_GamePause == false)
+	{
+		Update(dt);
 
-	// --- Set batpos, prevent surpassing colliders ---
-	Entity_Collider->SetPos(Position.x, Position.y);
+		// --- Set batpos, prevent surpassing colliders ---
+		Entity_Collider->SetPos(Position.x, Position.y);
 
-	App->col->Update(1.0f);
+		App->col->Update(1.0f);
 
-	Entity_Collider->SetPos(Position.x, Position.y);
+		Entity_Collider->SetPos(Position.x, Position.y);
+	}
 }
 
 void j1Bat::OnCollision(Collider * c1, Collider * c2)
