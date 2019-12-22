@@ -48,7 +48,10 @@ bool UIScene::Start()
 
 	menu* creditsMenu = new menu(CREDITS_MENU);
 	{
+		UI_element* image = App->gui->createImage(0, 0, App->tex->Load("gui/Credits.png"), this);
 
+		creditsMenu->elements.push_back(image);
+		menus.push_back(creditsMenu);
 	}
 
 	menu* startMenu = new menu(START_MENU);
@@ -64,12 +67,12 @@ bool UIScene::Start()
 		new_text->setOutlined(true);
 		new_game->appendChildAtCenter(new_text);
 
-		//CHAMPIONS
-		continueButton = App->gui->createButton(372 * App->gui->UI_scale, 400 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 0,148,281,111 }, { 0,148,281,111 }, this);
+		//CONTINUE
+		continueButton = App->gui->createButton(372 * App->gui->UI_scale, 400 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 562,148,281,111 }, this);
 		continueButton->function = CONTINUE;
 
 
-		UI_element* continue_text = App->gui->createText("CHAMPIONS", 200, 200, big_buttons_font, brown_color);
+		UI_element* continue_text = App->gui->createText("CONTINUE", 200, 200, big_buttons_font, brown_color);
 		continue_text->setOutlined(true);
 		continueButton->appendChildAtCenter(continue_text);
 
@@ -83,10 +86,12 @@ bool UIScene::Start()
 		exit_game->appendChildAtCenter(exit_text);
 
 		//CREDITS
-		UI_element* credits = App->gui->createButton(App->gui->UI_scale, 647 * App->gui->UI_scale, NULL, { 0,613,160,100 }, { 0,613,160,100 }, { 0,613,160,100 }, this);
-		credits->function = WEBPAGE;
+		UI_element* credits = App->gui->createButton(App->gui->UI_scale, 647 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 562,148,281,111 }, this);
+		credits->function = CREDITS;
 
-
+		UI_element* credit_text = App->gui->createText("CREDITS", 200, 200, big_buttons_font, brown_color);
+		credit_text->setOutlined(true);
+		credits->appendChildAtCenter(credit_text);
 
 		//SETTINGS
 		UI_element* settings_start_menu = App->gui->createButton(823 * App->gui->UI_scale, App->gui->UI_scale, NULL, { 250,613,170,150 }, { 250,613,170,150 }, { 250,613,170,150 }, this);
@@ -117,18 +122,7 @@ bool UIScene::Start()
 
 	}
 
-	menu* championSelection = new menu(SELECTION_MENU);
-	{
-		UI_element* selection_window = App->gui->createWindow(51 * App->gui->UI_scale, 93 * App->gui->UI_scale, App->tex->Load("gui/big_parchment.png"), { 0,0,923,581 }, this);
-		UI_element* settings_text = App->gui->createText("CHAMPION SELECTION", 425, 120, big_buttons_font, brown_color);
-		settings_text->setOutlined(true);
-
-
-
-		championSelection->elements.push_back(selection_window);
-		menus.push_back(championSelection);
-	}
-
+	
 	menu* settingsMenu = new menu(SETTINGS_MENU);
 	{
 
@@ -267,6 +261,13 @@ bool UIScene::Update(float dt)
 			App->transition->MenuTransition(INGAME_MENU);
 			ret = true;
 
+		}
+		else if (actual_menu == CREDITS_MENU)
+		{
+			App->on_GamePause = true;
+			actual_menu = START_MENU;
+			App->transition->MenuTransition(START_MENU);
+			ret = true;
 		}
 	}
 
@@ -436,7 +437,10 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 		break;
 		case CONTINUE:
 		{
-
+			actual_menu = INGAME_MENU;
+			bool result = App->LoadGame("save_game.xml");
+			App->transition->MenuTransition(INGAME_MENU, 0.3);
+			break;
 		}
 		break;
 		case SETTINGS:
@@ -444,7 +448,8 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 			App->transition->MenuTransition(SETTINGS_MENU, 0.1);
 			break;
 		case CREDITS:
-
+			actual_menu = CREDITS_MENU;
+			App->transition->MenuTransition(CREDITS_MENU, 0.1);
 			break;
 		case EXIT:
 			ret = false;
