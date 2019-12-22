@@ -5,6 +5,7 @@
 #include "j1Scene.h"
 #include "j1Player.h"
 #include "j1EntityManager.h"
+#include "UI_Scene.h"
 
 void Button::setOutlined(bool isOutlined)
 {
@@ -68,6 +69,10 @@ void Button::BlitElement()
 			if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
 			{
 				App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnMouse);
+			}
+			else if (App->ui_scene->HoveringReset == true)
+			{
+				App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &OnMouse);
 			}
 			else
 			{

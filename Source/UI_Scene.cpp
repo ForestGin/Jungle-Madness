@@ -238,6 +238,7 @@ bool UIScene::Update(float dt)
 	//pause game if on main menu
 	if (actual_menu == START_MENU)
 	{
+		HoveringReset = true;
 		App->on_GamePause = true;
 	}
 	else if (actual_menu == INGAME_MENU)

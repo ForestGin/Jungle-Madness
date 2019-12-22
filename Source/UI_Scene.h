@@ -67,5 +67,6 @@ public:
 	Button* continueButton = nullptr;
 	menu_id previous_menu;
 	menu_id actual_menu = START_MENU;
+	bool HoveringReset = false;
 };
 #endif
