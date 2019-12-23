@@ -324,6 +324,23 @@ void j1Player::HandleState(float dt)
 	}
 }
 
+float j1Player::Lerp(float Goal, float Current, float dt)
+{
+	float Difference = Goal - Current;
+
+	if (Difference > dt)
+	{
+		return Current + dt;
+	}
+
+	if (Difference < -dt)
+	{
+		return Current - dt;
+	}
+
+	return Goal;
+}
+
 void j1Player::AddGravity(float dt)
 {
 	if (App->entities->loading == false && playermode != MODE::GOD && playerstate != STATE::WINNER && playerstate != STATE::DEAD)
@@ -559,7 +576,15 @@ void j1Player::StandingModeMovement(float dt)
 	// ---- FALLING CONDITION ----
 	if (Current_Velocity.y > 0 && !OnGround && !OnPlatform && !LandedOnGround && !LandedOnPlatform)
 	{
-		if (playerstate != STATE::WALLSLIDING)
+		if (playerstate == STATE::WALLSLIDING)
+		{
+			if (!LandedOnLeftWall && !OnLeftWall && !LandedOnRightWall && !OnRightWall)
+			{
+				playerstate = STATE::FALLING;
+			}
+		}
+
+		else 
 		{
 			playerstate = STATE::FALLING;
 		}

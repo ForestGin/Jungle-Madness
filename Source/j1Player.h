@@ -136,6 +136,8 @@ public:
 	//
 	void HandleMode();
 
+	float Lerp(float Goal, float Current, float dt);
+
 	void AddGravity(float dt);
 
 	void HandleState(float dt);
