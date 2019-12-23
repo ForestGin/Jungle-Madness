@@ -46,7 +46,7 @@ bool j1Gui::Start()
 	atlas = App->tex->Load(atlas_file_name.data());
 	UI_scale = App->win->GetScale();
 	UI_scale = 1 / UI_scale;
-	button_click_fx = App->audio->LoadFx("audio/fx/button_click.wav");
+	button_click_fx = App->audio->LoadFx("Audio/fx/pop_button.wav");
 
 	return true;
 }

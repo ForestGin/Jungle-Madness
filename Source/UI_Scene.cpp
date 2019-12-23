@@ -60,7 +60,7 @@ bool UIScene::Start()
 
 
 		//PLAY
-		UI_element* new_game = App->gui->createButton(372 * App->gui->UI_scale, 250 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 562,148,281,111 }, this);
+		UI_element* new_game = App->gui->createButton(372 * App->gui->UI_scale, 250 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
 		new_game->function = NEW_GAME;
 
 		UI_element* new_text = App->gui->createText("PLAY", 200, 200, big_buttons_font, brown_color);
@@ -68,7 +68,7 @@ bool UIScene::Start()
 		new_game->appendChildAtCenter(new_text);
 
 		//CONTINUE
-		continueButton = App->gui->createButton(372 * App->gui->UI_scale, 400 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 562,148,281,111 }, this);
+		continueButton = App->gui->createButton(372 * App->gui->UI_scale, 400 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
 		continueButton->function = CONTINUE;
 
 
@@ -77,7 +77,7 @@ bool UIScene::Start()
 		continueButton->appendChildAtCenter(continue_text);
 
 		//EXIT GAME
-		UI_element* exit_game = App->gui->createButton(372 * App->gui->UI_scale, 550 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 562,148,281,111 }, this);
+		UI_element* exit_game = App->gui->createButton(372 * App->gui->UI_scale, 550 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
 
 		exit_game->function = EXIT;
 
@@ -86,7 +86,7 @@ bool UIScene::Start()
 		exit_game->appendChildAtCenter(exit_text);
 
 		//CREDITS
-		UI_element* credits = App->gui->createButton(App->gui->UI_scale, 647 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 562,148,281,111 }, this);
+		UI_element* credits = App->gui->createButton(App->gui->UI_scale, 647 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
 		credits->function = CREDITS;
 
 		UI_element* credit_text = App->gui->createText("CREDITS", 200, 200, big_buttons_font, brown_color);
@@ -135,7 +135,7 @@ bool UIScene::Start()
 
 
 		//BACK BUTTON
-		UI_element* back_button = App->gui->createButton(375 * App->gui->UI_scale, 580 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 562,148,281,111 }, this);
+		UI_element* back_button = App->gui->createButton(375 * App->gui->UI_scale, 580 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
 		back_button->function = BACK;
 		UI_element* back_text = App->gui->createText("BACK", 300, 300, mid_buttons_font, brown_color);
 		back_text->setOutlined(true);
@@ -180,7 +180,7 @@ bool UIScene::Start()
 
 
 		//BACK BUTTON
-		UI_element* back_button = App->gui->createButton(375 * App->gui->UI_scale, 580 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 562,148,281,111 }, this);
+		UI_element* back_button = App->gui->createButton(375 * App->gui->UI_scale, 580 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
 		back_button->function = BACK;
 		UI_element* back_text = App->gui->createText("BACK", 300, 300, mid_buttons_font, brown_color);
 		back_text->setOutlined(true);
@@ -425,9 +425,10 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 		{
 		case NEW_GAME:
 		{
-			App->scene->RestartLevel();
+			
 			actual_menu = INGAME_MENU;
-			App->transition->MenuTransition(INGAME_MENU, 0.3);
+			App->transition->MenuTransition(INGAME_MENU, 0.1);
+			App->scene->RestartLevel();
 			break;
 		}
 		case RESTART:
@@ -439,7 +440,7 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 		{
 			actual_menu = INGAME_MENU;
 			bool result = App->LoadGame("save_game.xml");
-			App->transition->MenuTransition(INGAME_MENU, 0.3);
+			App->transition->MenuTransition(INGAME_MENU, 0.1);
 			break;
 		}
 		break;
