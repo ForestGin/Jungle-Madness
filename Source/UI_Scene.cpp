@@ -28,6 +28,7 @@ bool UIScene::Awake(pugi::xml_node& config)
 }
 bool UIScene::Start()
 {
+	_TTF_Font* title_buttons_font = App->fonts->Load("fonts/finalf.ttf", 100);
 	_TTF_Font* big_buttons_font = App->fonts->Load("fonts/finalf.ttf", 80);
 	_TTF_Font* mid_buttons_font = App->fonts->Load("fonts/finalf.ttf", 50);
 	_TTF_Font* big_texts_font = App->fonts->Load("fonts/finalf.ttf", 55);
@@ -42,14 +43,13 @@ bool UIScene::Start()
 	SDL_Color dark_yellow_color = { 146, 97, 45, 255 };
 	SDL_Color black_color = { 0, 0, 0, 255 };
 	SDL_Color brown_color = { 139,69,19 };
-
+	SDL_Color green_color = { 0, 100, 0 };
 
 
 
 	menu* creditsMenu = new menu(CREDITS_MENU);
 	{
 		UI_element* image = App->gui->createImage(0, 0, App->tex->Load("gui/Credits.png"), this);
-
 		creditsMenu->elements.push_back(image);
 		menus.push_back(creditsMenu);
 	}
@@ -57,7 +57,10 @@ bool UIScene::Start()
 	menu* startMenu = new menu(START_MENU);
 	{
 
-
+		//TITLE
+		UI_element* title_text = App->gui->createText("JUNGLE MADNESS", 270, 70, title_buttons_font, brown_color);
+		title_text->setOutlined(true);
+		
 
 		//PLAY
 		UI_element* new_game = App->gui->createButton(372 * App->gui->UI_scale, 250 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
@@ -94,7 +97,7 @@ bool UIScene::Start()
 		credits->appendChildAtCenter(credit_text);
 
 		//SETTINGS
-		UI_element* settings_start_menu = App->gui->createButton(823 * App->gui->UI_scale, App->gui->UI_scale, NULL, { 250,613,170,150 }, { 250,613,170,150 }, { 250,613,170,150 }, this);
+		UI_element* settings_start_menu = App->gui->createButton(823 * App->gui->UI_scale, 600 *App->gui->UI_scale, NULL, { 250,613,170,150 }, { 445,613,170,150 }, { 640,613,170,150 }, this);
 
 		settings_start_menu->function = SETTINGS;
 
@@ -110,6 +113,7 @@ bool UIScene::Start()
 		startMenu->elements.push_back(exit_game);
 		startMenu->elements.push_back(exit_text);
 		startMenu->elements.push_back(credits);
+		startMenu->elements.push_back(title_text);
 		startMenu->elements.push_back(settings_start_menu);
 
 		menus.push_back(startMenu);
