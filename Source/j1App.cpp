@@ -15,6 +15,10 @@
 #include "j1App.h"
 #include "j1Pathfinding.h"
 #include "j1EntityManager.h"
+#include "j1Fonts.h"
+#include "j1Gui.h"
+#include "UI_Scene.h"
+#include "j1Transition.h"
 #include "Brofiler/Brofiler.h"
 
 // Constructor
@@ -34,6 +38,10 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	col = new j1Collision();
 	entities = new j1EntityManager();
 	pathfinding = new j1PathFinding();
+	fonts = new j1Fonts();
+	gui = new j1Gui();
+	transition = new j1Transition();
+	ui_scene = new UIScene();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -46,6 +54,10 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map);
 	AddModule(pathfinding);
 	AddModule(scene);
+	AddModule(fonts);
+	AddModule(gui);
+	AddModule(transition);
+	AddModule(ui_scene);
 	
 
 	// render last to swap buffer
@@ -191,6 +203,13 @@ void j1App::PrepareUpdate()
 	last_sec_frame_count++;
 
 	dt = frame_time.ReadSec();
+
+	if (on_GamePause == true)
+	{
+		if (!App->transition->doingMenuTransition)
+			dt = 0.0f;
+	}
+
 	frame_time.Start();
 }
 

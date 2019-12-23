@@ -175,7 +175,9 @@ void j1Player::CheckDeath()
 			playerstate = STATE::FALLING;
 			App->scene->EntityDirection();
 		}
+		StartUI = false;
 	}
+	
 }
 
 void j1Player::CheckWin()
@@ -289,6 +291,8 @@ void j1Player::HandleMode()
 
 			playerstate = STATE::IDLE;
 		}
+
+		StartUI = true;
 	}
 
 }
@@ -365,6 +369,7 @@ void j1Player::GodModeMovement(float dt)
 		Future_Position.x = (Position.x + Current_Velocity.x*dt);
 
 		playerdirection = DIRECTION::LEFT;
+		StartUI = true;
 	}
 
 	// ---- RIGHT ----
@@ -374,6 +379,7 @@ void j1Player::GodModeMovement(float dt)
 		Future_Position.x = (Position.x + Current_Velocity.x*dt);
 
 		playerdirection = DIRECTION::RIGHT;
+		StartUI = true;
 	}
 
 	// ---- BOTH ----
@@ -383,6 +389,7 @@ void j1Player::GodModeMovement(float dt)
 		Future_Position.x = (Position.x + Current_Velocity.x*dt);
 
 		playerdirection = DIRECTION::RIGHT;
+		StartUI = true;
 	}
 
 	// ---- Y AXIS MOVEMENT ----
@@ -392,6 +399,7 @@ void j1Player::GodModeMovement(float dt)
 	{
 		Current_Velocity.y = -playerinfo.God_Velocity;
 		Future_Position.y = (Position.y + Current_Velocity.y*dt);
+		StartUI = true;
 	}
 
 	// ---- DOWN ----
@@ -399,6 +407,7 @@ void j1Player::GodModeMovement(float dt)
 	{
 		Current_Velocity.y = playerinfo.God_Velocity;
 		Future_Position.y = (Position.y + Current_Velocity.y*dt);
+		StartUI = true;
 	}
 
 	// ---- BOTH ----
@@ -406,6 +415,7 @@ void j1Player::GodModeMovement(float dt)
 	{
 		Current_Velocity.y = 0;
 		Future_Position.y = (Position.y + Current_Velocity.y*dt);
+		StartUI = true;
 	}
 }
 
@@ -428,6 +438,8 @@ void j1Player::StandingModeMovement(float dt)
 
 			playerdirection = DIRECTION::LEFT;
 		}
+
+		StartUI = true;
 	}
 
 	// ---- RIGHT ----
@@ -445,6 +457,8 @@ void j1Player::StandingModeMovement(float dt)
 
 			playerdirection = DIRECTION::RIGHT;
 		}
+
+		StartUI = true;
 	}
 
 	// ---- BOTH ----
@@ -454,6 +468,7 @@ void j1Player::StandingModeMovement(float dt)
 		Future_Position.x = (Position.x + Current_Velocity.x*dt);
 
 		playerdirection = DIRECTION::RIGHT;
+		StartUI = true;
 	}
 
 	// ---- WALL-JUMPING X AXIS MOVEMENT----
@@ -523,6 +538,8 @@ void j1Player::StandingModeMovement(float dt)
 		{
 			DoubleJump(dt);
 		}
+
+		StartUI = true;
 	}
 
 	// ---- FALLING DOWN PLATFORM ----
@@ -530,6 +547,7 @@ void j1Player::StandingModeMovement(float dt)
 	{
 		Future_Position.y += 32;
 		playerstate = STATE::FALLING;
+		StartUI = true;
 	}
 
 	// ---- IDLE CONDITION ----
@@ -567,6 +585,7 @@ void j1Player::CrouchingModeMovenent(float dt)
 		}
 
 		playerdirection = DIRECTION::LEFT;
+		StartUI = true;
 	}
 
 	// ---- RIGHT ----
@@ -584,6 +603,7 @@ void j1Player::CrouchingModeMovenent(float dt)
 		}
 
 		playerdirection = DIRECTION::RIGHT;
+		StartUI = true;
 	}
 
 	// ---- BOTH ----
@@ -593,6 +613,7 @@ void j1Player::CrouchingModeMovenent(float dt)
 		Future_Position.x = (Position.x + Current_Velocity.x*dt);
 
 		playerdirection = DIRECTION::RIGHT;
+		StartUI = true;
 	}
 
 	// ---- Y AXIS MOVEMENT ----
@@ -614,6 +635,8 @@ void j1Player::CrouchingModeMovenent(float dt)
 		{
 			DoubleJump(dt);
 		}
+
+		StartUI = true;
 	}
 
 	// ---- FALLING DOWN PLATFORM ----
@@ -629,7 +652,8 @@ void j1Player::CrouchingModeMovenent(float dt)
 		Entity_Collider->rect = playerinfo.Standing_Rect;
 		Surr_Entity_Collider->rect = playerinfo.Surr_Standing_Rect;
 		playerinfo.Animation_Offset = playerinfo.Animation_Offset_St;
-;
+		StartUI = true;
+
 	}
 
 	// ---- Idle Condition ---- 
@@ -1411,18 +1435,22 @@ bool j1Player::CleanUp()
 
 void j1Player::FixedUpdate(float dt)
 {
-	PostUpdate(dt);
+	if(App->on_GamePause == false)
+		PostUpdate(dt);
 }
 
 void j1Player::LogicUpdate(float dt)
 {
-	Update(dt);
+	if (App->on_GamePause == false)
+	{
+		Update(dt);
 
-	// --- Set player pos, prevent surpassing colliders ---
-	/*Entity_Collider->SetPos(Position.x, Position.y);*/
+		// --- Set player pos, prevent surpassing colliders ---
+		/*Entity_Collider->SetPos(Position.x, Position.y);*/
 
-	App->col->Update(1.0f);
+		App->col->Update(1.0f);
 
-	/*Entity_Collider->SetPos(Position.x, Position.y);*/
+		/*Entity_Collider->SetPos(Position.x, Position.y);*/
+	}
 }
 
