@@ -42,7 +42,7 @@ void Button::BlitElement()
 	case STANDBY:
 		if (!active)
 		{
-			if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+			if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
 			{
 				App->render->Blit(texture, globalPos.x, globalPos.y + 190, &section);
 			}
@@ -53,7 +53,7 @@ void Button::BlitElement()
 		}
 		else
 		{
-			if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+			if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
 			{
 				App->render->Blit(texture, globalPos.x, globalPos.y + 190, &sectionActive);
 			}
@@ -66,7 +66,7 @@ void Button::BlitElement()
 	case MOUSEOVER:
 		if (!active)
 		{
-			if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+			if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
 			{
 				App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnMouse);
 			}
@@ -81,7 +81,7 @@ void Button::BlitElement()
 		}
 		else
 		{
-			if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+			if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
 			{
 				App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnMouseActive);
 			}
@@ -92,7 +92,7 @@ void Button::BlitElement()
 		}
 		break;
 	case CLICKED:
-		if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+		if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
 		{
 			App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnClick);
 		}

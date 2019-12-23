@@ -33,7 +33,7 @@ void Slider::BlitElement()
 
 	iPoint globalPos = calculateAbsolutePosition();
 
-	if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+	if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
 	{
 		App->render->Blit(texture, globalPos.x, globalPos.y + 190, &section);
 	}
@@ -55,7 +55,7 @@ void Slider::BlitElement()
 		progress = 1;
 	full.w = ((bar_length)* progress);
 
-	if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+	if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
 	{
 		App->render->Blit(texture, globalPos.x, globalPos.y + 190, &full);
 	}

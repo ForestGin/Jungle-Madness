@@ -77,7 +77,7 @@ void Text::BlitElement()
 
 		if (outlined)
 		{
-			if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+			if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
 			{
 				App->render->Blit(outline, globalPos.x + outline_offset.x, globalPos.y + outline_offset.y + 190, NULL);
 			}
@@ -88,7 +88,7 @@ void Text::BlitElement()
 			
 		}
 
-		if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+		if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
 		{
 			App->render->Blit(texture, globalPos.x, globalPos.y + 190, NULL, SDL_FLIP_NONE, App->gui->UI_scale);
 		}

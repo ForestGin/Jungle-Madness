@@ -37,7 +37,7 @@ void Window::BlitElement()
 	SDL_SetTextureAlphaMod(texture, App->gui->alpha_value);
 	iPoint globalPos = calculateAbsolutePosition();
 
-	if (App->scene->player->StartUI == false)//player hasn't moved yet or has died
+	if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
 	{
 		App->render->Blit(texture, globalPos.x /*+ App->scene->player->Future_Position.x -500*/, globalPos.y + 190, &section);//with player pos
 	}
