@@ -53,7 +53,12 @@ bool UIScene::Start()
 	menu* creditsMenu = new menu(CREDITS_MENU);
 	{
 		UI_element* image = App->gui->createImage(0, 0, App->tex->Load("gui/Credits.png"), this);
+		UI_element* webpage = App->gui->createButton(800 * App->gui->UI_scale, 620 * App->gui->UI_scale, NULL, { 0,405,165,115 }, { 0,405,165,115 }, { 0,405,165,115 }, this);
+		webpage->function = WEBPAGE;
+		
+		
 		creditsMenu->elements.push_back(image);
+		creditsMenu->elements.push_back(webpage);
 		menus.push_back(creditsMenu);
 	}
 
