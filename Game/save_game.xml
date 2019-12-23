@@ -33,6 +33,10 @@
 		<scene1 value="false" />
 		<scene2 value="true" />
 	</scene>
+	<fonts />
+	<gui />
+	<transition />
+	<ui_scene />
 	<renderer>
 		<camera x="-904" y="-800" />
 	</renderer>

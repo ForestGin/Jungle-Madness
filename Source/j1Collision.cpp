@@ -55,7 +55,7 @@ j1Collision::j1Collision()
 
 	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_FLOOR] = true;
 	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_DEADLY] = false;
-	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_PLATFORM] = false;
+	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_PLATFORM] = true;
 	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_PLAYER] = false;
 	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_CHECKSURROUNDING] = false;
 	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_BAT] = false;
@@ -292,11 +292,11 @@ void j1Collision::DebugDraw()
 		case COLLIDER_PLATFORM: // magenta
 			App->render->DrawQuad(item->data->rect, 255, 0, 255, alpha);
 			break;
-		case COLLIDER_CHECKSURROUNDING: // white
-			App->render->DrawQuad(item->data->rect, 255, 255, 255, alpha);
-			break;
 		case COLLIDER_PLAYER: // green
 			App->render->DrawQuad(item->data->rect, 0, 255, 0, alpha);
+			break;
+		case COLLIDER_CHECKSURROUNDING: // white
+			App->render->DrawQuad(item->data->rect, 255, 255, 255, alpha);
 			break;
 		case COLLIDER_SNAKE: // cyan
 			App->render->DrawQuad(item->data->rect, 0, 255, 255, alpha);
