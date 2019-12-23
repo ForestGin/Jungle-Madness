@@ -12,6 +12,7 @@
 #include "UI_Window.h"
 #include "j1Render.h"
 #include "j1Transition.h"
+#include "j1Audio.h"
 
 UIScene::UIScene() : j1Module()
 {
@@ -45,6 +46,8 @@ bool UIScene::Start()
 	SDL_Color brown_color = { 139,69,19 };
 	SDL_Color green_color = { 0, 100, 0 };
 
+	float music_progress = (float)App->audio->getMusicVolume() / 128;
+	float fx_progress = (float)App->audio->getFxVolume() / 128;
 
 
 	menu* creditsMenu = new menu(CREDITS_MENU);
@@ -147,20 +150,31 @@ bool UIScene::Start()
 
 		//AUDIO
 		Button* music_slider_butt = App->gui->createButton(240, 0, NULL, { 341, 287, 15, 40 }, { 341, 287, 15, 40 }, { 341, 287, 15, 40 }, this);
-		Slider* music_slider = App->gui->createSlider(400, 255, NULL, { 0, 291, 288, 21 }, { 0, 318, 288, 21 }, music_slider_butt, mid_texts_font, brown_color);
-		music_slider->modify = MUSIC;
-		settings_image->appendChild(430 * App->gui->UI_scale, 160 * App->gui->UI_scale, music_slider);
+		music_sliderMM = App->gui->createSlider(400, 255, NULL, { 0, 291, 288, 21 }, { 0, 318, 288, 21 }, music_slider_butt, mid_texts_font, brown_color, music_progress);
+		music_sliderMM->modify = MUSIC;
+		settings_image->appendChild(430 * App->gui->UI_scale, 160 * App->gui->UI_scale, music_sliderMM);
+
+		music_sliderMM->setProgress(float(App->audio->getMusicVolume() * 2) / 255.0f);
+		music_sliderMM->button->localPosition.x = ((music_sliderMM->section.w * App->gui->UI_scale) - 5 - music_sliderMM->button->section.w / (2 / App->gui->UI_scale)) * music_sliderMM->progress;
 
 		UI_element* audio_text = App->gui->createText("AUDIO", 280, 240, mid_buttons_font, brown_color);
 		audio_text->setOutlined(true);
 
-		//FULLSCREEN
-		Button* full_switch = App->gui->createSwitch(600, 415, NULL, { 404, 291, 47, 22 }, { 404, 291, 47, 22 }, { 404, 314, 47, 22 }, { 404, 314, 47, 22 }, this);
-		settings_image->appendChild(550 * App->gui->UI_scale, 325 * App->gui->UI_scale, full_switch);
+		//FX
+		Button* fx_slider_butt = App->gui->createButton(240, 400, NULL, { 341, 287, 15, 40 }, { 341, 287, 15, 40 }, { 341, 287, 15, 40 }, this);
+		fx_sliderMM = App->gui->createSlider(400, 400, NULL, { 0, 291, 288, 21 }, { 0, 318, 288, 21 }, fx_slider_butt, mid_texts_font, brown_color, fx_progress);
+		fx_sliderMM->modify = FX;
+		settings_image->appendChild(430 * App->gui->UI_scale, 160 * App->gui->UI_scale, fx_sliderMM);
 
-		UI_element* fullscreen_text = App->gui->createText("FULLSCREEN", 280, 400, mid_buttons_font, brown_color);
-		fullscreen_text->setOutlined(true);
+		UI_element* fx_text = App->gui->createText("FX", 280, 400, mid_buttons_font, brown_color);
+		fx_text->setOutlined(true);
 
+		//APPLY
+		UI_element* apply_button = App->gui->createButton(375 * App->gui->UI_scale, 480 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
+		apply_button->function = APPLY;
+
+		UI_element* apply_text = App->gui->createText("APPLY", 475, 510, mid_buttons_font, brown_color);
+		apply_text->setOutlined(true);
 
 
 		settingsMenu->elements.push_back(settings_image);
@@ -168,10 +182,14 @@ bool UIScene::Start()
 		settingsMenu->elements.push_back(back_button);
 		settingsMenu->elements.push_back(back_text);
 		settingsMenu->elements.push_back(music_slider_butt);
-		settingsMenu->elements.push_back(music_slider);
+		settingsMenu->elements.push_back(music_sliderMM);
 		settingsMenu->elements.push_back(audio_text);
-		settingsMenu->elements.push_back(full_switch);
-		settingsMenu->elements.push_back(fullscreen_text);
+		settingsMenu->elements.push_back(fx_slider_butt);
+		settingsMenu->elements.push_back(fx_sliderMM);
+		settingsMenu->elements.push_back(fx_text);
+		settingsMenu->elements.push_back(apply_button);
+		settingsMenu->elements.push_back(apply_text);
+	
 		menus.push_back(settingsMenu);
 	}
 
@@ -192,21 +210,28 @@ bool UIScene::Start()
 
 		//AUDIO
 		Button* music_slider_butt = App->gui->createButton(500, 0, NULL, { 341, 287, 15, 40 }, { 341, 287, 15, 40 }, { 341, 287, 15, 40 }, this);
-		Slider* music_slider = App->gui->createSlider(420, 255, NULL, { 0, 291, 288, 21 }, { 0, 318, 288, 21 }, music_slider_butt, mid_texts_font, brown_color);
+		music_slider = App->gui->createSlider(420, 255, NULL, { 0, 291, 288, 21 }, { 0, 318, 288, 21 }, music_slider_butt, mid_texts_font, brown_color, music_progress);
 		music_slider->modify = MUSIC;
 
 
 		UI_element* audio_text = App->gui->createText("AUDIO", 330, 240, mid_buttons_font, brown_color);
 		audio_text->setOutlined(true);
 
-		//FULLSCREEN
-		Button* full_switch = App->gui->createSwitch(600, 415, NULL, { 404, 291, 47, 22 }, { 404, 291, 47, 22 }, { 404, 314, 47, 22 }, { 404, 314, 47, 22 }, this);
+		//FX
+		Button* fx_slider_butt = App->gui->createButton(500, 0, NULL, { 341, 287, 15, 40 }, { 341, 287, 15, 40 }, { 341, 287, 15, 40 }, this);
+		fx_slider = App->gui->createSlider(420, 350, NULL, { 0, 291, 288, 21 }, { 0, 318, 288, 21 }, fx_slider_butt, mid_texts_font, brown_color, fx_progress);
+		fx_slider->modify = FX;
 
 
-		UI_element* fullscreen_text = App->gui->createText("FULLSCREEN", 330, 400, mid_buttons_font, brown_color);
-		fullscreen_text->setOutlined(true);
+		UI_element* fx_text = App->gui->createText("FX", 330, 350, mid_buttons_font, brown_color);
+		fx_text->setOutlined(true);
 
+		//APPLY BUTTON
+		UI_element* apply_button = App->gui->createButton(375 * App->gui->UI_scale, 480 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
+		apply_button->function = APPLY;
 
+		UI_element* apply_text = App->gui->createText("APPLY", 470, 510, mid_buttons_font, brown_color);
+		apply_text->setOutlined(true);
 
 		pauseMenu->elements.push_back(pause_window);
 		pauseMenu->elements.push_back(pause_text);
@@ -215,13 +240,20 @@ bool UIScene::Start()
 		pauseMenu->elements.push_back(music_slider_butt);
 		pauseMenu->elements.push_back(music_slider);
 		pauseMenu->elements.push_back(audio_text);
-		pauseMenu->elements.push_back(full_switch);
-		pauseMenu->elements.push_back(fullscreen_text);
+		pauseMenu->elements.push_back(fx_slider_butt);
+		pauseMenu->elements.push_back(fx_slider);
+		pauseMenu->elements.push_back(fx_text);
+		pauseMenu->elements.push_back(apply_button);
+		pauseMenu->elements.push_back(apply_text);
+
 		menus.push_back(pauseMenu);
 	}
 
 
 	current_menu = startMenu;
+	defaultValues.fx = fx_progress;
+	defaultValues.music = music_progress;
+	newValues = defaultValues;
 
 	return true;
 }
@@ -463,7 +495,7 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 
 			break;
 		case APPLY:
-
+			applySettings(newValues);
 			break;
 		case CANCEL:
 
@@ -505,9 +537,35 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 			{
 			case MUSIC:
 				newValues.music = tmp->progress;
+
+				if (music_slider != tmp)
+				{
+					music_slider->progress = newValues.music;
+					music_slider->button->localPosition.x = ((music_slider->section.w * App->gui->UI_scale) - 5 - music_slider->button->section.w / (2 / App->gui->UI_scale)) * music_slider->progress;
+				}
+				else if (music_sliderMM != tmp)
+				{
+					music_sliderMM->progress = newValues.music;
+					music_sliderMM->button->localPosition.x = ((music_sliderMM->section.w * App->gui->UI_scale) - 5 - music_sliderMM->button->section.w / (2 / App->gui->UI_scale)) * music_sliderMM->progress;
+				}
+
+				tmp->button->localPosition.x = ((tmp->section.w * App->gui->UI_scale) - 5 - tmp->button->section.w / (2 / App->gui->UI_scale)) * tmp->progress;
 				break;
 			case FX:
 				newValues.fx = tmp->progress;
+
+				if (fx_slider != tmp)
+				{
+					fx_slider->progress = newValues.fx;
+					fx_slider->button->localPosition.x = ((fx_slider->section.w * App->gui->UI_scale) - 5 - fx_slider->button->section.w / (2 / App->gui->UI_scale)) * fx_slider->progress;
+				}
+				else if (fx_sliderMM != tmp)
+				{
+					fx_sliderMM->progress = newValues.fx;
+					fx_sliderMM->button->localPosition.x = ((fx_sliderMM->section.w * App->gui->UI_scale) - 5 - fx_sliderMM->button->section.w / (2 / App->gui->UI_scale)) * fx_sliderMM->progress;
+				}
+
+				tmp->button->localPosition.x = ((tmp->section.w * App->gui->UI_scale) - 5 - tmp->button->section.w / (2 / App->gui->UI_scale)) * tmp->progress;
 				break;
 			}
 		}
@@ -539,4 +597,59 @@ bool UIScene::Load(pugi::xml_node& config)
 bool UIScene::Save(pugi::xml_node& config) const
 {
 	return true;
+}
+
+void UIScene::applySettings(settings_values values)
+{
+
+	App->audio->setMusicVolume(values.music);
+	App->audio->setFxVolume(values.fx);
+
+	for (std::list <UI_element*>::const_iterator item = current_menu->elements.begin(); item != current_menu->elements.end(); ++item)
+	{
+		if ((*item)->element_type == SLIDER)
+		{
+			Slider* slider = (Slider*)*item;
+
+			switch (slider->modify)
+			{
+			case MUSIC:
+
+				slider->setProgress(values.music);
+
+				if (music_slider != slider)
+				{
+					music_slider->setProgress(values.music);
+					music_slider->button->localPosition.x = ((music_slider->section.w * App->gui->UI_scale) - 5 - music_slider->button->section.w / (2 / App->gui->UI_scale)) * music_slider->progress;
+				}
+				else if (music_sliderMM != slider)
+				{
+					music_sliderMM->setProgress(values.music);
+					music_sliderMM->button->localPosition.x = ((music_sliderMM->section.w * App->gui->UI_scale) - 5 - music_sliderMM->button->section.w / (2 / App->gui->UI_scale)) * music_sliderMM->progress;
+				}
+
+				slider->button->localPosition.x = ((slider->section.w * App->gui->UI_scale) - 5 - slider->button->section.w / (2 / App->gui->UI_scale)) * slider->progress;
+				break;
+			case FX:
+
+				slider->setProgress(values.fx);
+
+				if (fx_slider != slider)
+				{
+					fx_slider->setProgress(values.fx);
+					fx_slider->button->localPosition.x = ((fx_slider->section.w * App->gui->UI_scale) - 5 - fx_slider->button->section.w / (2 / App->gui->UI_scale)) * fx_slider->progress;
+
+				}
+				else if (fx_sliderMM != slider)
+				{
+					fx_sliderMM->setProgress(values.fx);
+					fx_sliderMM->button->localPosition.x = ((fx_sliderMM->section.w * App->gui->UI_scale) - 5 - fx_sliderMM->button->section.w / (2 / App->gui->UI_scale)) * fx_sliderMM->progress;
+
+				}
+
+				slider->button->localPosition.x = ((slider->section.w * App->gui->UI_scale) - 5 - slider->button->section.w / (2 / App->gui->UI_scale)) * slider->progress;
+				break;
+			}
+		}
+	}
 }
