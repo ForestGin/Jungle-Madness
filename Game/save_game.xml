@@ -25,6 +25,15 @@
 			<Snakex value="220" />
 			<Snakey value="707" />
 		</Snake2>
+    <Coin1>
+      
+    </Coin1>
+    <Coin2>
+
+    </Coin2>
+    <Coin3>
+
+    </Coin3>
 	</entities>
 	<collision />
 	<map />

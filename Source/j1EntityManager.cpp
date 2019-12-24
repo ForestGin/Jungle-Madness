@@ -166,6 +166,9 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	batinfo.Reference_ID.y = batnode.child("ID").attribute("value2").as_int();
 	/*batinfo.Move->speed = 0.15f;*/
 
+	//COIN
+
+
 	return ret;
 }
 
@@ -288,7 +291,9 @@ j1Entity* const j1EntityManager::EntityCreation(const char* entname, entity_type
 	case entity_type::BAT:
 		entity = new j1Bat();
 		break;
-		
+	case entity_type::COIN:
+		entity = new j1Coin();
+		break;
 	}
 
 	entityID++;
