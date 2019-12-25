@@ -8,6 +8,7 @@ class UI_element;
 class Clock;
 class Button;
 class Slider;
+class Image;
 
 enum menu_id
 {
@@ -68,10 +69,13 @@ public:
 	menu_id previous_menu;
 	menu_id actual_menu = START_MENU;
 	bool HoveringReset = false;
+
 	//SLIDERS
 	Slider* music_slider = nullptr;
 	Slider* fx_slider = nullptr;
 	Slider* music_sliderMM = nullptr;
 	Slider* fx_sliderMM = nullptr;
+
+	Image* heart = nullptr;
 };
 #endif

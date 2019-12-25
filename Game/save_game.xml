@@ -6,11 +6,11 @@
 	<audio />
 	<entities>
 		<Player>
-			<Playerx value="935" />
-			<Playery value="678" />
+			<Playerx value="916.499939" />
+			<Playery value="627.540039" />
 		</Player>
 		<Bat1>
-			<Batx value="1083" />
+			<Batx value="1193" />
 			<Baty value="297" />
 		</Bat1>
 		<Bat2>
@@ -18,22 +18,13 @@
 			<Baty value="526" />
 		</Bat2>
 		<Snake1>
-			<Snakex value="445" />
+			<Snakex value="446.5" />
 			<Snakey value="708" />
 		</Snake1>
 		<Snake2>
 			<Snakex value="220" />
 			<Snakey value="707" />
 		</Snake2>
-    <Coin1>
-      
-    </Coin1>
-    <Coin2>
-
-    </Coin2>
-    <Coin3>
-
-    </Coin3>
 	</entities>
 	<collision />
 	<map />
@@ -47,6 +38,6 @@
 	<transition />
 	<ui_scene />
 	<renderer>
-		<camera x="-439" y="-192" />
+		<camera x="-430" y="-192" />
 	</renderer>
 </game_state>

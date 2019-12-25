@@ -13,6 +13,8 @@
 #include "j1Render.h"
 #include "j1Transition.h"
 #include "j1Audio.h"
+#include "j1Scene.h"
+#include "j1Player.h"
 
 UIScene::UIScene() : j1Module()
 {
@@ -129,7 +131,12 @@ bool UIScene::Start()
 
 	menu* ingameMenu = new menu(INGAME_MENU);
 	{
+		//vida
+		heart = App->gui->createImageFromAtlas(0,0, {399,468,52,16}, this);
+		
 
+		ingameMenu->elements.push_back(heart);
+		
 		menus.push_back(ingameMenu);
 
 	}
