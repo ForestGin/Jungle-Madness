@@ -9,6 +9,8 @@
 #include "j1Scene.h"
 #include "j1Window.h"
 #include "j1EntityManager.h"
+#include "j1Transition.h"
+#include "UI_Scene.h"
 
 j1Player::j1Player() : j1Entity("player", entity_type::PLAYER)
 {
@@ -82,6 +84,8 @@ bool j1Player::Start()
 
 	ID = App->entities->entityID;
 
+	lives = 3;
+
 	return true;
 }
 
@@ -146,6 +150,7 @@ void j1Player::CheckDeath()
 	{
 		if (CurrentAnimation->Finished())
 		{
+			lives--;
 
 			if (SavedCheckPoint)
 			{
@@ -178,6 +183,12 @@ void j1Player::CheckDeath()
 		StartUI = false;
 	}
 	
+	if (lives <= 0)
+	{
+		App->transition->MenuTransition(START_MENU, 0.3);
+		App->ui_scene->actual_menu = START_MENU;
+		lives = 3;
+	}
 }
 
 void j1Player::CheckWin()

@@ -194,6 +194,8 @@ public:
 	int SavedCheckPointArea = 0;
 	//GUI
 	bool StartUI = false;
+	//HP
+	int lives = 0;
 };
 
 #endif // __j1Player_H__

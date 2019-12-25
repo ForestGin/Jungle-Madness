@@ -319,6 +319,23 @@ bool UIScene::Update(float dt)
 		}
 	}
 
+	//PLAYER HP BLITTING
+	if (App->scene->player->lives == 3)
+	{
+		heart->section = { 399,468,52,16 };
+	}
+	else if (App->scene->player->lives == 2)
+	{
+		heart->section = { 399,451, 52, 16 };
+	}
+	else if (App->scene->player->lives == 1)
+	{
+		heart->section = { 399,434, 52, 16 };
+	}
+	else if (App->scene->player->lives == 0)
+	{
+		heart->section = { 399, 417, 52, 16 };
+	}
 
 	return ret;
 }

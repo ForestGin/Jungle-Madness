@@ -543,6 +543,7 @@ bool j1Scene::SceneChange(const char* scene)
 
 void j1Scene::RestartLevel()
 {
+	
 	//reseting entities directions
 	EntityDirection();
 
