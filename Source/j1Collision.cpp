@@ -310,6 +310,9 @@ void j1Collision::DebugDraw()
 		case  COLLIDER_WIN: // pink
 			App->render->DrawQuad(item->data->rect, 255, 0, 128, alpha);
 			break;
+		case  COLLIDER_COIN: // yellow
+			App->render->DrawQuad(item->data->rect, 255, 255, 0, alpha);
+			break;
 		}
 		item = item->next;
 	}
