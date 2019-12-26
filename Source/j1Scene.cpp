@@ -198,7 +198,8 @@ bool j1Scene::Start()
 	App->map->MapCollisions(App->map->data);
 
 	App->entities->loading = false;
-	
+	saveHP = false;
+
 	return ret;
 }
 
@@ -343,6 +344,7 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)//BEGINING OF CURRENT SCENE
 	{
+		player->lives = 3;
 		RestartLevel();
 	}
 //---------------------------------------
@@ -352,12 +354,13 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 	{
 		App->SaveGame("save_game.xml");
+		saveHP = true;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN )
 	{
 		bool result = App->LoadGame("save_game.xml");
-		
+		saveHP = false;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)

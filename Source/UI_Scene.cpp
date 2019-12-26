@@ -490,7 +490,7 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 		{
 		case NEW_GAME:
 		{
-			
+			App->scene->player->SavedCheckPoint = false;
 			actual_menu = INGAME_MENU;
 			App->transition->MenuTransition(INGAME_MENU, 0.1);
 			App->scene->RestartLevel();

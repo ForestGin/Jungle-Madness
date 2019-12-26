@@ -81,6 +81,8 @@ public:
 	//Transition
 	bool load_lvl = false;
 	int newLvl = 0;
+
+	bool saveHP = false;
 };
 
 #endif // __j1SCENE_H__

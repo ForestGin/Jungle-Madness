@@ -185,6 +185,7 @@ void j1Player::CheckDeath()
 	
 	if (lives <= 0)
 	{
+		
 		App->transition->MenuTransition(START_MENU, 0.3);
 		App->ui_scene->actual_menu = START_MENU;
 		lives = 3;
@@ -1424,7 +1425,8 @@ bool j1Player::Load(pugi::xml_node &config)
 
 	Position.x = config.child("Player").child("Playerx").attribute("value").as_float();
 	Position.y = config.child("Player").child("Playery").attribute("value").as_float();
-	lives = config.child("Player").child("Lives").attribute("value").as_int();
+	if(App->scene->saveHP == true)
+		lives = config.child("Player").child("Lives").attribute("value").as_int();
 	return ret;
 }
 
@@ -1432,7 +1434,8 @@ bool j1Player::Save(pugi::xml_node &config) const
 {
 	config.append_child("Player").append_child("Playerx").append_attribute("value") = Position.x;
 	config.child("Player").append_child("Playery").append_attribute("value") = Position.y;
-	config.child("Player").append_child("Lives").append_attribute("value") = lives;
+	if (App->scene->saveHP == true)
+		config.child("Player").append_child("Lives").append_attribute("value") = lives;
 	return true;
 }
 
