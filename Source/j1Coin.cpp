@@ -36,9 +36,9 @@ bool j1Coin::Start()
 
 	touched = false;
 
-
+	Entity_State = IDLE;
 	CurrentAnimation = Coininfo.idle;
-	Coininfo.idle->speed = Coininfo.animationspeed;
+	
 	
 
 
@@ -48,7 +48,7 @@ bool j1Coin::Start()
 
 	Entity_Collider->SetPos(Position.x, Position.y);
 
-	Entity_State = IDLE;
+	
 
 
 	if (spritesheet == nullptr)
@@ -68,10 +68,10 @@ bool j1Coin::Update(float dt)
 		Entity_Collider->SetPos(Position.x, Position.y);
 		CurrentAnimation = Coininfo.idle;
 	}
-	else if (Entity_Collider != nullptr)
+	/*else if (Entity_Collider != nullptr)
 	{
 		Entity_Collider->SetPos(-10, -10);
-	}
+	}*/
 
 
 
@@ -135,11 +135,13 @@ bool j1Coin::CleanUp()
 
 void j1Coin::FixedUpdate(float dt)
 {
-	PostUpdate(dt);
+	if (App->on_GamePause == false)
+		PostUpdate(dt);
 }
 
 void j1Coin::LogicUpdate(float dt)
 {
-	Update(dt);
+	if (App->on_GamePause == false)
+		Update(dt);
 
 }
