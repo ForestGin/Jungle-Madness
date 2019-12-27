@@ -280,6 +280,8 @@ bool UIScene::Start()
 	defaultValues.music = music_progress;
 	newValues = defaultValues;
 
+	App->audio->PlayMusic("Audio/music/MainMenu.ogg", 2.0f);
+
 	return true;
 }
 bool UIScene::PreUpdate()
@@ -293,6 +295,7 @@ bool UIScene::Update(float dt)
 	//pause game if on main menu
 	if (actual_menu == START_MENU)
 	{
+
 		HoveringReset = true;
 		App->on_GamePause = true;
 	}
@@ -567,6 +570,7 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 				App->on_GamePause = false;
 				App->transition->MenuTransition(START_MENU, 0.3);
 				actual_menu = START_MENU;
+				App->audio->PlayMusic("Audio/music/MainMenu.ogg", 2.0f);
 			}
 			break;
 		case RESTORE:

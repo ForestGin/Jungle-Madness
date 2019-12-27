@@ -222,9 +222,11 @@ bool j1Scene::Start()
 		RELEASE_ARRAY(buffer_data);
 	}
 	
-	
-	p2SString SceneMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->data->GetString());
-	App->audio->PlayMusic(SceneMusic.GetString());
+	if (App->ui_scene->actual_menu != START_MENU)
+	{
+		p2SString SceneMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->data->GetString());
+		App->audio->PlayMusic(SceneMusic.GetString(), 2.0f);
+	}
 
 	//colliders from tiled
 	App->map->MapCollisions(App->map->data);
@@ -537,7 +539,7 @@ bool j1Scene::SceneChange(const char* scene)
 		App->render->camera.y = CamScene1.y;
 
 		p2SString stageMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->data->GetString());
-		App->audio->PlayMusic(stageMusic.GetString());
+		App->audio->PlayMusic(stageMusic.GetString(), 2.0f);
 		player->playerstate = STATE::FALLING;
 		
 
@@ -559,7 +561,7 @@ bool j1Scene::SceneChange(const char* scene)
 		App->render->camera.y = CamScene2.y;
 
 		p2SString stageMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->next->data->GetString());
-		App->audio->PlayMusic(stageMusic.GetString());
+		App->audio->PlayMusic(stageMusic.GetString(), 2.0f);
 		player->playerstate = STATE::FALLING;
 
 		//pathfinding map2
