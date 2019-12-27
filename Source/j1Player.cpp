@@ -11,6 +11,7 @@
 #include "j1EntityManager.h"
 #include "j1Transition.h"
 #include "UI_Scene.h"
+#include "j1Audio.h"
 
 j1Player::j1Player() : j1Entity("player", entity_type::PLAYER)
 {
@@ -86,6 +87,9 @@ bool j1Player::Start()
 
 	lives = 3;
 
+	//fx
+	end = App->audio->LoadFx("Audio/fx/end_level.wav");
+	died = App->audio->LoadFx("Audio/fx/death.wav");
 	return true;
 }
 
@@ -961,6 +965,7 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 
 			Current_Velocity = { 0,0 };
 			//SFX?
+			App->audio->PlayFx(died, 0);
 		}
 		
 		if (to_check->type == COLLIDER_TYPE::COLLIDER_COIN)
@@ -988,6 +993,7 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 		{
 			playerstate = STATE::WINNER;
 			//SFX?
+			App->audio->PlayFx(end, 0, 70);
 			Current_Velocity = { 0,0 };
 		}
 	}
