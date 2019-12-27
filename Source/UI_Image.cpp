@@ -10,7 +10,7 @@
 
 void Image::BlitElement()
 {
-	BROFILER_CATEGORY("Image Blit", Profiler::Color::Chocolate);
+	BROFILER_CATEGORY("Image Blit", Profiler::Color::Bisque);
 
 	if (texture != App->gui->GetAtlas())
 		SDL_SetTextureAlphaMod(texture, App->gui->alpha_value);
