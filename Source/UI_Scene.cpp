@@ -16,6 +16,9 @@
 #include "j1Scene.h"
 #include "j1Player.h"
 
+#include <string>
+using namespace std;
+
 UIScene::UIScene() : j1Module()
 {
 	name.create("ui_scene");
@@ -39,6 +42,7 @@ bool UIScene::Start()
 	_TTF_Font* small_texts_font = App->fonts->Load("fonts/finalf.ttf", 15);
 	_TTF_Font* huge_texts_font = App->fonts->Load("fonts/finalf.ttf", 80);
 	_TTF_Font* special_text_font = App->fonts->Load("fonts/finalf.ttf", 55);
+	_TTF_Font* number_font = App->fonts->Load("fonts/3Dumb.ttf", 55);
 
 	SDL_Color yellow_color = { 229, 168, 61, 255 };
 	SDL_Color white_color = { 255, 255, 255, 0 };
@@ -136,11 +140,15 @@ bool UIScene::Start()
 		//score
 		score_text = App->gui->createText("SCORE", 0, 0, mid_buttons_font, white_color);
 		score_text->setOutlined(true);
+		
+		score_number = App->gui->createText("0", 100, 0, number_font, white_color);
+		score_number->setOutlined(true);
 
 		
-
+		ingameMenu->elements.push_back(score_number);
 		ingameMenu->elements.push_back(heart);
 		ingameMenu->elements.push_back(score_text);
+		
 
 		menus.push_back(ingameMenu);
 
@@ -342,6 +350,15 @@ bool UIScene::Update(float dt)
 		heart->section = { 399, 417, 52, 16 };
 	}
 
+	//score updating
+	
+	//transforming to string from int
+	int scoreUI = App->scene->player->score;
+	string number = to_string(scoreUI);
+	score_number->setText(number);
+
+
+	
 	return ret;
 }
 
@@ -352,6 +369,7 @@ bool UIScene::PostUpdate(float dt)
 
 bool UIScene::CleanUp()
 {
+	
 	std::list <menu*>::iterator item = menus.begin();
 
 	while (item != menus.end())
@@ -497,6 +515,7 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 		{
 			App->scene->saveHP = true;
 			App->scene->player->lives = 3;
+			App->scene->player->score = 0;
 			App->scene->player->SavedCheckPoint = false;
 			actual_menu = INGAME_MENU;
 			App->transition->MenuTransition(INGAME_MENU, 0.1);

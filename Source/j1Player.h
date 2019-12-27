@@ -196,6 +196,9 @@ public:
 	bool StartUI = false;
 	//HP
 	int lives = 0;
+	//Score
+	int score = 0;
+	
 };
 
 #endif // __j1Player_H__

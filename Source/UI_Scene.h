@@ -79,5 +79,6 @@ public:
 
 	Image* heart = nullptr;
 	Text* score_text = nullptr;
+	Text* score_number = nullptr;
 };
 #endif

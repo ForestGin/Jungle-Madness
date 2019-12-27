@@ -96,8 +96,6 @@ bool j1Coin::PostUpdate(float dt)
 void j1Coin::OnCollision(Collider * c1, Collider * c2)
 {
 	
-	
-
 
 
 }

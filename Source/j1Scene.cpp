@@ -79,6 +79,10 @@ bool j1Scene::Start()
 	coin2 = (j1Coin*)App->entities->EntityCreation("coin", entity_type::COIN);
 	coin3 = (j1Coin*)App->entities->EntityCreation("coin", entity_type::COIN);
 
+	coin->touched = false;
+	coin2->touched = false;
+	coin3->touched = false;
+
 	//Loading both scenes(maps/levels)
 
 	p2List_item<p2SString*>* sceneListItem;
