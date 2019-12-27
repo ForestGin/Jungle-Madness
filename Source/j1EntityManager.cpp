@@ -167,6 +167,19 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	/*batinfo.Move->speed = 0.15f;*/
 
 	//COIN
+	pugi::xml_node coinnode = config.child("coin");
+
+	coininfo.folder.create(coinnode.child("folder").child_value());
+	coininfo.Texture.create(coinnode.child("texture").child_value());
+
+	x = coinnode.child("collider").attribute("x").as_int();
+	y = coinnode.child("collider").attribute("y").as_int();
+	w = coinnode.child("collider").attribute("width").as_int();
+	h = coinnode.child("collider").attribute("height").as_int();
+	coininfo.CoinRect = { x,y,w,h };
+	
+	coininfo.idle = LoadAnimation(coininfo.folder.GetString(), "Idle");
+	coininfo.Gravity = playernode.child("gravity").attribute("value").as_float();
 
 
 	return ret;

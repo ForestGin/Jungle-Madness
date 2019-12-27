@@ -102,8 +102,8 @@
     </bat>
 
     <coin>
-      <folder>animations/Coin.tmx</folder>
-      <texture>Sprites/Coin.png</texture>
+      <folder>animations/Coins.tmx</folder>
+      <texture>gui/Coins_gui.png</texture>
       <collider x="0" y="0" width="12" height="12"/>
       <printingoffset x="10" y="10"/>
       <areaofaction value="150"/>

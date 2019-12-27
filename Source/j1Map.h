@@ -109,6 +109,9 @@ struct MapData
 	iPoint				Bat1;
 	iPoint				Snake2;
 	iPoint				Bat2;
+	iPoint				Coin1;
+	iPoint				Coin2;
+	iPoint				Coin3;
 
 	p2List<TileSet*>	tilesets;
 	p2List<MapLayer*>	layers;

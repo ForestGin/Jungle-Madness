@@ -12,6 +12,7 @@
 #include "j1Player.h"
 #include "j1Snake.h"
 #include "j1Bat.h"
+#include "j1Coin.h"
 #include "j1EntityManager.h"
 #include "j1PathFinding.h"
 #include "UI_Scene.h"
@@ -74,7 +75,9 @@ bool j1Scene::Start()
 	snake = (j1Snake*)App->entities->EntityCreation("snake", entity_type::SNAKE);
 	snake2 = (j1Snake*)App->entities->EntityCreation("snake", entity_type::SNAKE);
 	
-
+	coin = (j1Coin*)App->entities->EntityCreation("coin", entity_type::COIN);
+	coin2 = (j1Coin*)App->entities->EntityCreation("coin", entity_type::COIN);
+	coin3 = (j1Coin*)App->entities->EntityCreation("coin", entity_type::COIN);
 
 	//Loading both scenes(maps/levels)
 
@@ -121,6 +124,13 @@ bool j1Scene::Start()
 		snake2->Position.y = App->map->data.Snake2.y;
 		bat2->Position.x = App->map->data.Bat2.x;
 		bat2->Position.y = App->map->data.Bat2.y;
+		coin->Position.x = App->map->data.Coin1.x;
+		coin->Position.y = App->map->data.Coin1.y;
+		coin2->Position.x = App->map->data.Coin2.x;
+		coin2->Position.y = App->map->data.Coin2.y;
+		coin3->Position.x = App->map->data.Coin3.x;
+		coin3->Position.y = App->map->data.Coin3.y;
+
 
 		player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
 		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
@@ -135,6 +145,12 @@ bool j1Scene::Start()
 		snake2->Entity_Collider->SetPos(snake2->Position.x, snake2->Position.y);
 		bat2->Entity_Collider = App->col->AddCollider(bat2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
 		bat2->Entity_Collider->SetPos(bat2->Position.x, bat2->Position.y);
+		coin->Entity_Collider = App->col->AddCollider(coin->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+		coin->Entity_Collider->SetPos(coin->Position.x, coin->Position.y);
+		coin2->Entity_Collider = App->col->AddCollider(coin2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+		coin2->Entity_Collider->SetPos(coin2->Position.x, coin2->Position.y);
+		coin3->Entity_Collider = App->col->AddCollider(coin3->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+		coin3->Entity_Collider->SetPos(coin3->Position.x, coin3->Position.y);
 
 		/*scene1 = true;
 		scene2 = false;
@@ -165,6 +181,12 @@ bool j1Scene::Start()
 		snake2->Position.y = App->map->data2.Snake2.y;
 		bat2->Position.x = App->map->data2.Bat2.x;
 		bat2->Position.y = App->map->data2.Bat2.y;
+		coin->Position.x = App->map->data2.Coin1.x;
+		coin->Position.y = App->map->data2.Coin1.y;
+		coin2->Position.x = App->map->data2.Coin2.x;
+		coin2->Position.y = App->map->data2.Coin2.y;
+		coin3->Position.x = App->map->data2.Coin3.x;
+		coin3->Position.y = App->map->data2.Coin3.y;
 
 		player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
 		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
@@ -179,6 +201,12 @@ bool j1Scene::Start()
 		snake2->Entity_Collider->SetPos(snake2->Position.x, snake2->Position.y);
 		bat2->Entity_Collider = App->col->AddCollider(bat2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
 		bat2->Entity_Collider->SetPos(bat2->Position.x, bat2->Position.y);
+		coin->Entity_Collider = App->col->AddCollider(coin->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+		coin->Entity_Collider->SetPos(coin->Position.x, coin->Position.y);
+		coin2->Entity_Collider = App->col->AddCollider(coin2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+		coin2->Entity_Collider->SetPos(coin2->Position.x, coin2->Position.y);
+		coin3->Entity_Collider = App->col->AddCollider(coin3->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+		coin3->Entity_Collider->SetPos(coin3->Position.x, coin3->Position.y);
 
 		// --- Pathfinding walkability map 2 ---
 
@@ -322,7 +350,8 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && scene1 == false)//FIRST
 	{
-	
+		player->lives = 3;
+		saveHP = true;
 		App->entities->loading = true;
 		currentscene = scenes.start->data->GetString();
 		SceneChange(scenes.start->data->GetString());
@@ -334,6 +363,8 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && scene2 == false)//SECOND
 	{
+		player->lives = 3;
+		saveHP = true;
 		App->entities->loading = true;
 		currentscene = scenes.start->next->data->GetString();
 		SceneChange(scenes.start->next->data->GetString());
@@ -588,6 +619,12 @@ void j1Scene::EntityPosition(const char* scene)
 		snake2->Position.y = App->map->data.Snake2.y;
 		bat2->Position.x = App->map->data.Bat2.x;
 		bat2->Position.y = App->map->data.Bat2.y;
+		coin->Position.x = App->map->data.Coin1.x;
+		coin->Position.y = App->map->data.Coin1.y;
+		coin2->Position.x = App->map->data.Coin2.x;
+		coin2->Position.y = App->map->data.Coin2.y;
+		coin3->Position.x = App->map->data.Coin3.x;
+		coin3->Position.y = App->map->data.Coin3.y;
 	}
 	else
 	{
@@ -601,6 +638,12 @@ void j1Scene::EntityPosition(const char* scene)
 		snake2->Position.y = App->map->data2.Snake2.y;
 		bat2->Position.x = App->map->data2.Bat2.x;
 		bat2->Position.y = App->map->data2.Bat2.y;
+		coin->Position.x = App->map->data2.Coin1.x;
+		coin->Position.y = App->map->data2.Coin1.y;
+		coin2->Position.x = App->map->data2.Coin2.x;
+		coin2->Position.y = App->map->data2.Coin2.y;
+		coin3->Position.x = App->map->data2.Coin3.x;
+		coin3->Position.y = App->map->data2.Coin3.y;
 	}
 	
 
@@ -619,6 +662,12 @@ void j1Scene::EntityPosition(const char* scene)
 	snake2->Entity_Collider->SetPos(snake2->Position.x, snake2->Position.y);
 	bat2->Entity_Collider = App->col->AddCollider(bat2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
 	bat2->Entity_Collider->SetPos(bat2->Position.x, bat2->Position.y);
+	coin->Entity_Collider = App->col->AddCollider(coin->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+	coin->Entity_Collider->SetPos(coin->Position.x, coin->Position.y);
+	coin2->Entity_Collider = App->col->AddCollider(coin2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+	coin2->Entity_Collider->SetPos(coin2->Position.x, coin2->Position.y);
+	coin3->Entity_Collider = App->col->AddCollider(coin3->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+	coin3->Entity_Collider->SetPos(coin3->Position.x, coin3->Position.y);
 
 	//variables reset
 	snake->must_fall = true;
@@ -654,6 +703,15 @@ bool j1Scene::Load(pugi::xml_node &config)
 
 	int snake2x = snake2->Position.x;
 	int snake2y = snake2->Position.y;
+
+	int coinx = coin->Position.x;
+	int coiny = coin->Position.y;
+
+	int coin2x = coin2->Position.x;
+	int coin2y = coin2->Position.y;
+
+	int coin3x = coin3->Position.x;
+	int coin3y = coin3->Position.y;
 	//save & load working with this
 	
 
@@ -763,6 +821,15 @@ bool j1Scene::Load(pugi::xml_node &config)
 
 	snake2->Position.x = snake2x;
 	snake2->Position.y = snake2y;
+
+	coin->Position.x = coinx;
+	coin->Position.y = coiny;
+
+	coin2->Position.x = coin2x;
+	coin2->Position.y = coin2y;
+
+	coin3->Position.x = coin3x;
+	coin3->Position.y = coin3y;
 
 	return ret;
 }

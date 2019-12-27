@@ -17,6 +17,7 @@ struct CoinData {
 	SDL_Rect		CoinRect = { 0,0,0,0 };
 	iPoint			printingoffset = { 0,0 };
 
+	float           Gravity = 0;
 	float			colliding_offset = 0;
 	float			animationspeed = 0;
 
