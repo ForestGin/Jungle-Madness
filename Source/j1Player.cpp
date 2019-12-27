@@ -1427,6 +1427,8 @@ bool j1Player::Load(pugi::xml_node &config)
 	Position.y = config.child("Player").child("Playery").attribute("value").as_float();
 	if(App->scene->saveHP == true)
 		lives = config.child("Player").child("Lives").attribute("value").as_int();
+
+	App->scene->saveHP = false;
 	return ret;
 }
 

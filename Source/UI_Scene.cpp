@@ -490,6 +490,8 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 		{
 		case NEW_GAME:
 		{
+			App->scene->saveHP = true;
+			App->scene->player->lives = 3;
 			App->scene->player->SavedCheckPoint = false;
 			actual_menu = INGAME_MENU;
 			App->transition->MenuTransition(INGAME_MENU, 0.1);
@@ -504,6 +506,7 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 		case CONTINUE:
 		{
 			actual_menu = INGAME_MENU;
+			App->scene->saveHP = true;
 			bool result = App->LoadGame("save_game.xml");
 			App->transition->MenuTransition(INGAME_MENU, 0.1);
 			break;

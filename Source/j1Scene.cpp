@@ -345,6 +345,7 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)//BEGINING OF CURRENT SCENE
 	{
 		player->lives = 3;
+		saveHP = true;
 		RestartLevel();
 	}
 //---------------------------------------
@@ -360,7 +361,7 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN )
 	{
 		bool result = App->LoadGame("save_game.xml");
-		saveHP = false;
+		saveHP = true;
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
