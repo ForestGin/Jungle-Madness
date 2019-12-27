@@ -15,7 +15,7 @@ void Image::BlitElement()
 	if (texture != App->gui->GetAtlas())
 		SDL_SetTextureAlphaMod(texture, App->gui->alpha_value);
 	iPoint globalPos = calculateAbsolutePosition();
-
+	/*App->render->Blit(texture, globalPos.x, globalPos.y, &section, SDL_FLIP_NONE, App->gui->UI_scale, false);*/
 	if (this == App->ui_scene->heart)
 	{
 		App->render->Blit(texture, App->scene->player->Position.x- 10, App->scene->player->Position.y - 30, &section);

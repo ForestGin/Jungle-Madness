@@ -9,6 +9,7 @@ class Clock;
 class Button;
 class Slider;
 class Image;
+class Text;
 
 enum menu_id
 {
@@ -77,5 +78,6 @@ public:
 	Slider* fx_sliderMM = nullptr;
 
 	Image* heart = nullptr;
+	Text* score_text = nullptr;
 };
 #endif

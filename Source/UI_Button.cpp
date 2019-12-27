@@ -40,67 +40,80 @@ void Button::BlitElement()
 	switch (state)
 	{
 	case STANDBY:
-		if (!active)
-		{
-			if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
-			{
-				App->render->Blit(texture, globalPos.x, globalPos.y + 190, &section);
-			}
+		/*if (!active)
+		{*/
+
+			if (!active)
+				App->render->Blit(texture, globalPos.x, globalPos.y, &section, SDL_FLIP_NONE, App->gui->UI_scale, false);
 			else
-			{
-				App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
-			}
-		}
-		else
-		{
-			if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
-			{
-				App->render->Blit(texture, globalPos.x, globalPos.y + 190, &sectionActive);
-			}
-			else
-			{
-				App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
-			}
-		}
-		break;
+				App->render->Blit(texture, globalPos.x, globalPos.y, &sectionActive, SDL_FLIP_NONE, App->gui->UI_scale, false);
+			break;
+			//if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
+			//{
+			//	App->render->Blit(texture, globalPos.x, globalPos.y + 190, &section);
+			//}
+			//else
+			//{
+			//	App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
+			//}
+		/*}*/
+		//else
+		//{
+		//	//if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
+		//	//{
+		//	//	App->render->Blit(texture, globalPos.x, globalPos.y + 190, &sectionActive);
+		//	//}
+		//	//else
+		//	//{
+		//	//	App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
+		//	//}
+		//}
+		//break;
 	case MOUSEOVER:
 		if (!active)
-		{
-			if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
-			{
-				App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnMouse);
-			}
-			else if (App->ui_scene->HoveringReset == true)
-			{
-				App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &OnMouse);
-			}
-			else
-			{
-				App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
-			}
-		}
+			App->render->Blit(texture, globalPos.x, globalPos.y, &OnMouse, SDL_FLIP_NONE, App->gui->UI_scale, false);
 		else
-		{
-			if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
-			{
-				App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnMouseActive);
-			}
-			else
-			{
-				App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
-			}
-		}
+			App->render->Blit(texture, globalPos.x, globalPos.y, &OnMouseActive, SDL_FLIP_NONE, App->gui->UI_scale, false);
 		break;
+		//if (!active)
+		//{
+		//	if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
+		//	{
+		//		App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnMouse);
+		//	}
+		//	else if (App->ui_scene->HoveringReset == true)
+		//	{
+		//		App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &OnMouse);
+		//	}
+		//	else
+		//	{
+		//		App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
+		//	}
+		//}
+		//else
+		//{
+		//	if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
+		//	{
+		//		App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnMouseActive);
+		//	}
+		//	else
+		//	{
+		//		App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
+		//	}
+		//}
+		//break;
 	case CLICKED:
-		if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
-		{
-			App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnClick);
-		}
-		else
-		{
-			App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
-		}
+		App->render->Blit(texture, globalPos.x, globalPos.y, &OnClick, SDL_FLIP_NONE, App->gui->UI_scale, false);
 		break;
+		//if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
+		//{
+		//	App->render->Blit(texture, globalPos.x, globalPos.y + 190, &OnClick);
+		//}
+		//else
+		//{
+		//	App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
+		//}
+		//break;
 	}
 
 	if (text != nullptr)

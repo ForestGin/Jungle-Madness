@@ -133,10 +133,15 @@ bool UIScene::Start()
 	{
 		//vida
 		heart = App->gui->createImageFromAtlas(0,0, {399,468,52,16}, this);
+		//score
+		score_text = App->gui->createText("SCORE", 0, 0, mid_buttons_font, white_color);
+		score_text->setOutlined(true);
+
 		
 
 		ingameMenu->elements.push_back(heart);
-		
+		ingameMenu->elements.push_back(score_text);
+
 		menus.push_back(ingameMenu);
 
 	}

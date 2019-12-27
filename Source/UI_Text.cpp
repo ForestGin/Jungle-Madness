@@ -7,6 +7,8 @@
 #include "j1Scene.h"
 #include "j1Player.h"
 #include "j1EntityManager.h"
+#include "UI_Scene.h"
+#include "j1Window.h"
 
 Text::~Text()
 {
@@ -74,28 +76,43 @@ void Text::BlitElement()
 	{
 
 		iPoint globalPos = calculateAbsolutePosition();
-
 		if (outlined)
 		{
-			if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
-			{
-				App->render->Blit(outline, globalPos.x + outline_offset.x, globalPos.y + outline_offset.y + 190, NULL);
-			}
-			else
-			{
-				App->render->Blit(outline, globalPos.x + App->scene->player->Future_Position.x - 500 + outline_offset.x, globalPos.y + outline_offset.y + 190, NULL);
-			}
-			
+			App->render->Blit(outline, globalPos.x + outline_offset.x, globalPos.y + outline_offset.y, NULL, SDL_FLIP_NONE, App->gui->UI_scale, false);
+
 		}
 
-		if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false)//player hasn't moved yet or has died
-		{
-			App->render->Blit(texture, globalPos.x, globalPos.y + 190, NULL, SDL_FLIP_NONE, App->gui->UI_scale);
-		}
-		else//player has moved
-		{
-			App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
-		}
+		App->render->Blit(texture, globalPos.x, globalPos.y, &section, SDL_FLIP_NONE, App->gui->UI_scale, false);
+
+		//	if (outlined)
+		//	{
+		//		if (this == App->ui_scene->score_text)
+		//		{
+		//			
+		//			/*App->render->Blit(outline, App->render->camera.x + outline_offset.x, App->render->camera.y + outline_offset.y + 190, NULL);*/
+		//			App->render->Blit(texture, globalPos.x + App->scene->player->Position.x - 400, globalPos.y + 190, NULL, SDL_FLIP_NONE, App->gui->UI_scale);
+		//		}
+
+		//		if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false && this != App->ui_scene->score_text)//player hasn't moved yet or has died
+		//		{
+		//			App->render->Blit(outline, globalPos.x + outline_offset.x, globalPos.y + outline_offset.y + 190, NULL);
+		//		}
+		//		else if( this != App->ui_scene->score_text)
+		//		{
+		//			App->render->Blit(outline, globalPos.x + App->scene->player->Future_Position.x - 500 + outline_offset.x, globalPos.y + outline_offset.y + 190, NULL);
+		//		}
+		//		
+		//	}
+
+		//	if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false && this != App->ui_scene->score_text)//player hasn't moved yet or has died
+		//	{
+		//		App->render->Blit(texture, globalPos.x, globalPos.y + 190, NULL, SDL_FLIP_NONE, App->gui->UI_scale);
+		//	}
+		//	else if(this != App->ui_scene->score_text)//player has moved
+		//	{
+		//		App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
+		//	}
+		//}
 	}
 }
 
