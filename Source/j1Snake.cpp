@@ -190,7 +190,7 @@ void j1Snake::OnCollision(Collider * c1, Collider * c2)
 {
 	bool lateralcollision = true;
 
-	if (c1->rect.y - 4 + c1->rect.h == c2->rect.y)
+	if (c1->rect.y + c1->rect.h >= c2->rect.y && c1->rect.y + c1->rect.h <= c2->rect.y + 5)
 	{
 		lateralcollision = false;
 	}
