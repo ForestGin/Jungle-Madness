@@ -56,7 +56,7 @@ bool j1Coin::Start()
 
 	ID = App->entities->entityID;
 
-	
+	active = true;
 
 	return true;
 }
@@ -82,9 +82,8 @@ bool j1Coin::PostUpdate(float dt)
 {
 	bool ret = true;
 
-
-	
-	App->render->Blit(spritesheet, Position.x, Position.y, &CurrentAnimation->GetCurrentFrame(dt));
+	if(active)
+		App->render->Blit(spritesheet, Position.x, Position.y, &CurrentAnimation->GetCurrentFrame(dt));
 
 
 
@@ -96,7 +95,28 @@ bool j1Coin::PostUpdate(float dt)
 void j1Coin::OnCollision(Collider * c1, Collider * c2)
 {
 	
+	bool lateralcollision = true;
 
+	if (active)
+	{
+		if (c2->type == COLLIDER_TYPE::COLLIDER_COIN || c2->type == COLLIDER_TYPE::COLLIDER_PLAYER)
+		{
+			if (touched == false)
+			{
+				/*App->audio->PlayFx(App->audio->coinfx);*/
+				App->scene->player->score += 500;
+				/*App->scene->player->coin_number += 1;*/
+				/*if (Entity_Collider != nullptr)
+				{
+					Entity_Collider->to_delete = true;
+					
+				}*/
+
+				touched = true;
+				active = false;
+			}
+		}
+	}
 
 }
 
@@ -181,3 +201,4 @@ void j1Coin::LogicUpdate(float dt)
 		Update(dt);
 
 }
+

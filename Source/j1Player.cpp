@@ -237,6 +237,12 @@ void j1Player::CheckWin()
 		OnRightWall = false;
 		OnCeiling = false;
 
+		App->scene->coin->active = true;
+		App->scene->coin->touched = false;
+		App->scene->coin2->active = true;
+		App->scene->coin2->touched = false;
+		App->scene->coin3->active = true;
+		App->scene->coin3->touched = false;
 
 		playerstate = STATE::FALLING;
 	}
@@ -993,10 +999,12 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 			App->audio->PlayFx(died, 0);
 		}
 		
-		if (to_check->type == COLLIDER_TYPE::COLLIDER_COIN)
-		{
-			//fx?
-		}
+		//if (to_check->type == COLLIDER_TYPE::COLLIDER_COIN)
+		//{
+		//	//fx?
+		//	
+		//	
+		//}
 
 		if (to_check->type == COLLIDER_TYPE::COLLIDER_CHECKPOINT)
 		{

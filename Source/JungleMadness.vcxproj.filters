@@ -109,7 +109,7 @@
     <ClInclude Include="UI_Scene.h" />
     <ClInclude Include="j1Transition.h" />
     <ClInclude Include="j1Coin.h">
-      <Filter>Entities</Filter>
+      <Filter>Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -171,7 +171,7 @@
     <ClCompile Include="UI_Scene.cpp" />
     <ClCompile Include="j1Transition.cpp" />
     <ClCompile Include="j1Coin.cpp">
-      <Filter>Entities</Filter>
+      <Filter>Entities\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

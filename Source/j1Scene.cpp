@@ -357,6 +357,12 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && scene1 == false)//FIRST
 	{
+		coin->active = true;
+		coin->touched = false;
+		coin2->active = true;
+		coin2->touched = false;
+		coin3->active = true;
+		coin3->touched = false;
 		player->lives = 3;
 		saveHP = true;
 		App->entities->loading = true;
@@ -371,6 +377,12 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && scene2 == false)//SECOND
 	{
+		coin->active = true;
+		coin->touched = false;
+		coin2->active = true;
+		coin2->touched = false;
+		coin3->active = true;
+		coin3->touched = false;
 		player->lives = 3;
 		saveHP = true;
 		App->entities->loading = true;
@@ -384,6 +396,12 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)//BEGINING OF CURRENT SCENE
 	{
+		coin->active = true;
+		coin->touched = false;
+		coin2->active = true;
+		coin2->touched = false;
+		coin3->active = true;
+		coin3->touched = false;
 		player->lives = 3;
 		saveHP = true;
 		RestartLevel();
@@ -534,7 +552,12 @@ bool j1Scene::SceneChange(const char* scene)
 
 	App->col->CleanUp();
 	EntityPosition(scene);
-	
+	/*coin->active = true;
+	coin->touched = false;
+	coin2->active = true;
+	coin2->touched = false;
+	coin3->active = true;
+	coin3->touched = false;*/
 	
 	if (currentscene == scenes.start->data->GetString())
 	{
