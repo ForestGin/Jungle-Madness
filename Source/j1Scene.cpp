@@ -16,6 +16,7 @@
 #include "j1EntityManager.h"
 #include "j1PathFinding.h"
 #include "UI_Scene.h"
+#include "UI_Clock.h"
 #include "Brofiler\Brofiler.h"
 
 j1Scene::j1Scene() : j1Module()
@@ -363,7 +364,8 @@ bool j1Scene::Update(float dt)
 		SceneChange(scenes.start->data->GetString());
 		scene1 = true;
 		scene2 = false;
-		
+		App->ui_scene->clock->counter.Play();
+		App->ui_scene->clock->counter.Start();
 
 	}
 
@@ -376,7 +378,8 @@ bool j1Scene::Update(float dt)
 		SceneChange(scenes.start->next->data->GetString());
 		scene1 = false;
 		scene2 = true;
-		
+		App->ui_scene->clock->counter.Play();
+		App->ui_scene->clock->counter.Start();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)//BEGINING OF CURRENT SCENE
@@ -384,6 +387,8 @@ bool j1Scene::Update(float dt)
 		player->lives = 3;
 		saveHP = true;
 		RestartLevel();
+		App->ui_scene->clock->counter.Play();
+		App->ui_scene->clock->counter.Start();
 	}
 //---------------------------------------
 

@@ -307,12 +307,12 @@ bool UIScene::Update(float dt)
 
 		HoveringReset = true;
 		App->on_GamePause = true;
-		clock->counter.Pause();
+		
 	}
 	else if (actual_menu == INGAME_MENU)
 	{
 		App->on_GamePause = false;
-		PlayClock();
+		
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
@@ -324,7 +324,6 @@ bool UIScene::Update(float dt)
 		else if (actual_menu == INGAME_MENU)
 		{
 			App->on_GamePause = true;
-			PauseClock();
 			actual_menu = PAUSE_MENU;
 			App->transition->MenuTransition(PAUSE_MENU);
 			ret = true;
@@ -333,7 +332,6 @@ bool UIScene::Update(float dt)
 		else if (actual_menu == PAUSE_MENU)
 		{
 			App->on_GamePause = false;
-			PlayClock();
 			actual_menu = INGAME_MENU;
 			App->transition->MenuTransition(INGAME_MENU);
 			ret = true;
@@ -407,13 +405,13 @@ bool UIScene::MenuLoad(menu_id id)
 	bool ret = false;
 
 	previous_menu = current_menu->id;
-	
+	PauseClock();
 	for (std::list <menu*>::const_iterator item = menus.begin(); item != menus.end(); item++)
 	{
 		if ((*item)->id == id)
 		{
 			current_menu = *item;
-			
+			PlayClock();
 			ret = true;
 			if (id == SETTINGS_MENU)
 			{
@@ -540,8 +538,9 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 			actual_menu = INGAME_MENU;
 			App->transition->MenuTransition(INGAME_MENU, 0.1);
 			App->scene->RestartLevel();
-			/*clock->counter.setAt(0);*/
-			clock->counter.Start();
+			App->ui_scene->clock->counter.Play();
+			App->ui_scene->clock->counter.Start();
+			
 			break;
 		}
 		case RESTART:
