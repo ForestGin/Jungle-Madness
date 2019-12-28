@@ -72,12 +72,12 @@ bool UIScene::Start()
 	{
 
 		//TITLE
-		UI_element* title_text = App->gui->createText("JUNGLE MADNESS", 270, 70, title_buttons_font, brown_color);
+		UI_element* title_text = App->gui->createText("JUNGLE MADNESS", 270, 140, title_buttons_font, brown_color);
 		title_text->setOutlined(true);
 		
 
 		//PLAY
-		UI_element* new_game = App->gui->createButton(372 * App->gui->UI_scale, 250 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
+		UI_element* new_game = App->gui->createButton(20 * App->gui->UI_scale, 350 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
 		new_game->function = NEW_GAME;
 
 		UI_element* new_text = App->gui->createText("PLAY", 200, 200, big_buttons_font, brown_color);
@@ -85,7 +85,7 @@ bool UIScene::Start()
 		new_game->appendChildAtCenter(new_text);
 
 		//CONTINUE
-		continueButton = App->gui->createButton(372 * App->gui->UI_scale, 400 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
+		continueButton = App->gui->createButton(370 * App->gui->UI_scale, 350 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
 		continueButton->function = CONTINUE;
 
 
@@ -103,7 +103,7 @@ bool UIScene::Start()
 		exit_game->appendChildAtCenter(exit_text);
 
 		//CREDITS
-		UI_element* credits = App->gui->createButton(App->gui->UI_scale, 647 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
+		UI_element* credits = App->gui->createButton( 700* App->gui->UI_scale, 350 * App->gui->UI_scale, NULL, { 0,148,281,111 }, { 281,148,281,111 }, { 566,148,281,111 }, this);
 		credits->function = CREDITS;
 
 		UI_element* credit_text = App->gui->createText("CREDITS", 200, 200, big_buttons_font, brown_color);

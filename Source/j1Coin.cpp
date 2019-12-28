@@ -106,6 +106,25 @@ bool j1Coin::Load(pugi::xml_node &config)
 {
 	bool ret = true;
 
+	if (ID == Coininfo.coinID)
+	{
+		touched = config.child("Coin1").child("touched").attribute("value").as_bool();
+		Position.x = config.child("Coin1").child("x").attribute("value").as_int();
+		Position.y = config.child("Coin1").child("y").attribute("value").as_int();
+	}
+	else if (ID == Coininfo.coinID2)
+	{
+		touched = config.child("Coin2").child("touched").attribute("value").as_bool();
+		Position.x = config.child("Coin2").child("x").attribute("value").as_int();
+		Position.y = config.child("Coin2").child("y").attribute("value").as_int();
+	}
+	else if (ID == Coininfo.coinID3)
+	{
+		touched = config.child("Coin3").child("touched").attribute("value").as_bool();
+		Position.x = config.child("Coin3").child("x").attribute("value").as_int();
+		Position.y = config.child("Coin3").child("y").attribute("value").as_int();
+	}
+
 
 
 	return ret;
@@ -113,8 +132,27 @@ bool j1Coin::Load(pugi::xml_node &config)
 
 bool j1Coin::Save(pugi::xml_node &config) const
 {
-	
-	
+	if (ID == Coininfo.coinID)
+	{
+		config.append_child("Coin1").append_child("touched").append_attribute("value") = touched;
+		config.child("Coin1").append_child("x").append_attribute("value") = Position.x;
+		config.child("Coin1").append_child("y").append_attribute("value") = Position.y;
+
+	}
+	else if (ID == Coininfo.coinID2)
+	{
+		config.append_child("Coin2").append_child("touched").append_attribute("value") = touched;
+		config.child("Coin2").append_child("x").append_attribute("value") = Position.x;
+		config.child("Coin2").append_child("y").append_attribute("value") = Position.y;
+
+	}
+	else if (ID == Coininfo.coinID3)
+	{
+		config.append_child("Coin3").append_child("touched").append_attribute("value") = touched;
+		config.child("Coin3").append_child("x").append_attribute("value") = Position.x;
+		config.child("Coin3").append_child("y").append_attribute("value") = Position.y;
+
+	}
 
 	return true;
 }

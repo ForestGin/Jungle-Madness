@@ -180,7 +180,9 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	
 	coininfo.idle = LoadAnimation(coininfo.folder.GetString(), "Idle");
 	coininfo.Gravity = playernode.child("gravity").attribute("value").as_float();
-
+	coininfo.coinID = coinnode.child("ID").attribute("value1").as_int();
+	coininfo.coinID2 = coinnode.child("ID").attribute("value2").as_int();
+	coininfo.coinID3 = coinnode.child("ID").attribute("value3").as_int();
 
 	return ret;
 }

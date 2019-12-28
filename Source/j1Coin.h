@@ -26,6 +26,7 @@ struct CoinData {
 	int				coinID2 = 0;
 	int				coinID3 = 0;
 	
+
 };
 
 class j1Coin :public j1Entity
