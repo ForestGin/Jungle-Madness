@@ -501,6 +501,30 @@ bool j1Map::LoadMap(MapData& data)
 			data.Bat2.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
 		}
 
+		p2SString obj7(map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").attribute("name").as_string());
+
+		if (obj7 == "CoinSpawn1")
+		{
+			data.Coin1.x = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
+			data.Coin1.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
+		}
+
+		p2SString obj8(map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").attribute("name").as_string());
+
+		if (obj8 == "CoinSpawn2")
+		{
+			data.Coin2.x = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
+			data.Coin2.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
+		}
+
+		p2SString obj9(map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").attribute("name").as_string());
+
+		if (obj9 == "CoinSpawn3")
+		{
+			data.Coin3.x = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
+			data.Coin3.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
+		}
+
 	}
 
 	return ret;

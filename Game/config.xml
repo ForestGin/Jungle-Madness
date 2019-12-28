@@ -100,6 +100,15 @@
       <areaofaction value="150"/>
       <ID value1 ="2" value2 ="3"/>
     </bat>
+
+    <coin>
+      <folder>animations/Coins.tmx</folder>
+      <texture>gui/Coins_gui.png</texture>
+      <collider x="0" y="0" width="35" height="35"/>
+      <printingoffset x="10" y="10"/>
+      <areaofaction value="150"/>
+      <ID value1 ="6" value2 ="7" value3 ="8"/>
+    </coin>
     
   </entities>
 

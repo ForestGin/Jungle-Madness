@@ -40167,4 +40167,13 @@
  <objectgroup id="25" name="BatSpawn2">
   <object id="7" x="314" y="1154" width="32" height="32"/>
  </objectgroup>
+ <objectgroup id="34" name="CoinSpawn1">
+  <object id="7" x="644" y="538.667" width="25.3333" height="24"/>
+ </objectgroup>
+ <objectgroup id="35" name="CoinSpawn2">
+  <object id="8" x="854.667" y="546.667" width="24" height="26.6667"/>
+ </objectgroup>
+ <objectgroup id="36" name="CoinSpawn3">
+  <object id="9" x="1193.33" y="649.333" width="28" height="28"/>
+ </objectgroup>
 </map>

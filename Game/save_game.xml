@@ -25,6 +25,21 @@
 			<Snakex value="263.5" />
 			<Snakey value="1350" />
 		</Snake2>
+		<Coin1>
+			<touched value="false" />
+			<x value="276" />
+			<y value="407" />
+		</Coin1>
+		<Coin2>
+			<touched value="false" />
+			<x value="401" />
+			<y value="412" />
+		</Coin2>
+		<Coin3>
+			<touched value="false" />
+			<x value="488" />
+			<y value="422" />
+		</Coin3>
 	</entities>
 	<collision />
 	<map />
@@ -36,7 +51,11 @@
 	<fonts />
 	<gui />
 	<transition />
-	<ui_scene />
+	<ui_scene>
+		<UI>
+			<Timer value="3242" />
+		</UI>
+	</ui_scene>
 	<renderer>
 		<camera x="-1635" y="-329" />
 	</renderer>

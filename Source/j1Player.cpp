@@ -9,6 +9,9 @@
 #include "j1Scene.h"
 #include "j1Window.h"
 #include "j1EntityManager.h"
+#include "j1Transition.h"
+#include "UI_Scene.h"
+#include "j1Audio.h"
 
 j1Player::j1Player() : j1Entity("player", entity_type::PLAYER)
 {
@@ -82,6 +85,11 @@ bool j1Player::Start()
 
 	ID = App->entities->entityID;
 
+	lives = 3;
+
+	//fx
+	end = App->audio->LoadFx("Audio/fx/end_level.wav");
+	died = App->audio->LoadFx("Audio/fx/death.wav");
 	return true;
 }
 
@@ -146,6 +154,8 @@ void j1Player::CheckDeath()
 	{
 		if (CurrentAnimation->Finished())
 		{
+			lives--;
+			score += 100;
 
 			if (SavedCheckPoint)
 			{
@@ -178,6 +188,14 @@ void j1Player::CheckDeath()
 		StartUI = false;
 	}
 	
+	if (lives <= 0)
+	{
+		lives = 3;
+		score = 0;
+		App->transition->MenuTransition(START_MENU, 0.3);
+		App->ui_scene->actual_menu = START_MENU;
+		
+	}
 }
 
 void j1Player::CheckWin()
@@ -972,6 +990,12 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 
 			Current_Velocity = { 0,0 };
 			//SFX?
+			App->audio->PlayFx(died, 0);
+		}
+		
+		if (to_check->type == COLLIDER_TYPE::COLLIDER_COIN)
+		{
+			//fx?
 		}
 
 		if (to_check->type == COLLIDER_TYPE::COLLIDER_CHECKPOINT)
@@ -994,6 +1018,7 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 		{
 			playerstate = STATE::WINNER;
 			//SFX?
+			App->audio->PlayFx(end, 0, 70);
 			Current_Velocity = { 0,0 };
 		}
 	}
@@ -1438,7 +1463,11 @@ bool j1Player::Load(pugi::xml_node &config)
 
 	Position.x = config.child("Player").child("Playerx").attribute("value").as_float();
 	Position.y = config.child("Player").child("Playery").attribute("value").as_float();
+	score = config.child("Player").child("Score").attribute("value").as_int();
+	if(App->scene->saveHP == true)
+		lives = config.child("Player").child("Lives").attribute("value").as_int();
 
+	App->scene->saveHP = false;
 	return ret;
 }
 
@@ -1446,7 +1475,9 @@ bool j1Player::Save(pugi::xml_node &config) const
 {
 	config.append_child("Player").append_child("Playerx").append_attribute("value") = Position.x;
 	config.child("Player").append_child("Playery").append_attribute("value") = Position.y;
-
+	config.child("Player").append_child("Score").append_attribute("value") = score;
+	if (App->scene->saveHP == true)
+		config.child("Player").append_child("Lives").append_attribute("value") = lives;
 	return true;
 }
 

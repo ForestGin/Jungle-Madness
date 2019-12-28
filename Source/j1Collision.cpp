@@ -22,6 +22,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_FLOOR][COLLIDER_SNAKE] = true;
 	matrix[COLLIDER_FLOOR][COLLIDER_CHECKPOINT] = false;
 	matrix[COLLIDER_FLOOR][COLLIDER_WIN] = false;
+	matrix[COLLIDER_FLOOR][COLLIDER_COIN] = false;
 
 	matrix[COLLIDER_DEADLY][COLLIDER_FLOOR] = false;
 	matrix[COLLIDER_DEADLY][COLLIDER_DEADLY] = false;
@@ -32,6 +33,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_DEADLY][COLLIDER_SNAKE] = true;
 	matrix[COLLIDER_DEADLY][COLLIDER_CHECKPOINT] = false;
 	matrix[COLLIDER_DEADLY][COLLIDER_WIN] = false;
+	matrix[COLLIDER_DEADLY][COLLIDER_COIN] = false;
 
 	matrix[COLLIDER_PLATFORM][COLLIDER_FLOOR] = false;
 	matrix[COLLIDER_PLATFORM][COLLIDER_DEADLY] = false;
@@ -42,6 +44,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_PLATFORM][COLLIDER_SNAKE] = true;
 	matrix[COLLIDER_PLATFORM][COLLIDER_CHECKPOINT] = false;
 	matrix[COLLIDER_PLATFORM][COLLIDER_WIN] = false;
+	matrix[COLLIDER_PLATFORM][COLLIDER_COIN] = false;
 
 	matrix[COLLIDER_PLAYER][COLLIDER_FLOOR] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_DEADLY] = true;
@@ -52,6 +55,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_PLAYER][COLLIDER_SNAKE] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_CHECKPOINT] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_WIN] = true;
+	matrix[COLLIDER_PLAYER][COLLIDER_COIN] = true;
 
 	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_FLOOR] = true;
 	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_DEADLY] = false;
@@ -62,6 +66,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_SNAKE] = false;
 	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_CHECKPOINT] = false;
 	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_WIN] = false;
+	matrix[COLLIDER_CHECKSURROUNDING][COLLIDER_COIN] = false;
 
 	matrix[COLLIDER_SNAKE][COLLIDER_FLOOR] = true;
 	matrix[COLLIDER_SNAKE][COLLIDER_DEADLY] = false;
@@ -72,6 +77,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_SNAKE][COLLIDER_BAT] = false;
 	matrix[COLLIDER_SNAKE][COLLIDER_CHECKPOINT] = false;
 	matrix[COLLIDER_SNAKE][COLLIDER_WIN] = false;
+	matrix[COLLIDER_SNAKE][COLLIDER_COIN] = false;
 
 	matrix[COLLIDER_BAT][COLLIDER_FLOOR] = true;
 	matrix[COLLIDER_BAT][COLLIDER_DEADLY] = false;
@@ -82,6 +88,8 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_BAT][COLLIDER_BAT] = false;
 	matrix[COLLIDER_BAT][COLLIDER_CHECKPOINT] = false;
 	matrix[COLLIDER_BAT][COLLIDER_WIN] = false;
+	matrix[COLLIDER_BAT][COLLIDER_COIN] = false;
+	
 
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_FLOOR] = false;
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_DEADLY] = false;
@@ -92,6 +100,7 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_BAT] = false;
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_CHECKPOINT] = false;
 	matrix[COLLIDER_CHECKPOINT][COLLIDER_WIN] = false;
+	matrix[COLLIDER_CHECKPOINT][COLLIDER_COIN] = false;
 
 	matrix[COLLIDER_WIN][COLLIDER_FLOOR] = false;
 	matrix[COLLIDER_WIN][COLLIDER_DEADLY] = false;
@@ -102,7 +111,17 @@ j1Collision::j1Collision()
 	matrix[COLLIDER_WIN][COLLIDER_BAT] = false;
 	matrix[COLLIDER_WIN][COLLIDER_CHECKPOINT] = false;
 	matrix[COLLIDER_WIN][COLLIDER_WIN] = false;
+	matrix[COLLIDER_WIN][COLLIDER_COIN] = false;
 
+	matrix[COLLIDER_COIN][COLLIDER_FLOOR] = false;
+	matrix[COLLIDER_COIN][COLLIDER_DEADLY] = false;
+	matrix[COLLIDER_COIN][COLLIDER_PLATFORM] = false;
+	matrix[COLLIDER_COIN][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_COIN][COLLIDER_CHECKSURROUNDING] = false;
+	matrix[COLLIDER_COIN][COLLIDER_SNAKE] = false;
+	matrix[COLLIDER_COIN][COLLIDER_BAT] = false;
+	matrix[COLLIDER_COIN][COLLIDER_CHECKPOINT] = false;
+	matrix[COLLIDER_COIN][COLLIDER_WIN] = false;
 }
 
 j1Collision::~j1Collision()
@@ -164,7 +183,8 @@ bool j1Collision::Update(float dt)
 		if (c1->data->type == COLLIDER_PLAYER || c2->data->type == COLLIDER_PLAYER ||
 			c1->data->type == COLLIDER_CHECKSURROUNDING || c2->data->type == COLLIDER_CHECKSURROUNDING ||
 			c1->data->type == COLLIDER_SNAKE || c2->data->type == COLLIDER_SNAKE ||
-			c1->data->type == COLLIDER_BAT || c2->data->type == COLLIDER_BAT)
+			c1->data->type == COLLIDER_BAT || c2->data->type == COLLIDER_BAT ||
+			c1->data->type == COLLIDER_COIN || c2->data->type == COLLIDER_COIN)
 		{
 			skipcol = false;
 		}

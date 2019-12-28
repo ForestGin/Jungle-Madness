@@ -196,6 +196,13 @@ public:
 	int SavedCheckPointArea = 0;
 	//GUI
 	bool StartUI = false;
+	//HP
+	int lives = 0;
+	//Score
+	int score = 0;
+	//fx
+	uint end = 0;
+	uint died = 0;
 };
 
 #endif // __j1Player_H__

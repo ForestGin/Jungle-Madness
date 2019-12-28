@@ -166,6 +166,24 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	batinfo.Reference_ID.y = batnode.child("ID").attribute("value2").as_int();
 	/*batinfo.Move->speed = 0.15f;*/
 
+	//COIN
+	pugi::xml_node coinnode = config.child("coin");
+
+	coininfo.folder.create(coinnode.child("folder").child_value());
+	coininfo.Texture.create(coinnode.child("texture").child_value());
+
+	x = coinnode.child("collider").attribute("x").as_int();
+	y = coinnode.child("collider").attribute("y").as_int();
+	w = coinnode.child("collider").attribute("width").as_int();
+	h = coinnode.child("collider").attribute("height").as_int();
+	coininfo.CoinRect = { x,y,w,h };
+	
+	coininfo.idle = LoadAnimation(coininfo.folder.GetString(), "Idle");
+	coininfo.Gravity = playernode.child("gravity").attribute("value").as_float();
+	coininfo.coinID = coinnode.child("ID").attribute("value1").as_int();
+	coininfo.coinID2 = coinnode.child("ID").attribute("value2").as_int();
+	coininfo.coinID3 = coinnode.child("ID").attribute("value3").as_int();
+
 	return ret;
 }
 
@@ -288,7 +306,9 @@ j1Entity* const j1EntityManager::EntityCreation(const char* entname, entity_type
 	case entity_type::BAT:
 		entity = new j1Bat();
 		break;
-		
+	case entity_type::COIN:
+		entity = new j1Coin();
+		break;
 	}
 
 	entityID++;
