@@ -550,9 +550,11 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 		break;
 		case CONTINUE:
 		{
-			actual_menu = INGAME_MENU;
+			clock->counter.Play();
+			clock->counter.Start();
 			App->scene->saveHP = true;
 			bool result = App->LoadGame("save_game.xml");
+			actual_menu = INGAME_MENU;
 			App->transition->MenuTransition(INGAME_MENU, 0.1);
 			break;
 		}
@@ -670,10 +672,14 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 }
 bool UIScene::Load(pugi::xml_node& config)
 {
-	return true;
+	bool ret = true;
+	clock->counter.setAt(config.child("UI").child("Timer").attribute("value").as_float());
+	return ret;
 }
 bool UIScene::Save(pugi::xml_node& config) const
 {
+	config.append_child("UI").append_child("Timer").append_attribute("value") = clock->counter.Read();
+
 	return true;
 }
 
