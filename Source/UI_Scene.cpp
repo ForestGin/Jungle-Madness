@@ -143,8 +143,15 @@ bool UIScene::Start()
 		
 		score_number = App->gui->createText("0", 100, 0, number_font, white_color);
 		score_number->setOutlined(true);
+		//timer
+		UI_element* timer_text = App->gui->createText("TIMER", 200, 0, mid_buttons_font, white_color);
+		timer_text->setOutlined(true);
 
 		
+		clock = App->gui->createStopWatch(300 * App->gui->UI_scale, App->gui->UI_scale, number_font, white_color, this);
+
+		ingameMenu->elements.push_back(clock);
+		ingameMenu->elements.push_back(timer_text);
 		ingameMenu->elements.push_back(score_number);
 		ingameMenu->elements.push_back(heart);
 		ingameMenu->elements.push_back(score_text);
@@ -282,8 +289,10 @@ bool UIScene::Start()
 
 	App->audio->PlayMusic("Audio/music/MainMenu.ogg", 2.0f);
 
+	
 	return true;
 }
+
 bool UIScene::PreUpdate()
 {
 	return true;
@@ -298,10 +307,12 @@ bool UIScene::Update(float dt)
 
 		HoveringReset = true;
 		App->on_GamePause = true;
+		clock->counter.Pause();
 	}
 	else if (actual_menu == INGAME_MENU)
 	{
 		App->on_GamePause = false;
+		PlayClock();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
@@ -313,6 +324,7 @@ bool UIScene::Update(float dt)
 		else if (actual_menu == INGAME_MENU)
 		{
 			App->on_GamePause = true;
+			PauseClock();
 			actual_menu = PAUSE_MENU;
 			App->transition->MenuTransition(PAUSE_MENU);
 			ret = true;
@@ -321,6 +333,7 @@ bool UIScene::Update(float dt)
 		else if (actual_menu == PAUSE_MENU)
 		{
 			App->on_GamePause = false;
+			PlayClock();
 			actual_menu = INGAME_MENU;
 			App->transition->MenuTransition(INGAME_MENU);
 			ret = true;
@@ -359,7 +372,10 @@ bool UIScene::Update(float dt)
 	int scoreUI = App->scene->player->score;
 	string number = to_string(scoreUI);
 	score_number->setText(number);
-
+	//
+	/*float timerUI = timer->Read();
+	string number2 = to_string(timerUI);
+	timer_number->setText(number2);*/
 
 	
 	return ret;
@@ -391,13 +407,13 @@ bool UIScene::MenuLoad(menu_id id)
 	bool ret = false;
 
 	previous_menu = current_menu->id;
-	PauseClock();
+	
 	for (std::list <menu*>::const_iterator item = menus.begin(); item != menus.end(); item++)
 	{
 		if ((*item)->id == id)
 		{
 			current_menu = *item;
-			PlayClock();
+			
 			ret = true;
 			if (id == SETTINGS_MENU)
 			{
@@ -469,8 +485,8 @@ void UIScene::PauseClock()
 		if ((*item)->element_type == CLOCK)
 		{
 			Clock* clock = (Clock*)*item;
-			/*if (!clock->counter.isPaused())
-				clock->counter.Pause();*/
+			if (!clock->counter.isPaused())
+				clock->counter.Pause();
 		}
 	}
 }
@@ -481,8 +497,8 @@ void UIScene::PlayClock()
 		if ((*item)->element_type == CLOCK)
 		{
 			Clock* clock = (Clock*)*item;
-			/*if (clock->counter.isPaused())
-				clock->counter.Play();*/
+			if (clock->counter.isPaused())
+				clock->counter.Play();
 		}
 	}
 }
@@ -516,6 +532,7 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 		{
 		case NEW_GAME:
 		{
+			
 			App->scene->saveHP = true;
 			App->scene->player->lives = 3;
 			App->scene->player->score = 0;
@@ -523,6 +540,8 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 			actual_menu = INGAME_MENU;
 			App->transition->MenuTransition(INGAME_MENU, 0.1);
 			App->scene->RestartLevel();
+			/*clock->counter.setAt(0);*/
+			clock->counter.Start();
 			break;
 		}
 		case RESTART:

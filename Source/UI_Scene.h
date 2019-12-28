@@ -10,6 +10,8 @@ class Button;
 class Slider;
 class Image;
 class Text;
+class j1Timer;
+class j1PerfTimer;
 
 enum menu_id
 {
@@ -80,5 +82,10 @@ public:
 	Image* heart = nullptr;
 	Text* score_text = nullptr;
 	Text* score_number = nullptr;
+	
+
+	
+
+	
 };
 #endif
