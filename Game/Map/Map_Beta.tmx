@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="42" nextobjectid="10">
+<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="100" height="50" tilewidth="32" tileheight="32" infinite="0" nextlayerid="45" nextobjectid="15">
  <tileset firstgid="1" name="Colliders" tilewidth="32" tileheight="32" tilecount="10" columns="2">
   <image source="Colliders.png" width="64" height="160"/>
  </tileset>
@@ -7025,8 +7025,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="866"/>
-   <tile gid="867"/>
    <tile/>
    <tile/>
    <tile/>
@@ -7110,8 +7108,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="879"/>
-   <tile gid="880"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -9738,7 +9738,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="677"/>
    <tile/>
    <tile/>
    <tile/>
@@ -9818,7 +9817,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="705"/>
    <tile/>
    <tile/>
    <tile/>
@@ -9898,7 +9896,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="486"/>
    <tile/>
    <tile/>
    <tile/>
@@ -9967,7 +9964,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="485"/>
+   <tile/>
+   <tile/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -23497,7 +23497,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="841"/>
    <tile/>
    <tile/>
    <tile/>
@@ -23643,9 +23642,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile gid="841"/>
    <tile/>
    <tile/>
    <tile/>
@@ -40167,13 +40163,13 @@
  <objectgroup id="25" name="BatSpawn2">
   <object id="7" x="314" y="1154" width="32" height="32"/>
  </objectgroup>
- <objectgroup id="34" name="CoinSpawn1">
-  <object id="7" x="644" y="538.667" width="25.3333" height="24"/>
+ <objectgroup id="42" name="CoinSpawn1">
+  <object id="10" x="640" y="1186.67" width="32" height="32"/>
  </objectgroup>
- <objectgroup id="35" name="CoinSpawn2">
-  <object id="8" x="854.667" y="546.667" width="24" height="26.6667"/>
+ <objectgroup id="43" name="CoinSpawn2">
+  <object id="12" x="849.333" y="1169.33" width="32" height="32"/>
  </objectgroup>
- <objectgroup id="36" name="CoinSpawn3">
-  <object id="9" x="1193.33" y="649.333" width="28" height="28"/>
+ <objectgroup id="44" name="CoinSpawn3">
+  <object id="14" x="1002.67" y="972" width="32" height="32"/>
  </objectgroup>
 </map>
