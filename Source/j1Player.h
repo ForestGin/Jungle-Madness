@@ -200,6 +200,7 @@ public:
 	int lives = 0;
 	//Score
 	int score = 0;
+	int coins = 0;
 	//fx
 	uint end = 0;
 	uint died = 0;

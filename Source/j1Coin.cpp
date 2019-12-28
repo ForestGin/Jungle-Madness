@@ -58,6 +58,9 @@ bool j1Coin::Start()
 
 	active = true;
 
+	coinfx = App->audio->LoadFx("Audio/fx/coin.wav");
+	return true;
+
 	return true;
 }
 
@@ -103,9 +106,9 @@ void j1Coin::OnCollision(Collider * c1, Collider * c2)
 		{
 			if (touched == false)
 			{
-				/*App->audio->PlayFx(App->audio->coinfx);*/
+				App->audio->PlayFx(coinfx);
 				App->scene->player->score += 500;
-				/*App->scene->player->coin_number += 1;*/
+				App->scene->player->coins += 1;
 				/*if (Entity_Collider != nullptr)
 				{
 					Entity_Collider->to_delete = true;

@@ -155,8 +155,7 @@ void j1Player::CheckDeath()
 		if (CurrentAnimation->Finished())
 		{
 			lives--;
-			score += 100;
-
+			
 			if (SavedCheckPoint)
 			{
 				bool result = App->LoadGame("save_game.xml");
@@ -1472,6 +1471,7 @@ bool j1Player::Load(pugi::xml_node &config)
 	Position.x = config.child("Player").child("Playerx").attribute("value").as_float();
 	Position.y = config.child("Player").child("Playery").attribute("value").as_float();
 	score = config.child("Player").child("Score").attribute("value").as_int();
+	coins = config.child("Player").child("Coins").attribute("value").as_int();
 	if(App->scene->saveHP == true)
 		lives = config.child("Player").child("Lives").attribute("value").as_int();
 
@@ -1484,6 +1484,7 @@ bool j1Player::Save(pugi::xml_node &config) const
 	config.append_child("Player").append_child("Playerx").append_attribute("value") = Position.x;
 	config.child("Player").append_child("Playery").append_attribute("value") = Position.y;
 	config.child("Player").append_child("Score").append_attribute("value") = score;
+	config.child("Player").append_child("Coins").append_attribute("value") = coins;
 	if (App->scene->saveHP == true)
 		config.child("Player").append_child("Lives").append_attribute("value") = lives;
 	return true;

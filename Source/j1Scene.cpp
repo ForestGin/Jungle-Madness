@@ -357,6 +357,8 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && scene1 == false)//FIRST
 	{
+		player->coins = 0;
+		player->score = 0;
 		coin->active = true;
 		coin->touched = false;
 		coin2->active = true;
@@ -377,6 +379,8 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && scene2 == false)//SECOND
 	{
+		player->coins = 0;
+		player->score = 0;
 		coin->active = true;
 		coin->touched = false;
 		coin2->active = true;
@@ -396,6 +400,8 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)//BEGINING OF CURRENT SCENE
 	{
+		player->coins = 0;
+		player->score = 0;
 		coin->active = true;
 		coin->touched = false;
 		coin2->active = true;

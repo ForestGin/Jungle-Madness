@@ -143,14 +143,24 @@ bool UIScene::Start()
 		
 		score_number = App->gui->createText("0", 100, 0, number_font, white_color);
 		score_number->setOutlined(true);
+		//coins
+		coin_text = App->gui->createText("COINS", 250, 0, mid_buttons_font, white_color);
+		coin_text->setOutlined(true);
+
+		coin_number = App->gui->createText("0", 350, 0, number_font, white_color);
+		coin_number->setOutlined(true);
+
 		//timer
-		UI_element* timer_text = App->gui->createText("TIMER", 200, 0, mid_buttons_font, white_color);
+		UI_element* timer_text = App->gui->createText("TIMER", 450, 0, mid_buttons_font, white_color);
 		timer_text->setOutlined(true);
 
 		
-		clock = App->gui->createStopWatch(300 * App->gui->UI_scale, App->gui->UI_scale, number_font, white_color, this);
+		clock = App->gui->createStopWatch(550 * App->gui->UI_scale, App->gui->UI_scale, number_font, white_color, this);
 
+		
 		ingameMenu->elements.push_back(clock);
+		ingameMenu->elements.push_back(coin_number);
+		ingameMenu->elements.push_back(coin_text);
 		ingameMenu->elements.push_back(timer_text);
 		ingameMenu->elements.push_back(score_number);
 		ingameMenu->elements.push_back(heart);
@@ -371,9 +381,9 @@ bool UIScene::Update(float dt)
 	string number = to_string(scoreUI);
 	score_number->setText(number);
 	//
-	/*float timerUI = timer->Read();
-	string number2 = to_string(timerUI);
-	timer_number->setText(number2);*/
+	int coinsUI = App->scene->player->coins;
+	string number2 = to_string(coinsUI);
+	coin_number->setText(number2);
 
 	
 	return ret;

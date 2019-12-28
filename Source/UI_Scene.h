@@ -82,7 +82,8 @@ public:
 	Image* heart = nullptr;
 	Text* score_text = nullptr;
 	Text* score_number = nullptr;
-	
+	Text* coin_text = nullptr;
+	Text* coin_number = nullptr;
 
 	
 

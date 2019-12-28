@@ -58,6 +58,7 @@ public:
 	CoinData Coininfo;
 	bool touched = false;
 	bool active = false;
+	uint coinfx = 0;
 };
 
 #endif 
