@@ -2,8 +2,11 @@
 #define __j1AUDIO_H__
 
 #include "j1Module.h"
+#include <list>
 
 #define DEFAULT_MUSIC_FADE_TIME 2.0f
+#define DEFAULT_MUSIC_VOLUME 38
+#define	DEFAULT_FX_VOLUME 128
 
 struct _Mix_Music;
 struct Mix_Chunk;
@@ -32,7 +35,10 @@ public:
 	// Play a previously loaded WAV
 	bool PlayFx(unsigned int fx, int repeat = 0, uint volume = 128);
 
-
+	int getMusicVolume() const;
+	int getFxVolume() const;
+	void setMusicVolume(float volume);
+	void setFxVolume(float volume);
 
 	//Load & Save audio data
 
@@ -43,8 +49,9 @@ public:
 private:
 
 	_Mix_Music*			music = NULL;
-	p2List<Mix_Chunk*>	fx;
-
+	std::list <Mix_Chunk*>	fx;
+	int fx_volume = DEFAULT_FX_VOLUME;
+	int music_volume = DEFAULT_MUSIC_VOLUME;
 	
 };
 

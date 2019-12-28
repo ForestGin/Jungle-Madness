@@ -83,9 +83,12 @@ bool j1Audio::CleanUp()
 		Mix_FreeMusic(music);
 	}
 
-	p2List_item<Mix_Chunk*>* item;
-	for (item = fx.start; item != NULL; item = item->next)
-		Mix_FreeChunk(item->data);
+	std::list<Mix_Chunk*>::const_iterator item = fx.begin();
+
+	for (; item != fx.end(); item++)
+		Mix_FreeChunk(*item);
+
+	fx.clear();
 
 	p2List_item<p2SString*>* item2;
 	item2 = songs.start;
@@ -97,7 +100,7 @@ bool j1Audio::CleanUp()
 	}
 	songs.clear();
 
-	fx.clear();
+	
 
 	Mix_CloseAudio();
 	Mix_Quit();
@@ -177,8 +180,8 @@ unsigned int j1Audio::LoadFx(const char* path)
 	}
 	else
 	{
-		fx.add(chunk);
-		ret = fx.count();
+		fx.push_back(chunk);
+		ret = fx.size();
 	}
 
 	return ret;
@@ -192,15 +195,39 @@ bool j1Audio::PlayFx(unsigned int id, int repeat, uint volume)
 	if (!active)
 		return false;
 
-	if (id > 0 && id <= fx.count())
+	if (id > 0 && id <= fx.size())
 	{
-		Mix_VolumeChunk(fx[id - 1], volume);
-		Mix_PlayChannel(-1, fx[id - 1], repeat);
+		std::list <Mix_Chunk*>::const_iterator it;
+		it = std::next(fx.begin(), id - 1);
+		Mix_PlayChannel(-1, *it, repeat);
 	}
 
 	return ret;
 }
 
+int j1Audio::getMusicVolume() const
+{
+	return Mix_VolumeMusic(-1);
+}
 
+int j1Audio::getFxVolume() const
+{
+	return fx_volume;
+}
 
+void j1Audio::setMusicVolume(float volume)
+{
+	Mix_VolumeMusic(MIX_MAX_VOLUME*volume);
+	music_volume = MIX_MAX_VOLUME * volume; //Save it for fading;
+}
 
+void j1Audio::setFxVolume(float volume)
+{
+	std::list<Mix_Chunk*>::const_iterator item = fx.begin();
+
+	for (; item != fx.end(); item++)
+	{
+		Mix_VolumeChunk((*item), MIX_MAX_VOLUME*volume);
+	}
+	fx_volume = MIX_MAX_VOLUME * volume; //Save it for future loaded fx
+}

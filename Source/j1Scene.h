@@ -13,6 +13,7 @@ class Collider;
 class j1Player;
 class j1Snake;
 class j1Bat;
+class j1Coin;
 
 class j1Scene : public j1Module
 {
@@ -75,12 +76,18 @@ public:
 	j1Bat*				bat = nullptr;
 	j1Snake*			snake2 = nullptr;
 	j1Bat*				bat2 = nullptr;
+	j1Coin*				coin = nullptr;
+	j1Coin*				coin2 = nullptr;
+	j1Coin*				coin3 = nullptr;
+
 	//pathfind
 	SDL_Rect debug_Tex_rect = { 32,96,32,32 };
 
 	//Transition
 	bool load_lvl = false;
 	int newLvl = 0;
+
+	bool saveHP = false;
 };
 
 #endif // __j1SCENE_H__

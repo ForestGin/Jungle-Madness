@@ -18,6 +18,10 @@ The game includes two levels and basic mechanics.
 
 - SPACE (while in the air): doble jump.
 
+- M: Crouch/Stand-Up.
+
+- S: Fall down when on platform.
+
 ### Debug keys:
 - F1: Start First level
 - F2: Start Second level
@@ -26,6 +30,7 @@ The game includes two levels and basic mechanics.
 - F6: Load
 - F9: DebugDraw
 - F10: God Mode
+- F11: Enable/Disable fps cap. (We did not manage to make this work how it's suposed to...)
 
 ## Authors
  - Pol Bosch
@@ -67,3 +72,9 @@ Licensed under the [MIT License](LICENSE.txt)
 - Animations Loaded from Tiled ("animations" folder "player.tmx".
 
 - Camera culling (Both tiles and colliders).
+
+- Player Crouching Movement.
+
+- Player Falling down from platforms.
+
+- Checkpoints.

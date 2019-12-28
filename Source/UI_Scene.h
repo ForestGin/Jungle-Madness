@@ -7,7 +7,11 @@
 class UI_element;
 class Clock;
 class Button;
-
+class Slider;
+class Image;
+class Text;
+class j1Timer;
+class j1PerfTimer;
 
 enum menu_id
 {
@@ -51,7 +55,7 @@ public:
 	bool Save(pugi::xml_node& config) const;
 	bool Load(pugi::xml_node& config);
 	bool OnUIEvent(UI_element* element, event_type event_type);
-
+	void applySettings(settings_values values);
 	bool MenuLoad(menu_id id);
 	void ApplySettings(settings_values values);
 	void PauseClock();
@@ -68,5 +72,20 @@ public:
 	menu_id previous_menu;
 	menu_id actual_menu = START_MENU;
 	bool HoveringReset = false;
+
+	//SLIDERS
+	Slider* music_slider = nullptr;
+	Slider* fx_slider = nullptr;
+	Slider* music_sliderMM = nullptr;
+	Slider* fx_sliderMM = nullptr;
+
+	Image* heart = nullptr;
+	Text* score_text = nullptr;
+	Text* score_number = nullptr;
+	
+
+	
+
+	
 };
 #endif

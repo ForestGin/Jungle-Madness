@@ -23,7 +23,8 @@ enum class entity_type
 {
 	PLAYER,
 	SNAKE,
-	BAT
+	BAT, 
+	COIN
 };
 
 class j1Entity
