@@ -576,7 +576,15 @@ void j1Player::StandingModeMovement(float dt)
 	// ---- FALLING CONDITION ----
 	if (Current_Velocity.y > 0 && !OnGround && !OnPlatform && !LandedOnGround && !LandedOnPlatform)
 	{
-		if (playerstate != STATE::WALLSLIDING)
+		if (playerstate == STATE::WALLSLIDING)
+		{
+			if (!LandedOnLeftWall && !OnLeftWall && !LandedOnRightWall && !OnRightWall)
+			{
+				playerstate = STATE::FALLING;
+			}
+		}
+
+		else 
 		{
 			playerstate = STATE::FALLING;
 		}

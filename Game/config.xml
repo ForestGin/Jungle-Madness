@@ -24,7 +24,7 @@
 
   <map>
     <folder>Map/</folder>
-    <collision red="841" checkpoint="842" blue="843" pink="844"  yellow="845" white="846" cyan="847"/>
+    <collision red="3" checkpoint="4" blue="5" pink="6"  yellow="7" white="8" cyan="9"/>
   </map>
   <scene>
     <scene_name name="Map_Beta.tmx"/>
