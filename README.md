@@ -1,4 +1,4 @@
-#Jungle Madness
+# Jungle Madness
 
 Jungle Madness is a platfomer game made by Pol Bosch and Oscar Larios, students of Video Game Design and Development degree in UPC Barcelona, Spain.
 The game has been made using C++, using SDL and pugi libraries. 

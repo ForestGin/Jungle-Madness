@@ -619,8 +619,8 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 			break;
 		case WEBPAGE:
 
-			/*App->RequestBrowser("https://github.com/CheckTheDog/Fantasy-Brawl");*/
-
+			ShellExecuteA(NULL, "open", "https://megaoski.github.io/Jungle-Madness/", NULL, NULL, SW_SHOWNORMAL);
+			
 			break;
 		}
 	}
