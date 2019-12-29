@@ -40155,21 +40155,21 @@
   <object id="3" x="170.976" y="1343.42" width="31.9487" height="31.9727"/>
  </objectgroup>
  <objectgroup id="23" name="BatSpawn1">
-  <object id="4" x="468.334" y="1283.33" width="32" height="32"/>
+  <object id="4" x="2582.33" y="495.33" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="24" name="SnakeSpawn2">
-  <object id="5" x="1564" y="1045.21" width="32" height="32"/>
+  <object id="5" x="1569.33" y="1233.21" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="25" name="BatSpawn2">
-  <object id="7" x="534" y="1284.67" width="32" height="32"/>
+  <object id="7" x="1143.33" y="966.003" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="42" name="CoinSpawn1">
-  <object id="10" x="640" y="1186.67" width="32" height="32"/>
+  <object id="10" x="1090.67" y="1269.34" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="43" name="CoinSpawn2">
-  <object id="12" x="849.333" y="1169.33" width="32" height="32"/>
+  <object id="12" x="1968" y="403.997" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="44" name="CoinSpawn3">
-  <object id="14" x="1002.67" y="972" width="32" height="32"/>
+  <object id="14" x="2288" y="1133.33" width="32" height="32"/>
  </objectgroup>
 </map>

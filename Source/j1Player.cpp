@@ -592,6 +592,8 @@ void j1Player::StandingModeMovement(float dt)
 	{
 		DoubleJump();
 		DoubleJumpAvailable = true;
+		
+		score += 250;
 	}
 
 	// ---- FALLING DOWN PLATFORM ----

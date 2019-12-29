@@ -527,8 +527,6 @@ bool j1Scene::Update(float dt)
 			/*bat->dead = true;*/
 			bat->Position = { -50,-50 };
 			bat->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
-
-			player->score += 250;
 		}
 
 		if (bat2->GotDunkedOn == true)
@@ -537,24 +535,18 @@ bool j1Scene::Update(float dt)
 			bat2->Position = { -50,-50 };
 			bat2->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
 			/*bat2->dead = true;*/
-
-			player->score += 250;
 		}
 
 		if (snake->GotDunkedOn == true)
 		{
 			snake->Position = { -50,-50 };
 			snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
-
-			player->score += 250;
 		}
 
 		if (snake2->GotDunkedOn == true)
 		{
 			snake2->Position = { -50,-50 };
 			snake2->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
-
-			player->score += 250;
 		}
 	}
 		

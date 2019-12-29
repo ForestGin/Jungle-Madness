@@ -6,9 +6,9 @@
 	<audio />
 	<entities>
 		<Player>
-			<Playerx value="2141" />
-			<Playery value="518" />
-			<Score value="4000" />
+			<Playerx value="1724" />
+			<Playery value="1254" />
+			<Score value="1000" />
 			<Coins value="3" />
 		</Player>
 		<Bat1>
@@ -58,11 +58,11 @@
 	<transition />
 	<ui_scene>
 		<UI>
-			<Timer value="40721" />
+			<Timer value="17744" />
 		</UI>
 	</ui_scene>
 	<console />
 	<renderer>
-		<camera x="-1645" y="-368" />
+		<camera x="-1228" y="-672" />
 	</renderer>
 </game_state>
