@@ -6,63 +6,63 @@
 	<audio />
 	<entities>
 		<Player>
-			<Playerx value="1724" />
-			<Playery value="1254" />
-			<Score value="1000" />
-			<Coins value="3" />
+			<Playerx value="1468" />
+			<Playery value="1446" />
+			<Score value="0" />
+			<Coins value="2" />
 		</Player>
 		<Bat1>
-			<Batx value="0" />
-			<Baty value="-50" />
+			<Batx value="927" />
+			<Baty value="807" />
 		</Bat1>
 		<Bat2>
-			<Batx value="0" />
-			<Baty value="-50" />
+			<Batx value="2736" />
+			<Baty value="1054" />
 		</Bat2>
 		<Snake1>
 			<Snakex value="-50" />
 			<Snakey value="-50" />
 		</Snake1>
 		<Snake2>
-			<Snakex value="-50" />
-			<Snakey value="-50" />
+			<Snakex value="2439" />
+			<Snakey value="911" />
 		</Snake2>
 		<Coin1>
 			<touched value="true" />
 			<active value="false" />
-			<x value="640" />
-			<y value="1186" />
+			<x value="206" />
+			<y value="465" />
 		</Coin1>
 		<Coin2>
 			<touched value="true" />
 			<active value="false" />
-			<x value="849" />
-			<y value="1169" />
+			<x value="2018" />
+			<y value="1375" />
 		</Coin2>
 		<Coin3>
-			<touched value="true" />
-			<active value="false" />
-			<x value="1002" />
-			<y value="972" />
+			<touched value="false" />
+			<active value="true" />
+			<x value="2361" />
+			<y value="911" />
 		</Coin3>
 	</entities>
 	<collision />
 	<map />
 	<pathfinding />
 	<scene>
-		<scene1 value="true" />
-		<scene2 value="false" />
+		<scene1 value="false" />
+		<scene2 value="true" />
 	</scene>
 	<fonts />
 	<gui />
 	<transition />
 	<ui_scene>
 		<UI>
-			<Timer value="17744" />
+			<Timer value="2575" />
 		</UI>
 	</ui_scene>
 	<console />
 	<renderer>
-		<camera x="-1228" y="-672" />
+		<camera x="-972" y="-832" />
 	</renderer>
 </game_state>
