@@ -193,6 +193,7 @@ void j1Player::CheckDeath()
 	{
 		lives = 3;
 		score = 0;
+		coins = 0;
 		App->transition->MenuTransition(START_MENU, 0.3);
 		App->ui_scene->actual_menu = START_MENU;
 		

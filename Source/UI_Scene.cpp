@@ -15,6 +15,7 @@
 #include "j1Audio.h"
 #include "j1Scene.h"
 #include "j1Player.h"
+#include "j1Coin.h"
 
 #include <string>
 using namespace std;
@@ -606,6 +607,13 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 			if (actual_menu == PAUSE_MENU)
 			{
 				App->on_GamePause = false;
+				App->scene->player->coins = 0;
+				App->scene->coin->active = true;
+				App->scene->coin2->active = true;
+				App->scene->coin3->active = true;
+				App->scene->coin->touched = false;
+				App->scene->coin2->touched = false;
+				App->scene->coin3->touched = false;
 				App->transition->MenuTransition(START_MENU, 0.3);
 				actual_menu = START_MENU;
 				App->audio->PlayMusic("Audio/music/MainMenu.ogg", 2.0f);
