@@ -7,6 +7,7 @@
 #include "j1Player.h"
 #include "j1Snake.h"
 #include "j1Bat.h"
+#include "j1Coin.h"
 
 
 
@@ -42,11 +43,12 @@ public:
 	void OnCollision(Collider* c1, Collider* c2);
 	
 	Animation* LoadAnimation(const char* animationPath, const char* animationName);
+	SDL_Rect LoadColliderRect(const char* colliderPath, const char* colliderName);
 	
 	PlayerData& GetPlayerData() { return playerinfo; }//player info
 	BatData& GetBatData() { return batinfo; }
 	SnakeData& GetSnakeData() { return snakeinfo; }
-
+	CoinData& GetCoinData() { return coininfo; }
 
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
@@ -67,6 +69,7 @@ private:
 	PlayerData playerinfo;
 	BatData batinfo;
 	SnakeData snakeinfo;
+	CoinData coininfo;
 };
 
 #endif // __J1ENTITYMANAGER_H__

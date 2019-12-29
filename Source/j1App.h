@@ -18,6 +18,11 @@ class j1Map;
 class j1Collision;
 class j1PathFinding;
 class j1EntityManager;
+class j1Fonts;
+class j1Gui;
+class UIScene;
+class j1Transition;
+class j1Console;
 
 class j1App
 {
@@ -91,10 +96,16 @@ public:
 	j1Collision*		col;
 	j1PathFinding*		pathfinding;
 	j1EntityManager*    entities;
+	j1Gui*				gui;
+	j1Fonts*			fonts;
+	UIScene*			ui_scene;
+	j1Transition*		transition;
+	j1Console*			console;
 
 	uint32              framerate_cap;
 	float			    capped_ms = -1.0f;
 	bool                cap_on = true;
+	bool				on_GamePause = false;
 
 private:
 

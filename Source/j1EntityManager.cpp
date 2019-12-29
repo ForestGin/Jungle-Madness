@@ -44,10 +44,11 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	playerinfo.CrouchWalk = LoadAnimation(playerinfo.folder.GetString(), "Crouch_Walk_Sword_Sheathed");
 	playerinfo.Jump = LoadAnimation(playerinfo.folder.GetString(), "Jump");
 	playerinfo.DoubleJump = LoadAnimation(playerinfo.folder.GetString(), "Double_Jump");
+	playerinfo.WallJump = LoadAnimation(playerinfo.folder.GetString(), "Wall_Jump");
 	playerinfo.Fall = LoadAnimation(playerinfo.folder.GetString(), "Fall");
 	playerinfo.Death = LoadAnimation(playerinfo.folder.GetString(), "Knockout");
 	playerinfo.Slide = LoadAnimation(playerinfo.folder.GetString(), "Slide");
-	playerinfo.Wall_Slide = LoadAnimation(playerinfo.folder.GetString(), "Wall_Slide");
+	playerinfo.WallSlide = LoadAnimation(playerinfo.folder.GetString(), "Wall_Slide");
 	playerinfo.God = LoadAnimation(playerinfo.folder.GetString(), "God_Mode");
 
 	//ANIMATIONS OFFSET
@@ -78,6 +79,20 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	w = playernode.child("collider").child("crouching").attribute("width").as_int();
 	h = playernode.child("collider").child("crouching").attribute("height").as_int();
 	playerinfo.Crouching_Rect = { x,y,w,h };
+
+	//Surr_Standing
+	x = playernode.child("surr_collider").child("standing").attribute("x").as_int();
+	y = playernode.child("surr_collider").child("standing").attribute("y").as_int();
+	w = playernode.child("surr_collider").child("standing").attribute("width").as_int();
+	h = playernode.child("surr_collider").child("standing").attribute("height").as_int();
+	playerinfo.Surr_Standing_Rect = { x,y,w,h };
+
+	//Surr_Crouching
+	x = playernode.child("surr_collider").child("crouching").attribute("x").as_int();
+	y = playernode.child("surr_collider").child("crouching").attribute("y").as_int();
+	w = playernode.child("surr_collider").child("crouching").attribute("width").as_int();
+	h = playernode.child("surr_collider").child("crouching").attribute("height").as_int();
+	playerinfo.Surr_Crouching_Rect = { x,y,w,h };
 
 	//Player config
 	
@@ -150,6 +165,24 @@ bool j1EntityManager::Awake(pugi::xml_node& config)
 	batinfo.Reference_ID.x = batnode.child("ID").attribute("value1").as_int();
 	batinfo.Reference_ID.y = batnode.child("ID").attribute("value2").as_int();
 	/*batinfo.Move->speed = 0.15f;*/
+
+	//COIN
+	pugi::xml_node coinnode = config.child("coin");
+
+	coininfo.folder.create(coinnode.child("folder").child_value());
+	coininfo.Texture.create(coinnode.child("texture").child_value());
+
+	x = coinnode.child("collider").attribute("x").as_int();
+	y = coinnode.child("collider").attribute("y").as_int();
+	w = coinnode.child("collider").attribute("width").as_int();
+	h = coinnode.child("collider").attribute("height").as_int();
+	coininfo.CoinRect = { x,y,w,h };
+	
+	coininfo.idle = LoadAnimation(coininfo.folder.GetString(), "Idle");
+	coininfo.Gravity = playernode.child("gravity").attribute("value").as_float();
+	coininfo.coinID = coinnode.child("ID").attribute("value1").as_int();
+	coininfo.coinID2 = coinnode.child("ID").attribute("value2").as_int();
+	coininfo.coinID3 = coinnode.child("ID").attribute("value3").as_int();
 
 	return ret;
 }
@@ -273,7 +306,9 @@ j1Entity* const j1EntityManager::EntityCreation(const char* entname, entity_type
 	case entity_type::BAT:
 		entity = new j1Bat();
 		break;
-		
+	case entity_type::COIN:
+		entity = new j1Coin();
+		break;
 	}
 
 	entityID++;
@@ -388,5 +423,53 @@ Animation* j1EntityManager::LoadAnimation(const char* animationPath, const char*
 		return animation;
 	else
 		return nullptr;
+
+}
+
+SDL_Rect j1EntityManager::LoadColliderRect(const char* colliderPath, const char* colliderName)
+{
+	SDL_Rect colliderRect;
+
+	bool rect = false;
+
+	pugi::xml_document colliderDocument;
+	pugi::xml_parse_result result = colliderDocument.load_file(colliderPath);
+
+	if (result == NULL)
+	{
+		LOG("Issue loading Collider Rect");
+	}
+
+	pugi::xml_node objgroup;
+	for (objgroup = colliderDocument.child("map").child("objectgroup"); objgroup; objgroup = objgroup.next_sibling("objectgroup"))
+	{
+		p2SString name = objgroup.attribute("name").as_string();
+		if (name == colliderName)
+		{
+			rect = true;
+			int x, y, h, w;
+
+			for (pugi::xml_node sprite = objgroup.child("object"); sprite; sprite = sprite.next_sibling("object"))
+			{
+				x = sprite.attribute("x").as_int();
+				y = sprite.attribute("y").as_int();
+				w = sprite.attribute("width").as_int();
+				h = sprite.attribute("height").as_int();
+
+				colliderRect = { x, y, w, h };
+			}
+
+		}
+	}
+
+	if (rect = true)
+	{
+		return colliderRect;
+	}
+
+	else
+	{
+		return { 0, 0, 10, 10 };
+	}
 
 }

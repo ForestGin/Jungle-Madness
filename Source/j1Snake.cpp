@@ -167,26 +167,30 @@ bool j1Snake::CleanUp()
 
 void j1Snake::FixedUpdate(float dt)
 {
-	PostUpdate(dt);
+	if(App->on_GamePause == false)
+		PostUpdate(dt);
 }
 
 void j1Snake::LogicUpdate(float dt)
 {
-	Update(dt);
+	if (App->on_GamePause == false)
+	{
+		Update(dt);
 
-	
-	Entity_Collider->SetPos(Position.x, Position.y);
 
-	App->col->Update(1.0f);
+		Entity_Collider->SetPos(Position.x, Position.y);
 
-	Entity_Collider->SetPos(Position.x, Position.y);
+		App->col->Update(1.0f);
+
+		Entity_Collider->SetPos(Position.x, Position.y);
+	}
 }
 
 void j1Snake::OnCollision(Collider * c1, Collider * c2)
 {
 	bool lateralcollision = true;
 
-	if (c1->rect.y - 4 + c1->rect.h == c2->rect.y)
+	if (c1->rect.y + c1->rect.h >= c2->rect.y && c1->rect.y + c1->rect.h <= c2->rect.y + 5)
 	{
 		lateralcollision = false;
 	}
@@ -230,6 +234,23 @@ void j1Snake::OnCollision(Collider * c1, Collider * c2)
 		Snakecolliding = true;
 
 		Position.x = c1->rect.x;
+	}
+	
+	if (c2->type == COLLIDER_PLAYER)
+	{
+		SDL_IntersectRect(&c2->rect, &c1->rect, &Intersection);
+
+		if (Intersection.y + Intersection.h == c2->rect.y + c2->rect.h)
+		{
+			if (Intersection.w >= Intersection.h)
+			{
+				//Kill Snake/Bat
+				GotDunkedOn = true;
+				/*Entity_Collider->to_delete = true;
+
+				dead = true;*/
+			}
+		}
 	}
 }
 

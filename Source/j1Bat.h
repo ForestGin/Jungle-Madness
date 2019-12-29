@@ -66,10 +66,13 @@ class j1Bat : public j1Entity
 		bool going_down = false;
 	
 		bool batcolliding = false;
+
+		bool GotDunkedOn = false;
 	
 		BatData batinfo;
 	
-		
+		SDL_Rect Intersection = { 0,0,0,0 };
+
 		fPoint Bat_Collider_Margin = { 0, 5 };
 };
 

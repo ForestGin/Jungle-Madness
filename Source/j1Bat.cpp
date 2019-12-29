@@ -9,6 +9,7 @@
 #include "j1Scene.h"
 #include "j1Window.h"
 #include "j1EntityManager.h"
+#include "j1Scene.h"
 
 j1Bat::j1Bat() : j1Entity("Bat", entity_type::BAT)
 {
@@ -189,8 +190,13 @@ bool j1Bat::PostUpdate(float dt)
 		}
 	}
 
+	if (dead == true)
+	{
+		CleanUp();
+	}
 
-	//Blitting Snake
+
+	//Blitting Bat
 	if (going_right == true)
 	{
 		App->render->Blit(spritesheet, Position.x - batinfo.Print_offset.x, Position.y - batinfo.Print_offset.y, &CurrentAnimation->GetCurrentFrame(dt));
@@ -218,19 +224,25 @@ bool j1Bat::CleanUp()
 
 void j1Bat::FixedUpdate(float dt)
 {
-	PostUpdate(dt);
+	if (App->on_GamePause == false)
+	{
+		PostUpdate(dt);
+	}
 }
 
 void j1Bat::LogicUpdate(float dt)
 {
-	Update(dt);
+	if (App->on_GamePause == false && dead == false)
+	{
+		Update(dt);
 
-	// --- Set batpos, prevent surpassing colliders ---
-	Entity_Collider->SetPos(Position.x, Position.y);
+		// --- Set batpos, prevent surpassing colliders ---
+		Entity_Collider->SetPos(Position.x, Position.y);
 
-	App->col->Update(1.0f);
+		App->col->Update(1.0f);
 
-	Entity_Collider->SetPos(Position.x, Position.y);
+		Entity_Collider->SetPos(Position.x, Position.y);
+	}
 }
 
 void j1Bat::OnCollision(Collider * c1, Collider * c2)
@@ -282,6 +294,22 @@ void j1Bat::OnCollision(Collider * c1, Collider * c2)
 		Position.x = c1->rect.x;
 	}
 	
+	if (c2->type == COLLIDER_PLAYER)
+	{
+		SDL_IntersectRect(&c2->rect, &c1->rect, &Intersection);
+
+		if (Intersection.y + Intersection.h == c2->rect.y + c2->rect.h)
+		{
+			if (Intersection.w >= Intersection.h)
+			{
+				//Kill Snake/Bat
+				GotDunkedOn = true;
+				/*Entity_Collider->to_delete = true;
+
+				dead = true;*/
+			}
+		}
+	}
 }
 
 bool j1Bat::Load(pugi::xml_node &config)

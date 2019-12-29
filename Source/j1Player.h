@@ -23,7 +23,9 @@ enum class STATE
 	ATTACKING,
 	JUMPING,
 	DOUBLEJUMPING,
+	WALLJUMPING,
 	FALLING,
+	WALLSLIDING,
 	CROUCHIDLE,
 	CROUCHWALKING,
 	SLIDING,
@@ -60,9 +62,10 @@ struct PlayerData {
 	Animation* CrouchWalk = nullptr;
 	Animation* Jump = nullptr;
 	Animation* DoubleJump = nullptr;
+	Animation* WallJump = nullptr;
 	Animation* Fall = nullptr;
 	Animation* Slide = nullptr;
-	Animation* Wall_Slide = nullptr;
+	Animation* WallSlide = nullptr;
 	Animation* Death = nullptr;
 	Animation* God = nullptr;
 
@@ -70,9 +73,10 @@ struct PlayerData {
 	p2SString Texture = nullptr;
 
 	//Collider Rects
-	SDL_Rect Player_Collider_Rect = { 0,0,0,0 };
 	SDL_Rect Standing_Rect = { 0,0,0,0 };
 	SDL_Rect Crouching_Rect = { 0,0,0,0 };
+	SDL_Rect Surr_Standing_Rect = { 0,0,0,0 };
+	SDL_Rect Surr_Crouching_Rect = { 0,0,0,0 };
 
 	iPoint Animation_Offset = { 0,0 };
 	iPoint Animation_Offset_St = { 0,0 };
@@ -116,6 +120,7 @@ public:
 
 	//Collisions
 	void OnCollision(Collider * entitycollider, Collider * to_check);
+
 	void UpRight_Collision(Collider * entitycollider, Collider * to_check);
 	void Up_Collision(Collider * entitycollider, Collider * to_check);
 	void UpLeft_Collision(Collider * entitycollider, Collider * to_check);
@@ -128,10 +133,10 @@ public:
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
-	Animation* LoadAnimation(const char* animationPath, const char* animationName);
-	SDL_Rect LoadColliderRect(const char* colliderPath, const char* colliderName);
 	//
 	void HandleMode();
+
+	float Lerp(float Goal, float Current, float dt);
 
 	void AddGravity(float dt);
 
@@ -139,8 +144,8 @@ public:
 	void GodModeMovement(float dt);
 	void StandingModeMovement(float dt);
 	void CrouchingModeMovenent(float dt);
-	void Jump(float dt);
-	void DoubleJump(float dt);
+	void Jump();
+	void DoubleJump();
 	//void Slide();
 	//void WallSlide();
 	void CheckDeath();
@@ -163,18 +168,21 @@ public:
 	MOVEMENT playermovement;
 
 	bool DoubleJumpAvailable;
+	bool Dunk;
 
 	//Collisions
-	bool CollidingGround;
-	bool CollidingPlatform;
-	bool CollidingLeftWall;
-	bool CollidingRightWall;
-	bool CollidingCeiling;
+	bool LandedOnGround;
+	bool LandedOnPlatform;
+	bool LandedOnLeftWall;
+	bool LandedOnRightWall;
+	bool LandedOnCeiling;
 	
 	//Surrounding collisions
-	SDL_Rect Surr_Cr_Rect = { 0,0,0,0 };
-	SDL_Rect Surr_St_Rect = { 0,0,0,0 };
-	bool RubbingCeiling_Cr;
+	bool OnGround;
+	bool OnPlatform;
+	bool OnLeftWall;
+	bool OnRightWall;
+	bool OnCeiling;
 
 	SDL_Rect Intersection = { 0,0,0,0 };
 
@@ -187,6 +195,16 @@ public:
 	bool SavedCheckPoint = false;
 	fPoint LastCheckpointPostion = { 0,0 };
 	int SavedCheckPointArea = 0;
+	//GUI
+	bool StartUI = false;
+	//HP
+	int lives = 0;
+	//Score
+	int score = 0;
+	int coins = 0;
+	//fx
+	uint end = 0;
+	uint died = 0;
 };
 
 #endif // __j1Player_H__

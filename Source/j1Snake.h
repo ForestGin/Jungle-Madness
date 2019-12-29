@@ -65,9 +65,12 @@ class j1Snake : public j1Entity
 	
 	
 		bool Snakecolliding = false;
+
+		bool GotDunkedOn = false;
 	
 		SnakeData snakeinfo;
 
+		SDL_Rect Intersection = { 0,0,0,0 };
 		
 		fPoint Snake_Collider_Margin = { 26, 28 };
 };
