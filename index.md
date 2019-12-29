@@ -18,7 +18,7 @@ This game is a simple platformer where you can use the character movements like 
 
 ### Oscar Larios
 
-[[https://github.com/Megaoski/Jungle-Madness/blob/master/Website/oscar.png]]
+![Oscar Larios](https://github.com/Megaoski/Jungle-Madness/blob/master/Website/oscar.PNG)
 
 - Entity System
 - Pathfinding
