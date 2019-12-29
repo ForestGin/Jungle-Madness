@@ -553,9 +553,18 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 			App->scene->saveHP = true;
 			App->scene->player->lives = 3;
 			App->scene->player->score = 0;
+			App->scene->player->coins = 0;
+			App->scene->coin->active = true;
+			App->scene->coin2->active = true;
+			App->scene->coin3->active = true;
+			App->scene->coin->touched = false;
+			App->scene->coin2->touched = false;
+			App->scene->coin3->touched = false;
 			App->scene->player->SavedCheckPoint = false;
 			actual_menu = INGAME_MENU;
 			App->transition->MenuTransition(INGAME_MENU, 0.1);
+			App->scene->scene1 = true;
+			App->scene->scene2 = false;
 			App->scene->RestartLevel();
 			App->ui_scene->clock->counter.Play();
 			App->ui_scene->clock->counter.Start();
