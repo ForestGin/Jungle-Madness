@@ -59,9 +59,7 @@ This game is a simple platformer where you can use the character movements like 
 <html>
 <body>
 
-<iframe width="645" height="520"
-src="https://www.youtube.com/watch?v=PwKE9HYXVyM&feature=youtu.be" frameborder="0" allowfullscreen>
-</iframe>
+<iframe width="590" height="520" src="https://www.youtube.com/watch?v=PwKE9HYXVyM&feature=youtu.be" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
 
 </body>
 </html>
