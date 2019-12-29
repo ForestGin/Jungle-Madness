@@ -8,6 +8,14 @@ This game is a simple platformer where you can use the character movements like 
 
 ### Pol Bosch
 
+- Player
+- Collisions
+- Maps
+- Parallax
+- Art Management
+- Metadata
+- Camera
+
 ### Oscar Larios
 
 - Entity System
@@ -15,6 +23,7 @@ This game is a simple platformer where you can use the character movements like 
 - UI System
 - Ingame UI
 - Load & Save logic
+- Webpage
 
 ## Features:
 
@@ -59,7 +68,7 @@ This game is a simple platformer where you can use the character movements like 
 <html>
 <body>
 
-<iframe width="590" height="520" src="https://www.youtube.com/watch?v=PwKE9HYXVyM&feature=youtu.be" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+<video src="https://www.youtube.com/watch?v=PwKE9HYXVyM&feature=youtu.be" width="320" height="200" controls preload></video>
 
 </body>
 </html>
