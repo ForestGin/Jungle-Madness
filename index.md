@@ -4,7 +4,17 @@ Jungle Madness is a platfomer game made by Pol Bosch and Oscar Larios, students 
 ## About the game...
 This game is a simple platformer where you can use the character movements like jumping, crouching or wall jumping to advance through the level, recollecting coins to win score points and killing enemies
 
-## Team Photos
+## Team Photos & Tasks
+
+### Pol Bosch
+
+### Oscar Larios
+
+- Entity System
+- Pathfinding
+- UI System
+- Ingame UI
+- Load & Save logic
 
 ## Features:
 
@@ -45,8 +55,6 @@ This game is a simple platformer where you can use the character movements like 
 - More info about the debugging features inside the README archive 
 
 ## Video
-
-## Tasks
 
 ## License and Disclosure
 
