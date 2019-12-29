@@ -4,6 +4,10 @@
 
 #include "j1Module.h"
 
+class UI_element;
+class Window;
+class Text;
+
 class j1Console : public j1Module
 {
 public:
@@ -22,6 +26,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	
 	
 public:
 

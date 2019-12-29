@@ -1,8 +1,9 @@
 #include "j1Console.h"
+#include "UI_Scene.h"
 
 j1Console::j1Console()
 {
-
+	name.create("console");
 }
 
 j1Console::~j1Console()

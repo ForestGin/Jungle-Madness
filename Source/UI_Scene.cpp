@@ -55,6 +55,13 @@ bool UIScene::Start()
 	float music_progress = (float)App->audio->getMusicVolume() / 128;
 	float fx_progress = (float)App->audio->getFxVolume() / 128;
 
+	menu* consoleMenu = new menu(CONSOLE);
+	{
+		console_window = App->gui->createWindow(140 * App->gui->UI_scale, 50 * App->gui->UI_scale, App->tex->Load("gui/medium_parchment.png"), { 225,250, 744, 703 }, this);
+		
+		consoleMenu->elements.push_back(console_window);
+		menus.push_back(consoleMenu);
+	}
 
 	menu* creditsMenu = new menu(CREDITS_MENU);
 	{
@@ -354,6 +361,21 @@ bool UIScene::Update(float dt)
 			App->transition->MenuTransition(START_MENU);
 			ret = true;
 		}
+		else if (actual_menu == CONSOLE)
+		{
+			App->on_GamePause = false;
+			actual_menu = INGAME_MENU;
+			App->transition->MenuTransition(INGAME_MENU);
+			ret = true;
+		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_GRAVE) == KEY_DOWN)
+	{
+		App->on_GamePause = true;
+		actual_menu = CONSOLE;
+		App->transition->MenuTransition(CONSOLE);
+		ret = true;
 	}
 
 	//PLAYER HP BLITTING
@@ -427,11 +449,6 @@ bool UIScene::MenuLoad(menu_id id)
 			{
 				for (std::list <UI_element*>::const_iterator item2 = current_menu->elements.begin(); item2 != current_menu->elements.end(); ++item2)
 				{
-					if ((*item2)->element_type == SWITCH)
-					{
-						Button* full_switch = (Button*)*item2;
-						startValues.fullscreen = full_switch->active;
-					}
 					if ((*item2)->element_type == SLIDER)
 					{
 						Slider* slider = (Slider*)*item2;
@@ -465,11 +482,7 @@ void UIScene::ApplySettings(settings_values values)
 
 	for (std::list <UI_element*>::const_iterator item = current_menu->elements.begin(); item != current_menu->elements.end(); ++item)
 	{
-		if ((*item)->element_type == SWITCH)
-		{
-			Button* full_switch = (Button*)*item;
-			full_switch->active = values.fullscreen;
-		}
+		
 		if ((*item)->element_type == SLIDER)
 		{
 			Slider* slider = (Slider*)*item;
@@ -528,12 +541,7 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 	{
 		element->state = CLICKED;
 
-		if (element->element_type == SWITCH)
-		{
-			Button* tmp = (Button*)element;
-			tmp->active = !tmp->active;
-			newValues.fullscreen = tmp->active;
-		}
+		
 
 
 		switch (element->function)

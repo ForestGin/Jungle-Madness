@@ -106,7 +106,7 @@ bool j1Gui::PreUpdate()
 				element->Start_Drag();
 				draggingElement = element;
 			}
-			if (element->element_type == BUTTON || element->element_type == SWITCH)
+			if (element->element_type == BUTTON)
 				App->audio->PlayFx(button_click_fx, 0);
 		}
 		else if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP)
@@ -235,17 +235,6 @@ Image* j1Gui::createImageFromAtlas(int x, int y, SDL_Rect section, j1Module* cal
 
 	return ret;
 }
-
-Button* j1Gui::createSwitch(int x, int y, SDL_Texture* texture, SDL_Rect standbyUnactive, SDL_Rect OnMouseUnactive, SDL_Rect standbyActive, SDL_Rect OnMouseActive, j1Module* callback)
-{
-	SDL_Texture* usingTexture = (texture) ? texture : atlas;
-
-	Button* ret = new Button(x, y, usingTexture, standbyUnactive, OnMouseUnactive, standbyActive, OnMouseActive, callback);
-	UI_elements.push_back(ret);
-
-	return ret;
-}
-
 
 Window* j1Gui::createWindow(int x, int y, SDL_Texture * texture, SDL_Rect section, j1Module * callback)
 {
