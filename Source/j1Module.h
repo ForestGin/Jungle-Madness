@@ -11,6 +11,8 @@
 
 class j1App;
 class Collider;
+class UI_element;
+enum event_type;
 
 class j1Module
 {
@@ -49,7 +51,7 @@ public:
 	}
 
 	// Called each loop iteration
-	virtual bool PostUpdate()
+	virtual bool PostUpdate(float dt)
 	{
 		return true;
 	}
@@ -73,6 +75,10 @@ public:
 	virtual void OnCollision(Collider* c1, Collider* c2)
 	{
 
+	}
+	virtual bool OnUIEvent(UI_element* element, event_type event_type)
+	{
+		return true;
 	}
 
 public:

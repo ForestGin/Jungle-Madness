@@ -12,7 +12,14 @@ enum COLLIDER_TYPE
 	COLLIDER_NONE = -1,
 	COLLIDER_FLOOR,
 	COLLIDER_DEADLY,
+	COLLIDER_PLATFORM,
 	COLLIDER_PLAYER,
+	COLLIDER_CHECKSURROUNDING,
+	COLLIDER_SNAKE,
+	COLLIDER_BAT,
+	COLLIDER_CHECKPOINT,
+	COLLIDER_WIN,
+	COLLIDER_COIN,
 
 	COLLIDER_MAX
 
@@ -49,7 +56,7 @@ public:
 
 	bool PreUpdate();
 	bool Update(float dt);
-	bool PostUpdate();
+	bool PostUpdate(float dt);
 	bool CleanUp();
 
 	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback = nullptr);
@@ -57,11 +64,11 @@ public:
 
 	p2List<Collider*> colliders;
 	int Player_Touch;
-
+	bool debug = false;
 private:
 
 	bool matrix[COLLIDER_MAX][COLLIDER_MAX];
-	bool debug = false;
+	
 };
 
 #endif // __j1Collision_H__

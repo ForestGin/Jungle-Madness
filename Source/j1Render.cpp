@@ -3,6 +3,7 @@
 #include "j1App.h"
 #include "j1Window.h"
 #include "j1Render.h"
+#include "Brofiler/Brofiler.h"
 
 #define VSYNC true
 
@@ -27,7 +28,8 @@ bool j1Render::Awake(pugi::xml_node& config)
 	// load flags
 	Uint32 flags = SDL_RENDERER_ACCELERATED;
 
-	if (config.child("vsync").attribute("value").as_bool(true) == true)
+	Vsync = config.child("vsync").attribute("value").as_bool();
+	if (Vsync)
 	{
 		flags |= SDL_RENDERER_PRESENTVSYNC;
 		LOG("Using vsync");
@@ -68,17 +70,23 @@ bool j1Render::Start()
 // Called each loop iteration
 bool j1Render::PreUpdate()
 {
+	BROFILER_CATEGORY("Render_Pre_Update", Profiler::Color::Cyan);
+
 	SDL_RenderClear(renderer);
 	return true;
 }
 
 bool j1Render::Update(float dt)
 {
+
+	BROFILER_CATEGORY("Render_Update", Profiler::Color::DarkBlue);
 	return true;
 }
 
-bool j1Render::PostUpdate()
+bool j1Render::PostUpdate(float dt)
 {
+	BROFILER_CATEGORY("Render_Post_Update", Profiler::Color::DarkCyan);
+
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
 	return true;
@@ -128,7 +136,7 @@ void j1Render::ResetViewPort()
 }
 
 // Blit to screen
-bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip, float speed, double angle, int pivot_x, int pivot_y) const
+bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section, SDL_RendererFlip flip, bool ui, float speed, double angle, int pivot_x, int pivot_y) const
 {
 	bool ret = true;
 	uint scale = App->win->GetScale();
@@ -136,6 +144,13 @@ bool j1Render::Blit(SDL_Texture* texture, int x, int y, const SDL_Rect* section,
 	SDL_Rect rect;
 	rect.x = (int)(camera.x * speed) + x * scale;
 	rect.y = (int)(camera.y * speed) + y * scale;
+
+	if (ui)
+	{
+		SDL_Rect rect;
+		rect.x = x * scale;
+		rect.y = y * scale;
+	}
 
 	if (section != NULL)
 	{
@@ -247,6 +262,17 @@ bool j1Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, U
 		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
+
+	return ret;
+}
+
+iPoint j1Render::ScreenToWorld(int x, int y) const
+{
+	iPoint ret;
+	int scale = App->win->GetScale();
+
+	ret.x = (x - camera.x / scale);
+	ret.y = (y - camera.y / scale);
 
 	return ret;
 }

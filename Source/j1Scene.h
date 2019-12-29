@@ -1,10 +1,19 @@
-#ifndef __j1SCENE_H__
-#define __j1SCENE_H__
+
+#ifndef __j1_SCENE_H__
+#define __j1_SCENE_H__
 
 #include "j1Module.h"
+#include "p2Point.h"
+#include "SDL/include/SDL_rect.h"
+#include "p2List.h"
 
 struct SDL_Texture;
+class SDL_Rect;
 class Collider;
+class j1Player;
+class j1Snake;
+class j1Bat;
+class j1Coin;
 
 class j1Scene : public j1Module
 {
@@ -34,8 +43,15 @@ public:
 	bool CleanUp();
 
 	bool SceneChange(const char* scene);
+	void RestartLevel();
+
 	bool Save(pugi::xml_node&config) const;
 	bool Load(pugi::xml_node&config);
+
+	void EntityPosition(const char* scene);
+	void EntityDirection();//reset enti direction
+	
+	void LoadLvl(int num = 0);
 
 public:
 
@@ -52,8 +68,26 @@ public:
 	bool scene1Loaded = false;
 	bool scene2Loaded = false;
 
+	int area_of_collision = 0;
 
-	
+	//Entities
+	j1Player*           player = nullptr;
+	j1Snake*			snake = nullptr;
+	j1Bat*				bat = nullptr;
+	j1Snake*			snake2 = nullptr;
+	j1Bat*				bat2 = nullptr;
+	j1Coin*				coin = nullptr;
+	j1Coin*				coin2 = nullptr;
+	j1Coin*				coin3 = nullptr;
+
+	//pathfind
+	SDL_Rect debug_Tex_rect = { 32,96,32,32 };
+
+	//Transition
+	bool load_lvl = false;
+	int newLvl = 0;
+
+	bool saveHP = false;
 };
 
 #endif // __j1SCENE_H__

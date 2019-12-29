@@ -7,6 +7,7 @@
 #include "j1Collision.h"
 #include "j1Window.h"
 #include <math.h>
+#include "Brofiler/Brofiler.h"
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
 {
@@ -24,17 +25,22 @@ bool j1Map::Awake(pugi::xml_node& config)
 	bool ret = true;
 
 	folder.create(config.child("folder").child_value());
+	
 	//colliders XML
 	RedCol = config.child("collision").attribute("red").as_int();
+	checkpoint = config.child("collision").attribute("checkpoint").as_int();//GreenCol
 	BlueCol = config.child("collision").attribute("blue").as_int();
 	PinkCol = config.child("collision").attribute("pink").as_int();
-	GreenCol = config.child("collision").attribute("green").as_int();
-
+	YellowCol = config.child("collision").attribute("yellow").as_int();
+	WhiteCol = config.child("collision").attribute("white").as_int();
+	CyanCol = config.child("collision").attribute("cyan").as_int();
+	
 	return ret;
 }
 
 void j1Map::Draw(MapData &data)
 {
+	BROFILER_CATEGORY("Map_Draw", Profiler::Color::Chartreuse);
 
 	 if (map_loaded == false)
 			return;
@@ -462,6 +468,63 @@ bool j1Map::LoadMap(MapData& data)
 			data.StartPoint.x = map.child("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
 			data.StartPoint.y = map.child("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
 		}
+
+		p2SString obj3(map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").attribute("name").as_string());
+
+		if (obj3 == "SnakeSpawn1")
+		{
+			data.Snake1.x = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
+			data.Snake1.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
+		}
+
+		p2SString obj4(map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").attribute("name").as_string());
+
+		if (obj4 == "BatSpawn1")
+		{
+			data.Bat1.x = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
+			data.Bat1.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
+		}
+
+		p2SString obj5(map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").attribute("name").as_string());
+
+		if (obj5 == "SnakeSpawn2")
+		{
+			data.Snake2.x = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
+			data.Snake2.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
+		}
+
+		p2SString obj6(map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").attribute("name").as_string());
+
+		if (obj6 == "BatSpawn2")
+		{
+			data.Bat2.x = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
+			data.Bat2.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
+		}
+
+		p2SString obj7(map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").attribute("name").as_string());
+
+		if (obj7 == "CoinSpawn1")
+		{
+			data.Coin1.x = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
+			data.Coin1.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
+		}
+
+		p2SString obj8(map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").attribute("name").as_string());
+
+		if (obj8 == "CoinSpawn2")
+		{
+			data.Coin2.x = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
+			data.Coin2.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
+		}
+
+		p2SString obj9(map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").attribute("name").as_string());
+
+		if (obj9 == "CoinSpawn3")
+		{
+			data.Coin3.x = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("x").as_int();
+			data.Coin3.y = map.child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object").attribute("y").as_int();
+		}
+
 	}
 
 	return ret;
@@ -623,9 +686,25 @@ bool j1Map::MapCollisions(MapData& data)
 							{
 								App->col->AddCollider({ pos.x,pos.y,data.tile_width,data.tile_height }, COLLIDER_FLOOR, this);
 							}
+							else if (tile_id == checkpoint)
+							{
+								App->col->AddCollider({ pos.x,pos.y,data.tile_width,data.tile_height }, COLLIDER_CHECKPOINT, this);
+							}
 							else if (tile_id == BlueCol)
 							{
 								App->col->AddCollider({ pos.x,pos.y,data.tile_width,data.tile_height }, COLLIDER_DEADLY, this);
+							}
+							else if (tile_id == PinkCol)
+							{
+								App->col->AddCollider({ pos.x,pos.y,data.tile_width,data.tile_height }, COLLIDER_PLATFORM, this);
+							}
+							else if (tile_id == YellowCol)
+							{
+								App->col->AddCollider({ pos.x,pos.y,data.tile_width,data.tile_height }, COLLIDER_COIN, this);
+							}
+							else if (tile_id == CyanCol)
+							{
+								App->col->AddCollider({ pos.x,pos.y,data.tile_width,data.tile_height }, COLLIDER_WIN, this);
 							}
 						}
 					}
@@ -728,4 +807,52 @@ p2SString Properties::GetProperties(const char * request)
 
 
 	return tmp;
+}
+
+bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer, MapData& Data) const
+{
+	bool ret = false;
+	p2List_item<MapLayer*>* item;
+	//item = Data.layers.start;
+
+	for (item = Data.layers.start; item != NULL; item = item->next)
+	{
+		MapLayer* layer = item->data;
+
+		if (layer->properties_lay.GetProperties("Navigation") == 0)
+			continue;
+
+		uchar* map = new uchar[layer->width*layer->height];
+		memset(map, 1, layer->width*layer->height);
+
+		for (int y = 0; y < Data.height; ++y)
+		{
+			for (int x = 0; x < Data.width; ++x)
+			{
+				int i = (y*layer->width) + x;
+
+				int tile_id = layer->Get(x, y);
+				TileSet* tileset = (tile_id > 0) ? TileId(tile_id, Data) : NULL;
+
+				if (tileset != NULL)
+				{
+					map[i] = (tile_id - tileset->firstgid) > 0 ? 0 : 1;
+					/*TileType* ts = tileset->GetTileType(tile_id);
+					if(ts != NULL)
+					{
+					map[i] = ts->properties.Get("walkable", 1);
+					}*/
+				}
+			}
+		}
+
+		*buffer = map;
+		width = Data.width;
+		height = Data.height;
+		ret = true;
+
+		break;
+	}
+
+	return ret;
 }

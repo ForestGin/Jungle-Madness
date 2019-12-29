@@ -7,6 +7,18 @@
     <Filter Include="Pugi">
       <UniqueIdentifier>{757f3c79-ea16-4acc-a5f3-689b4dae6aa7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{183d96f7-c926-4a4e-a3d6-478dfa2bdb1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities\Enemies">
+      <UniqueIdentifier>{f9bd744d-b801-447e-b2ea-90eaed6b7ba1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{23477d34-96e9-499c-b35b-cad872634fdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\Elements">
+      <UniqueIdentifier>{2c152a25-8b2f-42d8-829b-d62339538bf3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -46,10 +58,60 @@
     <ClInclude Include="j1Window.h" />
     <ClInclude Include="j1Scene.h" />
     <ClInclude Include="j1Collision.h" />
-    <ClInclude Include="j1Player.h" />
     <ClInclude Include="MemLeaks.h">
       <Filter>Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="j1Pathfinding.h" />
+    <ClInclude Include="j1EntityManager.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Player.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Entity.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Timer.h" />
+    <ClInclude Include="j1PerfTimer.h" />
+    <ClInclude Include="j1Bat.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Snake.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Fonts.h">
+      <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_element.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Gui.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Button.h">
+      <Filter>UI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Clock.h">
+      <Filter>UI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Slider.h">
+      <Filter>UI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Image.h">
+      <Filter>UI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Window.h">
+      <Filter>UI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Text.h">
+      <Filter>UI\Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Scene.h" />
+    <ClInclude Include="j1Transition.h" />
+    <ClInclude Include="j1Coin.h">
+      <Filter>Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="j1Console.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="p2Log.cpp">
@@ -68,6 +130,50 @@
     <ClCompile Include="j1Window.cpp" />
     <ClCompile Include="j1Scene.cpp" />
     <ClCompile Include="j1Collision.cpp" />
-    <ClCompile Include="j1Player.cpp" />
+    <ClCompile Include="j1Pathfinding.cpp" />
+    <ClCompile Include="j1EntityManager.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Player.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Timer.cpp" />
+    <ClCompile Include="j1PerfTimer.cpp" />
+    <ClCompile Include="j1Bat.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Snake.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Fonts.cpp">
+      <Filter>Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Gui.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Button.cpp">
+      <Filter>UI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Clock.cpp">
+      <Filter>UI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Slider.cpp">
+      <Filter>UI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Image.cpp">
+      <Filter>UI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Window.cpp">
+      <Filter>UI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Text.cpp">
+      <Filter>UI\Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Scene.cpp" />
+    <ClCompile Include="j1Transition.cpp" />
+    <ClCompile Include="j1Coin.cpp">
+      <Filter>Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="j1Console.cpp" />
   </ItemGroup>
 </Project>

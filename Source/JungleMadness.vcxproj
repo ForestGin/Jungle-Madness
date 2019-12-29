@@ -77,9 +77,11 @@
       <SDLCheck>false</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
       <ExceptionHandling>false</ExceptionHandling>
+      <AdditionalIncludeDirectories>C:\Users\Usuario\Documents\GitHub\Jungle-Madness\Source\Brofiler;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -99,11 +101,13 @@
       <SDLCheck>false</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
       <ExceptionHandling>false</ExceptionHandling>
+      <AdditionalIncludeDirectories>C:\Users\Usuario\Documents\GitHub\Jungle-Madness\Source\Brofiler;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -122,6 +126,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="j1Bat.h" />
+    <ClInclude Include="j1Coin.h" />
+    <ClInclude Include="j1Console.h" />
+    <ClInclude Include="j1Entity.h" />
+    <ClInclude Include="j1EntityManager.h" />
+    <ClInclude Include="j1Fonts.h" />
+    <ClInclude Include="j1Gui.h" />
+    <ClInclude Include="j1Pathfinding.h" />
+    <ClInclude Include="j1PerfTimer.h" />
     <ClInclude Include="j1Player.h" />
     <ClInclude Include="j1App.h" />
     <ClInclude Include="j1Audio.h" />
@@ -131,7 +144,10 @@
     <ClInclude Include="j1Module.h" />
     <ClInclude Include="j1Render.h" />
     <ClInclude Include="j1Scene.h" />
+    <ClInclude Include="j1Snake.h" />
     <ClInclude Include="j1Textures.h" />
+    <ClInclude Include="j1Timer.h" />
+    <ClInclude Include="j1Transition.h" />
     <ClInclude Include="j1Window.h" />
     <ClInclude Include="MemLeaks.h" />
     <ClInclude Include="p2Defs.h" />
@@ -142,21 +158,47 @@
     <ClInclude Include="p2SString.h" />
     <ClInclude Include="PugiXml\src\pugiconfig.hpp" />
     <ClInclude Include="PugiXml\src\pugixml.hpp" />
+    <ClInclude Include="UI_Button.h" />
+    <ClInclude Include="UI_Clock.h" />
+    <ClInclude Include="UI_element.h" />
+    <ClInclude Include="UI_Image.h" />
+    <ClInclude Include="UI_Scene.h" />
+    <ClInclude Include="UI_Slider.h" />
+    <ClInclude Include="UI_Text.h" />
+    <ClInclude Include="UI_Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="j1Bat.cpp" />
+    <ClCompile Include="j1Coin.cpp" />
+    <ClCompile Include="j1Console.cpp" />
+    <ClCompile Include="j1EntityManager.cpp" />
     <ClCompile Include="j1App.cpp" />
     <ClCompile Include="j1Audio.cpp" />
     <ClCompile Include="j1Collision.cpp" />
+    <ClCompile Include="j1Fonts.cpp" />
+    <ClCompile Include="j1Gui.cpp" />
     <ClCompile Include="j1Input.cpp" />
     <ClCompile Include="j1Main.cpp" />
     <ClCompile Include="j1Map.cpp" />
+    <ClCompile Include="j1Pathfinding.cpp" />
+    <ClCompile Include="j1PerfTimer.cpp" />
     <ClCompile Include="j1Player.cpp" />
     <ClCompile Include="j1Render.cpp" />
     <ClCompile Include="j1Scene.cpp" />
+    <ClCompile Include="j1Snake.cpp" />
     <ClCompile Include="j1Textures.cpp" />
+    <ClCompile Include="j1Timer.cpp" />
+    <ClCompile Include="j1Transition.cpp" />
     <ClCompile Include="j1Window.cpp" />
     <ClCompile Include="p2Log.cpp" />
     <ClCompile Include="PugiXml\src\pugixml.cpp" />
+    <ClCompile Include="UI_Button.cpp" />
+    <ClCompile Include="UI_Clock.cpp" />
+    <ClCompile Include="UI_Image.cpp" />
+    <ClCompile Include="UI_Scene.cpp" />
+    <ClCompile Include="UI_Slider.cpp" />
+    <ClCompile Include="UI_Text.cpp" />
+    <ClCompile Include="UI_Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

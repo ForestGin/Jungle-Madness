@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="192" height="32" tilewidth="1" tileheight="1" infinite="0" nextlayerid="58" nextobjectid="349">
+ <objectgroup color="#005500" id="5" name="Idle">
+  <object id="332" x="0" y="0" width="32" height="32"/>
+  <object id="344" x="32" y="0" width="32" height="32"/>
+  <object id="345" x="64" y="0" width="32" height="32"/>
+  <object id="346" x="96" y="0" width="32" height="32"/>
+  <object id="347" x="128" y="0" width="32" height="32"/>
+  <object id="348" x="160" y="0" width="32" height="32"/>
+ </objectgroup>
+ <imagelayer id="3" name="Sprites">
+  <image source="../gui/Coins_gui.png" width="192" height="32"/>
+ </imagelayer>
+</map>

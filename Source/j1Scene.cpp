@@ -10,6 +10,14 @@
 #include "j1Scene.h"
 #include "j1Collision.h"
 #include "j1Player.h"
+#include "j1Snake.h"
+#include "j1Bat.h"
+#include "j1Coin.h"
+#include "j1EntityManager.h"
+#include "j1PathFinding.h"
+#include "UI_Scene.h"
+#include "UI_Clock.h"
+#include "Brofiler\Brofiler.h"
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -48,6 +56,7 @@ bool j1Scene::Awake(pugi::xml_node& config)
 	CamScene2.y = config.child("secondcamera").attribute("y").as_int();
 
 	
+	area_of_collision = config.child("collisionarea").attribute("value").as_int();
 
 	return ret;
 }
@@ -56,6 +65,24 @@ bool j1Scene::Awake(pugi::xml_node& config)
 bool j1Scene::Start()
 {
 	bool ret = true;
+
+	currentscene = "Map_Beta.tmx";
+
+	player = (j1Player*)App->entities->EntityCreation("player", entity_type::PLAYER);
+	
+	bat = (j1Bat*)App->entities->EntityCreation("bat", entity_type::BAT);
+	bat2 = (j1Bat*)App->entities->EntityCreation("bat", entity_type::BAT);
+
+	snake = (j1Snake*)App->entities->EntityCreation("snake", entity_type::SNAKE);
+	snake2 = (j1Snake*)App->entities->EntityCreation("snake", entity_type::SNAKE);
+	
+	coin = (j1Coin*)App->entities->EntityCreation("coin", entity_type::COIN);
+	coin2 = (j1Coin*)App->entities->EntityCreation("coin", entity_type::COIN);
+	coin3 = (j1Coin*)App->entities->EntityCreation("coin", entity_type::COIN);
+
+	coin->touched = false;
+	coin2->touched = false;
+	coin3->touched = false;
 
 	//Loading both scenes(maps/levels)
 
@@ -81,29 +108,132 @@ bool j1Scene::Start()
 	}
 
 	//Loading positions and music
-	firstscene = scenes.start->data->GetString();
+	currentscene = scenes.start->data->GetString();
 
-	if (firstscene == "Map_Beta.tmx")
+	if (currentscene == "Map_Beta.tmx")
 	{
 
-		App->render->camera.x = CamScene1.x;
-		App->render->camera.y = CamScene1.y;
+		/*App->render->camera.x = CamScene1.x;
+		App->render->camera.y = CamScene1.y;*/
 
-		//Player position Loaded from map
-		App->player->Position.x = App->map->data.StartPoint.x;
-		App->player->Position.y = App->map->data.StartPoint.y;
-		
-		scene1 = true;
+		//entities
+		player->Position.x = App->map->data.StartPoint.x;
+		player->Position.y = App->map->data.StartPoint.y;
+		player->Future_Position = player->Position;
+
+		snake->Position.x = App->map->data.Snake1.x;
+		snake->Position.y = App->map->data.Snake1.y;
+		bat->Position.x = App->map->data.Bat1.x;
+		bat->Position.y = App->map->data.Bat1.y;
+		snake2->Position.x = App->map->data.Snake2.x;
+		snake2->Position.y = App->map->data.Snake2.y;
+		bat2->Position.x = App->map->data.Bat2.x;
+		bat2->Position.y = App->map->data.Bat2.y;
+		coin->Position.x = App->map->data.Coin1.x;
+		coin->Position.y = App->map->data.Coin1.y;
+		coin2->Position.x = App->map->data.Coin2.x;
+		coin2->Position.y = App->map->data.Coin2.y;
+		coin3->Position.x = App->map->data.Coin3.x;
+		coin3->Position.y = App->map->data.Coin3.y;
+
+
+		player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
+		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
+		player->Surr_Entity_Collider = App->col->AddCollider(player->Surr_Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_CHECKSURROUNDING, App->entities);
+		player->Surr_Entity_Collider->SetPos(player->Position.x - 1, player->Position.y - 1);
+
+		snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
+		snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
+		bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
+		bat->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
+		snake2->Entity_Collider = App->col->AddCollider(snake2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
+		snake2->Entity_Collider->SetPos(snake2->Position.x, snake2->Position.y);
+		bat2->Entity_Collider = App->col->AddCollider(bat2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
+		bat2->Entity_Collider->SetPos(bat2->Position.x, bat2->Position.y);
+		coin->Entity_Collider = App->col->AddCollider(coin->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+		coin->Entity_Collider->SetPos(coin->Position.x, coin->Position.y);
+		coin2->Entity_Collider = App->col->AddCollider(coin2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+		coin2->Entity_Collider->SetPos(coin2->Position.x, coin2->Position.y);
+		coin3->Entity_Collider = App->col->AddCollider(coin3->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+		coin3->Entity_Collider->SetPos(coin3->Position.x, coin3->Position.y);
+
+		/*scene1 = true;
 		scene2 = false;
 
-		currentscene = scenes.start->data->GetString();
+		currentscene = scenes.start->data->GetString();*/
+
+		// --- Pathfinding walkability map 1 ---
+		int w, h;
+		uchar* buffer_data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &buffer_data, App->map->data))
+			App->pathfinding->SetMap(w, h, buffer_data);
+
+		RELEASE_ARRAY(buffer_data);
+		
+	}
+	else
+	{
+		
+		//entities
+		player->Position.x = App->map->data2.StartPoint.x;
+		player->Position.y = App->map->data2.StartPoint.y;
+		player->Future_Position = player->Position;
+		snake->Position.x = App->map->data2.Snake1.x;
+		snake->Position.y = App->map->data2.Snake1.y;
+		bat->Position.x = App->map->data2.Bat1.x;
+		bat->Position.y = App->map->data2.Bat1.y;
+		snake2->Position.x = App->map->data2.Snake2.x;
+		snake2->Position.y = App->map->data2.Snake2.y;
+		bat2->Position.x = App->map->data2.Bat2.x;
+		bat2->Position.y = App->map->data2.Bat2.y;
+		coin->Position.x = App->map->data2.Coin1.x;
+		coin->Position.y = App->map->data2.Coin1.y;
+		coin2->Position.x = App->map->data2.Coin2.x;
+		coin2->Position.y = App->map->data2.Coin2.y;
+		coin3->Position.x = App->map->data2.Coin3.x;
+		coin3->Position.y = App->map->data2.Coin3.y;
+
+		player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
+		player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
+		player->Surr_Entity_Collider = App->col->AddCollider(player->Surr_Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_CHECKSURROUNDING, App->entities);
+		player->Surr_Entity_Collider->SetPos(player->Position.x - 1, player->Position.y - 1);
+
+		snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
+		snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
+		bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
+		bat->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
+		snake2->Entity_Collider = App->col->AddCollider(snake2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
+		snake2->Entity_Collider->SetPos(snake2->Position.x, snake2->Position.y);
+		bat2->Entity_Collider = App->col->AddCollider(bat2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
+		bat2->Entity_Collider->SetPos(bat2->Position.x, bat2->Position.y);
+		coin->Entity_Collider = App->col->AddCollider(coin->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+		coin->Entity_Collider->SetPos(coin->Position.x, coin->Position.y);
+		coin2->Entity_Collider = App->col->AddCollider(coin2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+		coin2->Entity_Collider->SetPos(coin2->Position.x, coin2->Position.y);
+		coin3->Entity_Collider = App->col->AddCollider(coin3->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+		coin3->Entity_Collider->SetPos(coin3->Position.x, coin3->Position.y);
+
+		// --- Pathfinding walkability map 2 ---
+
+		int w, h;
+		uchar* buffer_data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &buffer_data, App->map->data2))
+			App->pathfinding->SetMap(w, h, buffer_data);
+
+		RELEASE_ARRAY(buffer_data);
 	}
 	
-	p2SString SceneMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->data->GetString());
-	App->audio->PlayMusic(SceneMusic.GetString());
+	if (App->ui_scene->actual_menu != START_MENU)
+	{
+		p2SString SceneMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->data->GetString());
+		App->audio->PlayMusic(SceneMusic.GetString(), 2.0f);
+	}
 
 	//colliders from tiled
 	App->map->MapCollisions(App->map->data);
+
+	App->entities->loading = false;
+	saveHP = false;
 
 	return ret;
 }
@@ -111,10 +241,46 @@ bool j1Scene::Start()
 // Called each loop iteration
 bool j1Scene::PreUpdate()
 {
+
+	BROFILER_CATEGORY("Scene_Pre__Update", Profiler::Color::DarkGoldenRod);
+
+	// debug pathfing ------------------
+	static iPoint origin;
+	static bool origin_selected = false;
+
+	int x, y;
+	App->input->GetMousePosition(x, y);
+	iPoint p = App->render->ScreenToWorld(x, y);
+
+	if (scene1)
+	{
+		p = App->map->WorldToMap(p.x, p.y, App->map->data);
+	}
+	else
+	{
+		p = App->map->WorldToMap(p.x, p.y, App->map->data2);
+	}
+
+	if (App->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		if (origin_selected == true)
+		{
+			App->pathfinding->CreatePath(origin, p);
+			origin_selected = false;
+		}
+		else
+		{
+			origin = p;
+			origin_selected = true;
+		}
+	}
+
 	//TODO: Win condition
 
-	if (scene1 && (App->player->Position.x >= App->map->data.FinishPoint.x))
+	/*if (scene1 && (player->Position.x >= App->map->data.FinishPoint.x))
 	{
+		App->entities->loading = true;
+
 		currentscene = scenes.start->next->data->GetString();
 		SceneChange(scenes.start->next->data->GetString());
 		scene1 = false;
@@ -122,20 +288,23 @@ bool j1Scene::PreUpdate()
 	}
 
 
-	else if (scene2 && (App->player->Position.x >= App->map->data2.FinishPoint.x))
+	else if (scene2 && (player->Position.x >= App->map->data2.FinishPoint.x))
 	{
+
+		App->entities->loading = true;
+
 		currentscene = scenes.start->data->GetString();
 		SceneChange(scenes.start->data->GetString());
 		scene1 = true;
 		scene2 = false;
-	}
+	}*/
 
 	//camera X axis
-	App->render->camera.x = (-App->player->Position.x*App->win->GetScale() - App->player->Player_Collider->rect.w/2  + App->render->camera.w /2);
+	App->render->camera.x = (-player->Position.x*App->win->GetScale() - player->Entity_Collider->rect.w/2  + App->render->camera.w /2);
 
-	if (-App->render->camera.x <= App->player->Initial_Velocity_x)
+	if (-App->render->camera.x <= 2)
 	{
-		App->render->camera.x = -App->player->Initial_Velocity_x;
+		App->render->camera.x = -2;
 	}
 
 	if (-App->render->camera.x + App->render->camera.w >= App->map->data.width*App->map->data.tile_width*App->win->GetScale())
@@ -144,18 +313,26 @@ bool j1Scene::PreUpdate()
 	}
 
 	// camera up y axis
-	if (App->player->Position.y*App->win->GetScale() <= -App->render->camera.y + App->render->camera.h / 6)
+	if (player->Position.y*App->win->GetScale() <= -App->render->camera.y + App->render->camera.h / 6)
 	{
-		if (App->render->camera.y + (-App->player->Gravity * 8) < 0)
-			App->render->camera.y += (-App->player->Gravity * 8);
+		if (App->render->camera.y + 8 < 0)
+			App->render->camera.y = -(player->Position.y * App->win->GetScale() - App->render->camera.h / 6);
 	}
 
 	//camera down y axis
 	
-
-	if (App->player->Position.y*App->win->GetScale() > -App->render->camera.y + App->render->camera.h - App->render->camera.h / 6)
+	if (player->Position.y*App->win->GetScale() + player->Entity_Collider->rect.h >= -App->render->camera.y + App->render->camera.h - App->render->camera.h / 6)
 	{
-		App->render->camera.y -= -(App->player->Gravity * 8) + 150;
+		/*if (player->playerstate != STATE::FALLING)*/
+			App->render->camera.y = -(player->Position.y * App->win->GetScale() + player->Entity_Collider->rect.h - App->render->camera.h + App->render->camera.h / 6);
+		/*else
+			App->render->camera.y -= 8;*/
+	}
+
+
+	if (player->Position.y*App->win->GetScale() > -App->render->camera.y + App->render->camera.h - App->render->camera.h / 6)
+	{
+		App->render->camera.y -= 10;
 	}
 
 
@@ -163,70 +340,102 @@ bool j1Scene::PreUpdate()
 	{
 		App->render->camera.y = (-App->map->data.height*App->map->data.tile_height*App->win->GetScale() + App->render->camera.h);
 	}
+
+	//Parallax calculation
+	camera_displacement.x = App->render->camera_initial_pos.x - App->render->camera.x;
+	App->map->PX = -camera_displacement.x;
+
 	return true;
 }
 
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
+	BROFILER_CATEGORY("Scene_Update", Profiler::Color::DarkGray);
 
 	//SCENE INTERACTION
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && scene1 == false)//FIRST
 	{
-	
-
+		player->coins = 0;
+		player->score = 0;
+		coin->active = true;
+		coin->touched = false;
+		coin2->active = true;
+		coin2->touched = false;
+		coin3->active = true;
+		coin3->touched = false;
+		player->lives = 3;
+		saveHP = true;
+		App->entities->loading = true;
 		currentscene = scenes.start->data->GetString();
 		SceneChange(scenes.start->data->GetString());
 		scene1 = true;
 		scene2 = false;
-		
+		App->ui_scene->clock->counter.Play();
+		App->ui_scene->clock->counter.Start();
 
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN && scene2 == false)//SECOND
 	{
+		player->coins = 0;
+		player->score = 0;
+		coin->active = true;
+		coin->touched = false;
+		coin2->active = true;
+		coin2->touched = false;
+		coin3->active = true;
+		coin3->touched = false;
+		player->lives = 3;
+		saveHP = true;
+		App->entities->loading = true;
 		currentscene = scenes.start->next->data->GetString();
 		SceneChange(scenes.start->next->data->GetString());
 		scene1 = false;
 		scene2 = true;
-		
+		App->ui_scene->clock->counter.Play();
+		App->ui_scene->clock->counter.Start();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)//BEGINING OF CURRENT SCENE
 	{
-		if (App->player->God_Mode == true)
-			App->player->God_Mode = false;
-
-		if (scene1)
-		{
-			currentscene = scenes.start->data->GetString();
-			SceneChange(scenes.start->data->GetString());
-			scene1 = true;
-			scene2 = false;
-		}
-		else if (scene2)
-		{
-			currentscene = scenes.start->next->data->GetString();
-			SceneChange(scenes.start->next->data->GetString());
-			scene1 = false;
-			scene2 = true;
-		}
+		player->coins = 0;
+		player->score = 0;
+		coin->active = true;
+		coin->touched = false;
+		coin2->active = true;
+		coin2->touched = false;
+		coin3->active = true;
+		coin3->touched = false;
+		player->lives = 3;
+		saveHP = true;
+		RestartLevel();
+		App->ui_scene->clock->counter.Play();
+		App->ui_scene->clock->counter.Start();
 	}
 //---------------------------------------
 
 //SAVE & LOAD SCENE
 
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
-		App->SaveGame("save_game.xml");
-
-	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 	{
-		bool result = App->LoadGame("save_game.xml");
+		App->SaveGame("save_game.xml");
+		saveHP = true;
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN )
+	{
+		bool result = App->LoadGame("save_game.xml");
+		saveHP = true;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+		App->cap_on = !App->cap_on;
+	
+
 //-----------------------------------------
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	/*if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		App->render->camera.y += 10;
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
@@ -237,10 +446,7 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x -= 10;
-
-	//check utility of this when doing player
-	camera_displacement.x = App->render->camera_initial_pos.x - App->render->camera.x;
-	
+	*/
 	//App->map->Draw(App->map->data);
 
 	int x, y;
@@ -257,7 +463,7 @@ bool j1Scene::Update(float dt)
 			App->map->data.tilesets.count(),
 			map_coordinates.x, map_coordinates.y);
 
-		App->win->SetTitle(title.GetString());
+		//App->win->SetTitle(title.GetString());
 	}
 	else
 	{
@@ -271,16 +477,87 @@ bool j1Scene::Update(float dt)
 			App->map->data2.tilesets.count(),
 			map_coordinates.x, map_coordinates.y);
 
-		App->win->SetTitle(title.GetString());
+		//App->win->SetTitle(title.GetString());
 	}
 
-	
+	// --- Debug Pathfinding
+	if (App->col->debug)
+	{
+		iPoint p = App->render->ScreenToWorld(x, y);
+		if (scene1)
+		{
+			p = App->map->WorldToMap(p.x, p.y, App->map->data);
+			p = App->map->MapToWorld(p.x, p.y, App->map->data);
+			App->render->Blit(App->map->data.tilesets.start->next->data->texture, p.x, p.y, &debug_Tex_rect);
+		}
+		else
+		{
+			p = App->map->WorldToMap(p.x, p.y, App->map->data2);
+			p = App->map->MapToWorld(p.x, p.y, App->map->data2);
+			App->render->Blit(App->map->data2.tilesets.start->next->data->texture, p.x, p.y, &debug_Tex_rect);
+		}
+
+		const p2DynArray<iPoint>* path = App->pathfinding->GetLastPath();
+
+		for (uint i = 0; i < path->Count(); ++i)
+		{
+			if (scene1)
+			{
+				iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y, App->map->data);
+				App->render->Blit(App->map->data.tilesets.start->next->data->texture, pos.x, pos.y, &debug_Tex_rect);
+			}
+			else
+			{
+				iPoint pos = App->map->MapToWorld(path->At(i)->x, path->At(i)->y, App->map->data2);
+				App->render->Blit(App->map->data2.tilesets.start->next->data->texture, pos.x, pos.y, &debug_Tex_rect);
+			}
+
+
+		}
+	}
+
+	//"Kill" enemies
+
+	if (player->Dunk == true)
+	{
+		if (bat->GotDunkedOn == true)
+		{
+			/*bat->Entity_Collider->to_delete = true;*/
+
+			/*bat->dead = true;*/
+			bat->Position = { -50,-50 };
+			bat->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
+		}
+
+		if (bat2->GotDunkedOn == true)
+		{
+			/*bat2->Entity_Collider->to_delete = true;*/
+			bat2->Position = { -50,-50 };
+			bat2->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
+			/*bat2->dead = true;*/
+		}
+
+		if (snake->GotDunkedOn == true)
+		{
+			snake->Position = { -50,-50 };
+			snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
+		}
+
+		if (snake2->GotDunkedOn == true)
+		{
+			snake2->Position = { -50,-50 };
+			snake2->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
+		}
+	}
+		
 	return true;
 }
 
 // Called each loop iteration
 bool j1Scene::PostUpdate()
 {
+	BROFILER_CATEGORY("Scene_Post_Update", Profiler::Color::DarkGreen);
+
 	bool ret = true;
 
 	if (App->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
@@ -309,50 +586,178 @@ bool j1Scene::CleanUp()
 	return true;
 }
 
-bool j1Scene::SceneChange(const char* scene) 
+bool j1Scene::SceneChange(const char* scene)
 {
 	bool ret = true;
 
-	App->player->Initial_Moment = true;
-	App->player->First_Move = false;
-
 	App->col->CleanUp();
-	App->player->Player_Collider = App->col->AddCollider(App->player->Player_Collider_Rect, COLLIDER_PLAYER, App->player);
-
+	EntityPosition(scene);
+	/*coin->active = true;
+	coin->touched = false;
+	coin2->active = true;
+	coin2->touched = false;
+	coin3->active = true;
+	coin3->touched = false;*/
+	
 	if (currentscene == scenes.start->data->GetString())
 	{
 		App->map->MapCollisions(App->map->data);
-
-		//TODO: Initial position
-		App->player->Position.x = App->map->data.StartPoint.x;
-		App->player->Position.y = App->map->data.StartPoint.y;
-
+				
 		App->render->camera.x = CamScene1.x;
 		App->render->camera.y = CamScene1.y;
 
 		p2SString stageMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->data->GetString());
-		App->audio->PlayMusic(stageMusic.GetString());
+		App->audio->PlayMusic(stageMusic.GetString(), 2.0f);
+		player->playerstate = STATE::FALLING;
+		
 
-		App->player->State_Player = FALLING;
+		//pathfinding map1
+		int w, h;
+		uchar* buffer_data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &buffer_data, App->map->data))
+			App->pathfinding->SetMap(w, h, buffer_data);
+
+		RELEASE_ARRAY(buffer_data);
+		
 	}
 	else if (currentscene == scenes.start->next->data->GetString()) 
 	{
 		App->map->MapCollisions(App->map->data2);
 		
-		//TODO: Initial position
-		App->player->Position.x = App->map->data2.StartPoint.x;
-		App->player->Position.y = App->map->data2.StartPoint.y;
-
+		
 		App->render->camera.x = CamScene2.x;
 		App->render->camera.y = CamScene2.y;
 
 		p2SString stageMusic("%s%s", App->audio->musicfolder.GetString(), App->audio->songs.start->next->data->GetString());
-		App->audio->PlayMusic(stageMusic.GetString());
+		App->audio->PlayMusic(stageMusic.GetString(), 2.0f);
+		player->playerstate = STATE::FALLING;
 
-		App->player->State_Player = FALLING;
+		//pathfinding map2
+		int w, h;
+		uchar* buffer_data = NULL;
+		if (App->map->CreateWalkabilityMap(w, h, &buffer_data, App->map->data2))
+			App->pathfinding->SetMap(w, h, buffer_data);
+
+		RELEASE_ARRAY(buffer_data);
+		
 	}
 
+	App->entities->loading = false;
+	/*App->SaveGame("save_game.xml");*/
+
+	player->StartUI = false;
+
 	return ret;
+}
+
+void j1Scene::RestartLevel()
+{
+	
+	//reseting entities directions
+	EntityDirection();
+
+	if (player->playermode == MODE::GOD)
+		player->playermode == MODE::STANDING;
+
+	if (scene1)
+	{
+		currentscene = scenes.start->data->GetString();
+		SceneChange(scenes.start->data->GetString());
+		scene1 = true;
+		scene2 = false;
+
+	}
+	else if (scene2)
+	{
+		currentscene = scenes.start->next->data->GetString();
+		SceneChange(scenes.start->next->data->GetString());
+		scene1 = false;
+		scene2 = true;
+	}
+}
+
+void j1Scene::EntityPosition(const char* scene)
+{
+	/*player->CurrentAnimation = player->playerinfo.Idle;*/
+	
+	if (scene == scenes.start->data->GetString())
+	{
+
+		player->Position.x = App->map->data.StartPoint.x;
+		player->Position.y = App->map->data.StartPoint.y;
+		snake->Position.x = App->map->data.Snake1.x;
+		snake->Position.y = App->map->data.Snake1.y;
+		bat->Position.x = App->map->data.Bat1.x;
+		bat->Position.y = App->map->data.Bat1.y;
+		snake2->Position.x = App->map->data.Snake2.x;
+		snake2->Position.y = App->map->data.Snake2.y;
+		bat2->Position.x = App->map->data.Bat2.x;
+		bat2->Position.y = App->map->data.Bat2.y;
+		coin->Position.x = App->map->data.Coin1.x;
+		coin->Position.y = App->map->data.Coin1.y;
+		coin2->Position.x = App->map->data.Coin2.x;
+		coin2->Position.y = App->map->data.Coin2.y;
+		coin3->Position.x = App->map->data.Coin3.x;
+		coin3->Position.y = App->map->data.Coin3.y;
+	}
+	else
+	{
+		player->Position.x = App->map->data2.StartPoint.x;
+		player->Position.y = App->map->data2.StartPoint.y;
+		snake->Position.x = App->map->data2.Snake1.x;
+		snake->Position.y = App->map->data2.Snake1.y;
+		bat->Position.x = App->map->data2.Bat1.x;
+		bat->Position.y = App->map->data2.Bat1.y;
+		snake2->Position.x = App->map->data2.Snake2.x;
+		snake2->Position.y = App->map->data2.Snake2.y;
+		bat2->Position.x = App->map->data2.Bat2.x;
+		bat2->Position.y = App->map->data2.Bat2.y;
+		coin->Position.x = App->map->data2.Coin1.x;
+		coin->Position.y = App->map->data2.Coin1.y;
+		coin2->Position.x = App->map->data2.Coin2.x;
+		coin2->Position.y = App->map->data2.Coin2.y;
+		coin3->Position.x = App->map->data2.Coin3.x;
+		coin3->Position.y = App->map->data2.Coin3.y;
+	}
+	
+
+	// Colliders
+	player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
+	player->Entity_Collider->SetPos(player->Position.x, player->Position.y);
+	player->Surr_Entity_Collider = App->col->AddCollider(player->Surr_Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_CHECKSURROUNDING, App->entities);
+	player->Surr_Entity_Collider->SetPos(player->Position.x - 1, player->Position.y - 1);
+	player->Future_Position = player->Position;
+
+	snake->Entity_Collider = App->col->AddCollider(snake->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
+	snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
+	bat->Entity_Collider = App->col->AddCollider(bat->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
+	bat->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
+	snake2->Entity_Collider = App->col->AddCollider(snake2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_SNAKE, App->entities);
+	snake2->Entity_Collider->SetPos(snake2->Position.x, snake2->Position.y);
+	bat2->Entity_Collider = App->col->AddCollider(bat2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_BAT, App->entities);
+	bat2->Entity_Collider->SetPos(bat2->Position.x, bat2->Position.y);
+	coin->Entity_Collider = App->col->AddCollider(coin->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+	coin->Entity_Collider->SetPos(coin->Position.x, coin->Position.y);
+	coin2->Entity_Collider = App->col->AddCollider(coin2->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+	coin2->Entity_Collider->SetPos(coin2->Position.x, coin2->Position.y);
+	coin3->Entity_Collider = App->col->AddCollider(coin3->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_COIN, App->entities);
+	coin3->Entity_Collider->SetPos(coin3->Position.x, coin3->Position.y);
+
+	//variables reset
+	snake->must_fall = true;
+	snake2->must_fall = true;
+
+	bat->dead = false;
+	bat2->dead = false;
+	snake->dead = false;
+	snake2->dead = false;
+
+	bat->GotDunkedOn = false;
+	bat2->GotDunkedOn = false;
+	snake->GotDunkedOn = false;
+	snake2->GotDunkedOn = false;
+
+
 }
 
 bool j1Scene::Save(pugi::xml_node &config) const
@@ -367,10 +772,39 @@ bool j1Scene::Save(pugi::xml_node &config) const
 
 bool j1Scene::Load(pugi::xml_node &config)
 {
-
+	
 	bool ret = true;
-	int x = App->player->Position.x;
-	int y = App->player->Position.y;
+	int x = player->Position.x;
+	int y = player->Position.y;
+	player->Future_Position = player->Position;
+
+	int batx = bat->Position.x;
+	int baty = bat->Position.y;
+
+	int snakex = snake->Position.x;
+	int snakey = snake->Position.y;
+
+	int bat2x = bat2->Position.x;
+	int bat2y = bat2->Position.y;
+
+	int snake2x = snake2->Position.x;
+	int snake2y = snake2->Position.y;
+
+	int coinx = coin->Position.x;
+	int coiny = coin->Position.y;
+
+	int coin2x = coin2->Position.x;
+	int coin2y = coin2->Position.y;
+
+	int coin3x = coin3->Position.x;
+	int coin3y = coin3->Position.y;
+	//save & load working with this
+	
+
+
+	//THIS SHOULNDT BREAK THE SAVE AND LOAD, BUT...
+	/*player->Entity_Collider = App->col->AddCollider(player->Entity_Collider_Rect, COLLIDER_TYPE::COLLIDER_PLAYER, App->entities);
+	player->Entity_Collider->SetPos(player->Position.x, player->Position.y);*/
 
 	scene1Loaded = config.child("scene1").attribute("value").as_bool();
 	scene2Loaded= config.child("scene2").attribute("value").as_bool();
@@ -385,8 +819,16 @@ bool j1Scene::Load(pugi::xml_node &config)
 			SceneChange(scenes.start->next->data->GetString());
 			scene2 = true;
 			scene1 = false;
-			App->player->Position.x = x;
-			App->player->Position.y = y;
+			/*player->Position.x = x;
+			player->Position.y = y;
+			bat->Position.x = batx;
+			bat->Position.y = baty;
+			snake->Position.x = snakex;
+			snake->Position.y = snakey;
+			bat2->Position.x = bat2x;
+			bat2->Position.y = bat2y;
+			snake2->Position.x = snake2x;
+			snake2->Position.y = snake2y;*/
 		}
 
 		else
@@ -395,9 +837,16 @@ bool j1Scene::Load(pugi::xml_node &config)
 			SceneChange(scenes.start->data->GetString());
 			scene1 = true;
 			scene2 = false;
-			App->player->Position.x = x;
-			App->player->Position.y = y;
-
+			/*player->Position.x = x;
+			player->Position.y = y;
+			bat->Position.x = batx;
+			bat->Position.y = baty;
+			snake->Position.x = snakex;
+			snake->Position.y = snakey;
+			bat2->Position.x = bat2x;
+			bat2->Position.y = bat2y;
+			snake2->Position.x = snake2x;
+			snake2->Position.y = snake2y;*/
 		}
 
 	}
@@ -411,9 +860,16 @@ bool j1Scene::Load(pugi::xml_node &config)
 			SceneChange(scenes.start->data->GetString());
 			scene1 = true;
 			scene2 = false;
-			App->player->Position.x = x;
-			App->player->Position.y = y;
-
+			/*player->Position.x = x;
+			player->Position.y = y;
+			bat->Position.x = batx;
+			bat->Position.y = baty;
+			snake->Position.x = snakex;
+			snake->Position.y = snakey;
+			bat2->Position.x = bat2x;
+			bat2->Position.y = bat2y;
+			snake2->Position.x = snake2x;
+			snake2->Position.y = snake2y;*/
 		}
 
 		else
@@ -422,10 +878,66 @@ bool j1Scene::Load(pugi::xml_node &config)
 			SceneChange(scenes.start->next->data->GetString());
 			scene1 = false;
 			scene2 = true;
-			App->player->Position.x = x;
-			App->player->Position.y = y;
+			/*player->Position.x = x;
+			player->Position.y = y;
+			bat->Position.x = batx;
+			bat->Position.y = baty;
+			snake->Position.x = snakex;
+			snake->Position.y = snakey;
+			bat2->Position.x = bat2x;
+			bat2->Position.y = bat2y;
+			snake2->Position.x = snake2x;
+			snake2->Position.y = snake2y;*/
 		}
 	}
 
+	
+	player->Position.x = x;
+	player->Position.y = y;
+	player->Future_Position = player->Position;
+
+	bat->Position.x = batx;
+	bat->Position.y = baty;
+
+	snake->Position.x = snakex;
+	snake->Position.y = snakey;
+
+	bat2->Position.x = bat2x;
+	bat2->Position.y = bat2y;
+
+	snake2->Position.x = snake2x;
+	snake2->Position.y = snake2y;
+
+	coin->Position.x = coinx;
+	coin->Position.y = coiny;
+
+	coin2->Position.x = coin2x;
+	coin2->Position.y = coin2y;
+
+	coin3->Position.x = coin3x;
+	coin3->Position.y = coin3y;
+
 	return ret;
+}
+
+void j1Scene::EntityDirection()
+{
+	//reseting entities directions
+	bat->going_right = false;
+	bat->going_left = false;
+	bat->going_up = false;
+	bat->going_down = false;
+	bat2->going_right = false;
+	bat2->going_left = false;
+	bat2->going_up = false;
+	bat2->going_down = false;
+	snake->going_left = false;
+	snake->going_right = false;
+	snake2->going_left = false;
+	snake2->going_right = false;
+}
+
+void j1Scene::LoadLvl(int num)
+{
+	App->ui_scene->MenuLoad(START_MENU);
 }
