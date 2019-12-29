@@ -8,7 +8,7 @@ This game is a simple platformer where you can use the character movements like 
 
 ### Pol Bosch
 
-![Pol Bosch](https://github.com/Megaoski/Jungle-Madness/blob/master/Website/pol.PNG)
+![Pol Bosch](https://github.com/Megaoski/Jungle-Madness/blob/master/Website/pol.PNG?raw=true)
 
 - Player
 - Collisions
@@ -20,7 +20,7 @@ This game is a simple platformer where you can use the character movements like 
 
 ### Oscar Larios
 
-![Oscar Larios](https://github.com/Megaoski/Jungle-Madness/blob/master/Website/oscar.PNG)
+![Oscar Larios](https://github.com/Megaoski/Jungle-Madness/blob/master/Website/oscar.PNG?raw=true)
 
 - Entity System
 - Pathfinding
