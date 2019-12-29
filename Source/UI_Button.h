@@ -15,12 +15,7 @@ public:
 		OnMouse(OnMouse),
 		OnClick(OnClick)
 	{}
-	Button(int x, int y, SDL_Texture* texture, SDL_Rect standby, SDL_Rect OnMouse, SDL_Rect standbyActive, SDL_Rect OnMouseActive, j1Module* callback) : UI_element(x, y, element_type::SWITCH, standby, callback, texture),
-		OnMouse(OnMouse),
-		OnClick(OnMouse),
-		sectionActive(standbyActive),
-		OnMouseActive(OnMouseActive)
-	{}
+	
 
 	~Button()
 	{}

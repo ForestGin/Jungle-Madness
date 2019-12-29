@@ -56,7 +56,10 @@ bool j1Coin::Start()
 
 	ID = App->entities->entityID;
 
-	
+	active = true;
+
+	coinfx = App->audio->LoadFx("Audio/fx/coin.wav");
+	return true;
 
 	return true;
 }
@@ -82,9 +85,8 @@ bool j1Coin::PostUpdate(float dt)
 {
 	bool ret = true;
 
-
-	
-	App->render->Blit(spritesheet, Position.x, Position.y, &CurrentAnimation->GetCurrentFrame(dt));
+	if(active)
+		App->render->Blit(spritesheet, Position.x, Position.y, &CurrentAnimation->GetCurrentFrame(dt));
 
 
 
@@ -96,7 +98,28 @@ bool j1Coin::PostUpdate(float dt)
 void j1Coin::OnCollision(Collider * c1, Collider * c2)
 {
 	
+	bool lateralcollision = true;
 
+	if (active)
+	{
+		if (c2->type == COLLIDER_TYPE::COLLIDER_COIN || c2->type == COLLIDER_TYPE::COLLIDER_PLAYER)
+		{
+			if (touched == false)
+			{
+				App->audio->PlayFx(coinfx);
+				App->scene->player->score += 500;
+				App->scene->player->coins += 1;
+				/*if (Entity_Collider != nullptr)
+				{
+					Entity_Collider->to_delete = true;
+					
+				}*/
+
+				touched = true;
+				active = false;
+			}
+		}
+	}
 
 }
 
@@ -109,18 +132,21 @@ bool j1Coin::Load(pugi::xml_node &config)
 	if (ID == Coininfo.coinID)
 	{
 		touched = config.child("Coin1").child("touched").attribute("value").as_bool();
+		active = config.child("Coin1").child("active").attribute("value").as_bool();
 		Position.x = config.child("Coin1").child("x").attribute("value").as_int();
 		Position.y = config.child("Coin1").child("y").attribute("value").as_int();
 	}
 	else if (ID == Coininfo.coinID2)
 	{
 		touched = config.child("Coin2").child("touched").attribute("value").as_bool();
+		active = config.child("Coin2").child("active").attribute("value").as_bool();
 		Position.x = config.child("Coin2").child("x").attribute("value").as_int();
 		Position.y = config.child("Coin2").child("y").attribute("value").as_int();
 	}
 	else if (ID == Coininfo.coinID3)
 	{
 		touched = config.child("Coin3").child("touched").attribute("value").as_bool();
+		active = config.child("Coin3").child("active").attribute("value").as_bool();
 		Position.x = config.child("Coin3").child("x").attribute("value").as_int();
 		Position.y = config.child("Coin3").child("y").attribute("value").as_int();
 	}
@@ -135,6 +161,7 @@ bool j1Coin::Save(pugi::xml_node &config) const
 	if (ID == Coininfo.coinID)
 	{
 		config.append_child("Coin1").append_child("touched").append_attribute("value") = touched;
+		config.child("Coin1").append_child("active").append_attribute("value") = active;
 		config.child("Coin1").append_child("x").append_attribute("value") = Position.x;
 		config.child("Coin1").append_child("y").append_attribute("value") = Position.y;
 
@@ -142,6 +169,7 @@ bool j1Coin::Save(pugi::xml_node &config) const
 	else if (ID == Coininfo.coinID2)
 	{
 		config.append_child("Coin2").append_child("touched").append_attribute("value") = touched;
+		config.child("Coin2").append_child("active").append_attribute("value") = active;
 		config.child("Coin2").append_child("x").append_attribute("value") = Position.x;
 		config.child("Coin2").append_child("y").append_attribute("value") = Position.y;
 
@@ -149,6 +177,7 @@ bool j1Coin::Save(pugi::xml_node &config) const
 	else if (ID == Coininfo.coinID3)
 	{
 		config.append_child("Coin3").append_child("touched").append_attribute("value") = touched;
+		config.child("Coin3").append_child("active").append_attribute("value") = active;
 		config.child("Coin3").append_child("x").append_attribute("value") = Position.x;
 		config.child("Coin3").append_child("y").append_attribute("value") = Position.y;
 
@@ -181,3 +210,4 @@ void j1Coin::LogicUpdate(float dt)
 		Update(dt);
 
 }
+

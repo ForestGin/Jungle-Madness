@@ -55,6 +55,13 @@ bool UIScene::Start()
 	float music_progress = (float)App->audio->getMusicVolume() / 128;
 	float fx_progress = (float)App->audio->getFxVolume() / 128;
 
+	menu* consoleMenu = new menu(CONSOLE);
+	{
+		console_window = App->gui->createWindow(140 * App->gui->UI_scale, 50 * App->gui->UI_scale, App->tex->Load("gui/medium_parchment.png"), { 225,250, 744, 703 }, this);
+		
+		consoleMenu->elements.push_back(console_window);
+		menus.push_back(consoleMenu);
+	}
 
 	menu* creditsMenu = new menu(CREDITS_MENU);
 	{
@@ -143,14 +150,24 @@ bool UIScene::Start()
 		
 		score_number = App->gui->createText("0", 100, 0, number_font, white_color);
 		score_number->setOutlined(true);
+		//coins
+		coin_text = App->gui->createText("COINS", 250, 0, mid_buttons_font, white_color);
+		coin_text->setOutlined(true);
+
+		coin_number = App->gui->createText("0", 350, 0, number_font, white_color);
+		coin_number->setOutlined(true);
+
 		//timer
-		UI_element* timer_text = App->gui->createText("TIMER", 200, 0, mid_buttons_font, white_color);
+		UI_element* timer_text = App->gui->createText("TIMER", 450, 0, mid_buttons_font, white_color);
 		timer_text->setOutlined(true);
 
 		
-		clock = App->gui->createStopWatch(300 * App->gui->UI_scale, App->gui->UI_scale, number_font, white_color, this);
+		clock = App->gui->createStopWatch(550 * App->gui->UI_scale, App->gui->UI_scale, number_font, white_color, this);
 
+		
 		ingameMenu->elements.push_back(clock);
+		ingameMenu->elements.push_back(coin_number);
+		ingameMenu->elements.push_back(coin_text);
 		ingameMenu->elements.push_back(timer_text);
 		ingameMenu->elements.push_back(score_number);
 		ingameMenu->elements.push_back(heart);
@@ -344,6 +361,21 @@ bool UIScene::Update(float dt)
 			App->transition->MenuTransition(START_MENU);
 			ret = true;
 		}
+		else if (actual_menu == CONSOLE)
+		{
+			App->on_GamePause = false;
+			actual_menu = INGAME_MENU;
+			App->transition->MenuTransition(INGAME_MENU);
+			ret = true;
+		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_GRAVE) == KEY_DOWN)
+	{
+		App->on_GamePause = true;
+		actual_menu = CONSOLE;
+		App->transition->MenuTransition(CONSOLE);
+		ret = true;
 	}
 
 	//PLAYER HP BLITTING
@@ -371,9 +403,9 @@ bool UIScene::Update(float dt)
 	string number = to_string(scoreUI);
 	score_number->setText(number);
 	//
-	/*float timerUI = timer->Read();
-	string number2 = to_string(timerUI);
-	timer_number->setText(number2);*/
+	int coinsUI = App->scene->player->coins;
+	string number2 = to_string(coinsUI);
+	coin_number->setText(number2);
 
 	
 	return ret;
@@ -417,11 +449,6 @@ bool UIScene::MenuLoad(menu_id id)
 			{
 				for (std::list <UI_element*>::const_iterator item2 = current_menu->elements.begin(); item2 != current_menu->elements.end(); ++item2)
 				{
-					if ((*item2)->element_type == SWITCH)
-					{
-						Button* full_switch = (Button*)*item2;
-						startValues.fullscreen = full_switch->active;
-					}
 					if ((*item2)->element_type == SLIDER)
 					{
 						Slider* slider = (Slider*)*item2;
@@ -455,11 +482,7 @@ void UIScene::ApplySettings(settings_values values)
 
 	for (std::list <UI_element*>::const_iterator item = current_menu->elements.begin(); item != current_menu->elements.end(); ++item)
 	{
-		if ((*item)->element_type == SWITCH)
-		{
-			Button* full_switch = (Button*)*item;
-			full_switch->active = values.fullscreen;
-		}
+		
 		if ((*item)->element_type == SLIDER)
 		{
 			Slider* slider = (Slider*)*item;
@@ -518,12 +541,7 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 	{
 		element->state = CLICKED;
 
-		if (element->element_type == SWITCH)
-		{
-			Button* tmp = (Button*)element;
-			tmp->active = !tmp->active;
-			newValues.fullscreen = tmp->active;
-		}
+		
 
 
 		switch (element->function)
@@ -601,8 +619,8 @@ bool UIScene::OnUIEvent(UI_element* element, event_type event_type)
 			break;
 		case WEBPAGE:
 
-			/*App->RequestBrowser("https://github.com/CheckTheDog/Fantasy-Brawl");*/
-
+			ShellExecuteA(NULL, "open", "https://megaoski.github.io/Jungle-Madness/", NULL, NULL, SW_SHOWNORMAL);
+			
 			break;
 		}
 	}

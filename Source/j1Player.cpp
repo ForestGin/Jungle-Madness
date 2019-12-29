@@ -156,8 +156,7 @@ void j1Player::CheckDeath()
 		if (CurrentAnimation->Finished())
 		{
 			lives--;
-			score += 100;
-
+			
 			if (SavedCheckPoint)
 			{
 				bool result = App->LoadGame("save_game.xml");
@@ -240,6 +239,13 @@ void j1Player::CheckWin()
 		OnCeiling = false;
 
 		Dunk = false;
+		
+		App->scene->coin->active = true;
+		App->scene->coin->touched = false;
+		App->scene->coin2->active = true;
+		App->scene->coin2->touched = false;
+		App->scene->coin3->active = true;
+		App->scene->coin3->touched = false;
 
 		playerstate = STATE::FALLING;
 	}
@@ -1038,10 +1044,12 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 			}
 		}
 		
-		if (to_check->type == COLLIDER_TYPE::COLLIDER_COIN)
-		{
-			//fx?
-		}
+		//if (to_check->type == COLLIDER_TYPE::COLLIDER_COIN)
+		//{
+		//	//fx?
+		//	
+		//	
+		//}
 
 		if (to_check->type == COLLIDER_TYPE::COLLIDER_CHECKPOINT)
 		{
@@ -1509,6 +1517,7 @@ bool j1Player::Load(pugi::xml_node &config)
 	Position.x = config.child("Player").child("Playerx").attribute("value").as_float();
 	Position.y = config.child("Player").child("Playery").attribute("value").as_float();
 	score = config.child("Player").child("Score").attribute("value").as_int();
+	coins = config.child("Player").child("Coins").attribute("value").as_int();
 	if(App->scene->saveHP == true)
 		lives = config.child("Player").child("Lives").attribute("value").as_int();
 
@@ -1521,6 +1530,7 @@ bool j1Player::Save(pugi::xml_node &config) const
 	config.append_child("Player").append_child("Playerx").append_attribute("value") = Position.x;
 	config.child("Player").append_child("Playery").append_attribute("value") = Position.y;
 	config.child("Player").append_child("Score").append_attribute("value") = score;
+	config.child("Player").append_child("Coins").append_attribute("value") = coins;
 	if (App->scene->saveHP == true)
 		config.child("Player").append_child("Lives").append_attribute("value") = lives;
 	return true;

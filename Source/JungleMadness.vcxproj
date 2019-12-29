@@ -128,6 +128,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="j1Bat.h" />
     <ClInclude Include="j1Coin.h" />
+    <ClInclude Include="j1Console.h" />
     <ClInclude Include="j1Entity.h" />
     <ClInclude Include="j1EntityManager.h" />
     <ClInclude Include="j1Fonts.h" />
@@ -169,6 +170,7 @@
   <ItemGroup>
     <ClCompile Include="j1Bat.cpp" />
     <ClCompile Include="j1Coin.cpp" />
+    <ClCompile Include="j1Console.cpp" />
     <ClCompile Include="j1EntityManager.cpp" />
     <ClCompile Include="j1App.cpp" />
     <ClCompile Include="j1Audio.cpp" />

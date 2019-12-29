@@ -12,6 +12,7 @@ class Image;
 class Text;
 class j1Timer;
 class j1PerfTimer;
+class Window;
 
 enum menu_id
 {
@@ -21,7 +22,8 @@ enum menu_id
 	SELECTION_MENU,
 	PAUSE_MENU,
 	CREDITS_MENU,
-	FINAL_MENU
+	FINAL_MENU,
+	CONSOLE
 };
 struct menu
 {
@@ -82,8 +84,10 @@ public:
 	Image* heart = nullptr;
 	Text* score_text = nullptr;
 	Text* score_number = nullptr;
-	
+	Text* coin_text = nullptr;
+	Text* coin_number = nullptr;
 
+	Window* console_window = nullptr;
 	
 
 	

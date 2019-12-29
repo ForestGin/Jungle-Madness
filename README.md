@@ -1,4 +1,4 @@
-#Jungle Madness
+# Jungle Madness
 
 Jungle Madness is a platfomer game made by Pol Bosch and Oscar Larios, students of Video Game Design and Development degree in UPC Barcelona, Spain.
 The game has been made using C++, using SDL and pugi libraries. 
@@ -22,12 +22,15 @@ The game includes two levels and basic mechanics.
 
 - S: Fall down when on platform.
 
+-You can Wall-Slide and Wall-Jump using the game walls, just need to use SPACE in a walla or let the Player Slide 
+
 ### Debug keys:
 - F1: Start First level
 - F2: Start Second level
 - F3: Restart current level
 - F5: Save
 - F6: Load
+- F8: UI DebugDraw
 - F9: DebugDraw
 - F10: God Mode
 - F11: Enable/Disable fps cap. (We did not manage to make this work how it's suposed to...)
@@ -38,6 +41,9 @@ github: https://github.com/OhCaXulu
 
 - Oscar Larios
 github: https://github.com/Megaoski
+
+
+## Website Link
 
 ## Project Github
 
@@ -78,3 +84,5 @@ Licensed under the [MIT License](LICENSE.txt)
 - Player Falling down from platforms.
 
 - Checkpoints.
+
+- Player Slide Jump and Slide

@@ -15,12 +15,10 @@ enum element_type
 	TEXT,
 	IMAGE,
 	BUTTON,
-	SWITCH,
 	SLIDER,
 	WINDOW,
-	CLOCK,
-	PLAYERINFO,
-	FINALINFO
+	CLOCK
+	
 };
 
 enum element_function

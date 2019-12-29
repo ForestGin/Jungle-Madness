@@ -85,7 +85,7 @@
       <collider x="0" y="0" width="20" height="30"/>
       <colliding_offset value="5" />
       <printingoffset x="22" y="38"/>
-      <Velocity x="0.5" y="0.0" initalVx="2.0"/>
+      <Velocity x="1" y="0.0" initalVx="2.0"/>
       <areaofaction value="200"/>
       <gravity value="-4.0"/>
       <ID value1 ="4" value2 ="5"/>

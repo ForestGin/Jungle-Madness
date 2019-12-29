@@ -64152,13 +64152,13 @@
   <object id="9" x="214" y="642" width="32" height="64"/>
  </objectgroup>
  <objectgroup id="88" name="SnakeSpawn1">
-  <object id="3" x="179.726" y="475" width="31.9487" height="31.9727"/>
+  <object id="3" x="517.726" y="795" width="31.9487" height="31.9727"/>
  </objectgroup>
  <objectgroup id="89" name="BatSpawn1">
   <object id="4" x="176.667" y="389" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="90" name="SnakeSpawn2">
-  <object id="5" x="242" y="472.67" width="32" height="32"/>
+  <object id="5" x="890" y="753.67" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="91" name="BatSpawn2"/>
  <objectgroup id="26" name="CoinSpawn1">

@@ -57,6 +57,7 @@
 			<Timer value="38892" />
 		</UI>
 	</ui_scene>
+	<console />
 	<renderer>
 		<camera x="-1636" y="-379" />
 	</renderer>

@@ -19,6 +19,7 @@
 #include "j1Gui.h"
 #include "UI_Scene.h"
 #include "j1Transition.h"
+#include "j1Console.h"
 #include "Brofiler/Brofiler.h"
 
 // Constructor
@@ -42,6 +43,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	gui = new j1Gui();
 	transition = new j1Transition();
 	ui_scene = new UIScene();
+	console = new j1Console();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -58,6 +60,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(gui);
 	AddModule(transition);
 	AddModule(ui_scene);
+	AddModule(console);
 	
 
 	// render last to swap buffer

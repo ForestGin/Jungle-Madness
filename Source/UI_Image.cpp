@@ -23,10 +23,10 @@ void Image::BlitElement()
 
 	if (App->scene->player->StartUI == false && App->scene->player->SavedCheckPoint == false && this != App->ui_scene->heart)//player hasn't moved yet or has died
 	{
-		App->render->Blit(texture, globalPos.x, globalPos.y + 190, &section);
+		App->render->Blit(texture, globalPos.x, globalPos.y, &section, SDL_FLIP_NONE, App->gui->UI_scale, false);
 	}
 	else if(this != App->ui_scene->heart)
 	{
-		App->render->Blit(texture, globalPos.x + App->scene->player->Future_Position.x - 500, globalPos.y + 190, &section);//with player pos
+		App->render->Blit(texture, globalPos.x, globalPos.y, &section, SDL_FLIP_NONE, App->gui->UI_scale, false);//with player pos
 	}
 }

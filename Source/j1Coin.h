@@ -49,7 +49,7 @@ public:
 	void OnCollision(Collider* c1, Collider* c2);
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
-
+	
 	
 	
 	
@@ -57,6 +57,8 @@ public:
 
 	CoinData Coininfo;
 	bool touched = false;
+	bool active = false;
+	uint coinfx = 0;
 };
 
 #endif 
