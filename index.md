@@ -26,7 +26,7 @@ This game is a simple platformer where you can use the character movements like 
 - UI System that alows the creation of interactive buttons, windows, text etc...
 
 ## Github Repository
-[Click Here](https://github.com/Megaoski/Jungle-Madness) 
+[LINK](https://github.com/Megaoski/Jungle-Madness) 
       
       https://github.com/Megaoski/Jungle-Madness
 
@@ -59,3 +59,19 @@ This game is a simple platformer where you can use the character movements like 
 ## License and Disclosure
 
 Licensed under the [MIT License](https://github.com/Megaoski/Jungle-Madness/blob/master/LICENSE.txt)
+
+We do not own any of the Sprites, Tilesets, Images or Music presented in this game. Credits:
+
+- Player sprites:
+https://rvros.itch.io/animated-pixel-hero
+
+- Tileset:
+https://jesse-m.itch.io/jungle-pack
+
+- Parallax:
+https://edermunizz.itch.io/free-pixel-art-forest
+
+-Songs:
+http://www.tannerhelland.com/7/surreptitious/
+https://patrickdearteaga.com/audio/
+
