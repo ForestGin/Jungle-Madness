@@ -45,6 +45,8 @@ github: https://github.com/Megaoski
 
 ## Website Link
 
+https://megaoski.github.io/Jungle-Madness/
+
 ## Project Github
 
 https://github.com/Megaoski/Jungle-Madness
