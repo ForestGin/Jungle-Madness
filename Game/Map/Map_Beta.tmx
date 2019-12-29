@@ -40161,7 +40161,7 @@
   <object id="5" x="1569.33" y="1233.21" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="25" name="BatSpawn2">
-  <object id="7" x="1143.33" y="966.003" width="32" height="32"/>
+  <object id="7" x="913.33" y="1124" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="42" name="CoinSpawn1">
   <object id="10" x="1090.67" y="1269.34" width="32" height="32"/>
