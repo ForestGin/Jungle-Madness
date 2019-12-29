@@ -66,6 +66,8 @@ class j1Bat : public j1Entity
 		bool going_down = false;
 	
 		bool batcolliding = false;
+
+		bool GotDunkedOn = false;
 	
 		BatData batinfo;
 	

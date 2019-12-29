@@ -168,6 +168,7 @@ public:
 	MOVEMENT playermovement;
 
 	bool DoubleJumpAvailable;
+	bool Dunk;
 
 	//Collisions
 	bool LandedOnGround;

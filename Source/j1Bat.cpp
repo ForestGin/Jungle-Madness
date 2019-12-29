@@ -9,6 +9,7 @@
 #include "j1Scene.h"
 #include "j1Window.h"
 #include "j1EntityManager.h"
+#include "j1Scene.h"
 
 j1Bat::j1Bat() : j1Entity("Bat", entity_type::BAT)
 {
@@ -302,9 +303,10 @@ void j1Bat::OnCollision(Collider * c1, Collider * c2)
 			if (Intersection.w >= Intersection.h)
 			{
 				//Kill Snake/Bat
-				Entity_Collider->to_delete = true;
+				GotDunkedOn = true;
+				/*Entity_Collider->to_delete = true;
 
-				dead = true;
+				dead = true;*/
 			}
 		}
 	}

@@ -40,6 +40,7 @@ bool j1Player::Start()
 
 	//Jump booleans
 	DoubleJumpAvailable = true;
+	Dunk = false;
 
 	//Collider init
 	Entity_Collider_Rect = playerinfo.Standing_Rect;
@@ -181,6 +182,7 @@ void j1Player::CheckDeath()
 			OnRightWall = false;
 			OnCeiling = false;
 
+			Dunk = false;
 
 			playerstate = STATE::FALLING;
 			App->scene->EntityDirection();
@@ -237,6 +239,7 @@ void j1Player::CheckWin()
 		OnRightWall = false;
 		OnCeiling = false;
 
+		Dunk = false;
 
 		playerstate = STATE::FALLING;
 	}
@@ -946,6 +949,8 @@ void j1Player::CheckMovement()
 	OnLeftWall = false;
 	OnRightWall = false;
 	OnCeiling = false;
+
+	Dunk = false;
 }
 
 void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
@@ -1003,10 +1008,12 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 				{
 					if (Intersection.w >= Intersection.h)
 					{
-						DoubleJump();
-						DoubleJumpAvailable = true;
+						/*DoubleJump();
+						DoubleJumpAvailable = true;*/
 
 						//Kill Snake/Bat
+
+						Dunk = true;
 					}
 				}
 			}
