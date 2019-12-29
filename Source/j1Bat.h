@@ -69,7 +69,8 @@ class j1Bat : public j1Entity
 	
 		BatData batinfo;
 	
-		
+		SDL_Rect Intersection = { 0,0,0,0 };
+
 		fPoint Bat_Collider_Margin = { 0, 5 };
 };
 

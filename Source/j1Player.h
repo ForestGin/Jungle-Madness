@@ -144,8 +144,8 @@ public:
 	void GodModeMovement(float dt);
 	void StandingModeMovement(float dt);
 	void CrouchingModeMovenent(float dt);
-	void Jump(float dt);
-	void DoubleJump(float dt);
+	void Jump();
+	void DoubleJump();
 	//void Slide();
 	//void WallSlide();
 	void CheckDeath();

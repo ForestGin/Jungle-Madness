@@ -68,6 +68,7 @@ class j1Snake : public j1Entity
 	
 		SnakeData snakeinfo;
 
+		SDL_Rect Intersection = { 0,0,0,0 };
 		
 		fPoint Snake_Collider_Margin = { 26, 28 };
 };

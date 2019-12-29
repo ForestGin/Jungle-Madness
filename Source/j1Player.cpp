@@ -566,12 +566,12 @@ void j1Player::StandingModeMovement(float dt)
 	{
 		if (playerstate == STATE::IDLE || playerstate == STATE::RUNNING || playerstate == STATE::WALLSLIDING)
 		{
-			Jump(dt);
+			Jump();
 		}
 
 		else if (DoubleJumpAvailable && !OnGround && !OnPlatform && !LandedOnGround && !LandedOnPlatform)
 		{
-			DoubleJump(dt);
+			DoubleJump();
 		}
 
 		StartUI = true;
@@ -670,13 +670,13 @@ void j1Player::CrouchingModeMovenent(float dt)
 		{
 			if (!OnCeiling)
 			{
-				Jump(dt);
+				Jump();
 			}
 		}
 
 		else if (!OnGround && !OnPlatform && DoubleJumpAvailable)
 		{
-			DoubleJump(dt);
+			DoubleJump();
 		}
 
 		StartUI = true;
@@ -721,13 +721,13 @@ void j1Player::CrouchingModeMovenent(float dt)
 	}
 }
 
-void j1Player::Jump(float dt)
+void j1Player::Jump()
 {
 	if (playerstate == STATE::WALLSLIDING)
 	{
 		//Adding Y velocity
 		Current_Velocity.y = playerinfo.Jump_Force;
-		Future_Position.y = (Position.y + Current_Velocity.y*dt);
+		Future_Position.y = (Position.y + Current_Velocity.y/**dt*/);
 
 		//Switching direction
 		if (playerdirection == DIRECTION::LEFT)
@@ -753,7 +753,7 @@ void j1Player::Jump(float dt)
 	{	
 		//Adding Y velocity
 		Current_Velocity.y = playerinfo.Jump_Force;
-		Future_Position.y = (Position.y + Current_Velocity.y*dt);
+		Future_Position.y = (Position.y + Current_Velocity.y/**dt*/);
 
 		if (playermode == MODE::CROUCHING)
 		{
@@ -775,11 +775,11 @@ void j1Player::Jump(float dt)
 	}
 }
 
-void j1Player::DoubleJump(float dt)
+void j1Player::DoubleJump()
 {
 	//Adding Y velocity
 	Current_Velocity.y = playerinfo.Double_Jump_Force;
-	Future_Position.y = (Position.y + Current_Velocity.y*dt);
+	Future_Position.y = (Position.y + Current_Velocity.y/**dt*/);
 
 	playerstate = STATE::DOUBLEJUMPING;
 
@@ -982,7 +982,7 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 			break;
 		}
 
-		if (to_check->type == COLLIDER_TYPE::COLLIDER_DEADLY || to_check->type == COLLIDER_TYPE::COLLIDER_SNAKE || to_check->type == COLLIDER_TYPE::COLLIDER_BAT)
+		if (to_check->type == COLLIDER_TYPE::COLLIDER_DEADLY)
 		{
 			playerstate = STATE::DEAD;
 
@@ -991,6 +991,36 @@ void j1Player::OnCollision(Collider * entitycollider, Collider * to_check)
 			Current_Velocity = { 0,0 };
 			//SFX?
 			App->audio->PlayFx(died, 0);
+		}
+
+		if (to_check->type == COLLIDER_TYPE::COLLIDER_SNAKE || to_check->type == COLLIDER_TYPE::COLLIDER_BAT)
+		{
+			if (playermovement == MOVEMENT::DOWNRIGHTWARDS || playermovement == MOVEMENT::DOWNWARDS || playermovement == MOVEMENT::DOWNLEFTWARDS)
+			{
+				SDL_IntersectRect(&entitycollider->rect, &to_check->rect, &Intersection);
+
+				if (Intersection.y + Intersection.h == entitycollider->rect.y + entitycollider->rect.h)
+				{
+					if (Intersection.w >= Intersection.h)
+					{
+						DoubleJump();
+						DoubleJumpAvailable = true;
+
+						//Kill Snake/Bat
+					}
+				}
+			}
+
+			else 
+			{
+				playerstate = STATE::DEAD;
+
+				CurrentAnimation = playerinfo.Death;
+
+				Current_Velocity = { 0,0 };
+				//SFX?
+				App->audio->PlayFx(died, 0);
+			}
 		}
 		
 		if (to_check->type == COLLIDER_TYPE::COLLIDER_COIN)

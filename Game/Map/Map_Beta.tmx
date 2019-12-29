@@ -40149,19 +40149,19 @@
  </layer>
  <objectgroup id="21" name="FinishPoint"/>
  <objectgroup id="20" name="StartPoint">
-  <object id="9" x="386" y="1228" width="32" height="64"/>
+  <object id="9" x="331.333" y="1273.33" width="32" height="64"/>
  </objectgroup>
  <objectgroup id="22" name="SnakeSpawn1">
-  <object id="3" x="172.726" y="1269" width="31.9487" height="31.9727"/>
+  <object id="3" x="70.0593" y="1221" width="31.9487" height="31.9727"/>
  </objectgroup>
  <objectgroup id="23" name="BatSpawn1">
-  <object id="4" x="185.667" y="1154" width="32" height="32"/>
+  <object id="4" x="468.334" y="1283.33" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="24" name="SnakeSpawn2">
-  <object id="5" x="247" y="1274.67" width="32" height="32"/>
+  <object id="5" x="59" y="1282.67" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="25" name="BatSpawn2">
-  <object id="7" x="314" y="1154" width="32" height="32"/>
+  <object id="7" x="534" y="1284.67" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="42" name="CoinSpawn1">
   <object id="10" x="640" y="1186.67" width="32" height="32"/>
