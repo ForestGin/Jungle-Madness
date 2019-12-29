@@ -56,6 +56,16 @@ This game is a simple platformer where you can use the character movements like 
 
 ## Video
 
+<html>
+<body>
+
+<iframe width="645" height="520"
+src="https://www.youtube.com/watch?v=PwKE9HYXVyM&feature=youtu.be" frameborder="0" allowfullscreen>
+</iframe>
+
+</body>
+</html>
+
 ## License and Disclosure
 
 Licensed under the [MIT License](https://github.com/Megaoski/Jungle-Madness/blob/master/LICENSE.txt)
