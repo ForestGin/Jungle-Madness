@@ -8,6 +8,8 @@ This game is a simple platformer where you can use the character movements like 
 
 ### Pol Bosch
 
+![Pol Bosch](https://github.com/Megaoski/Jungle-Madness/blob/master/Website/pol.PNG)
+
 - Player
 - Collisions
 - Maps
