@@ -18,7 +18,8 @@ This game is a simple platformer where you can use the character movements like 
 
 ### Oscar Larios
 
-![Team Photo](https://github.com/Megaoski/Jungle-Madness/blob/master/Website/oscar.PNG)
+(https://github.com/Megaoski/Jungle-Madness/blob/master/Website/oscar.PNG)
+
 
 - Entity System
 - Pathfinding
@@ -78,7 +79,7 @@ We do not own any of the Sprites, Tilesets, Images or Music presented in this ga
 - [Player sprites](https://rvros.itch.io/animated-pixel-hero)
 
 
-- [Tileset](https://jesse-m.itch.io/jungle-pack)
+- [Tileset](https://www.openpixelproject.com/)
 
 
 - [Parallax:](https://edermunizz.itch.io/free-pixel-art-forest)
