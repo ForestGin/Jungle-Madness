@@ -491,6 +491,40 @@ bool j1Scene::Update(float dt)
 
 		}
 	}
+
+	//"Kill" enemies
+
+	if (player->Dunk == true)
+	{
+		if (bat->GotDunkedOn == true)
+		{
+			/*bat->Entity_Collider->to_delete = true;*/
+
+			/*bat->dead = true;*/
+			bat->Position = { -50,-50 };
+			bat->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
+		}
+
+		if (bat2->GotDunkedOn == true)
+		{
+			/*bat2->Entity_Collider->to_delete = true;*/
+			bat2->Position = { -50,-50 };
+			bat2->Entity_Collider->SetPos(bat->Position.x, bat->Position.y);
+			/*bat2->dead = true;*/
+		}
+
+		if (bat->GotDunkedOn == true)
+		{
+			snake->Position = { -50,-50 };
+			snake->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
+		}
+
+		if (bat2->GotDunkedOn == true)
+		{
+			snake2->Position = { -50,-50 };
+			snake2->Entity_Collider->SetPos(snake->Position.x, snake->Position.y);
+		}
+	}
 		
 	return true;
 }
@@ -683,6 +717,18 @@ void j1Scene::EntityPosition(const char* scene)
 	//variables reset
 	snake->must_fall = true;
 	snake2->must_fall = true;
+
+	bat->dead = false;
+	bat2->dead = false;
+	snake->dead = false;
+	snake2->dead = false;
+
+	bat->GotDunkedOn = false;
+	bat2->GotDunkedOn = false;
+	snake->GotDunkedOn = false;
+	snake2->GotDunkedOn = false;
+
+
 }
 
 bool j1Scene::Save(pugi::xml_node &config) const

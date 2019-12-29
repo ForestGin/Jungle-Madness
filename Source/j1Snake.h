@@ -65,6 +65,8 @@ class j1Snake : public j1Entity
 	
 	
 		bool Snakecolliding = false;
+
+		bool GotDunkedOn = false;
 	
 		SnakeData snakeinfo;
 

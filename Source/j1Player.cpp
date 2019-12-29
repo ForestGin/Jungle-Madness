@@ -565,6 +565,7 @@ void j1Player::StandingModeMovement(float dt)
 	AddGravity(dt);
 
 	// ---- JUMPING ----
+
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		if (playerstate == STATE::IDLE || playerstate == STATE::RUNNING || playerstate == STATE::WALLSLIDING)
@@ -578,6 +579,13 @@ void j1Player::StandingModeMovement(float dt)
 		}
 
 		StartUI = true;
+	}
+
+	//Jumping on top of enemies when killing them
+	if (Dunk)
+	{
+		DoubleJump();
+		DoubleJumpAvailable = true;
 	}
 
 	// ---- FALLING DOWN PLATFORM ----

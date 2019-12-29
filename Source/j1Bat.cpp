@@ -196,7 +196,7 @@ bool j1Bat::PostUpdate(float dt)
 	}
 
 
-	//Blitting Snake
+	//Blitting Bat
 	if (going_right == true)
 	{
 		App->render->Blit(spritesheet, Position.x - batinfo.Print_offset.x, Position.y - batinfo.Print_offset.y, &CurrentAnimation->GetCurrentFrame(dt));
@@ -232,7 +232,7 @@ void j1Bat::FixedUpdate(float dt)
 
 void j1Bat::LogicUpdate(float dt)
 {
-	if (App->on_GamePause == false)
+	if (App->on_GamePause == false && dead == false)
 	{
 		Update(dt);
 

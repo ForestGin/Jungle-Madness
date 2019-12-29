@@ -235,6 +235,23 @@ void j1Snake::OnCollision(Collider * c1, Collider * c2)
 
 		Position.x = c1->rect.x;
 	}
+	
+	if (c2->type == COLLIDER_PLAYER)
+	{
+		SDL_IntersectRect(&c2->rect, &c1->rect, &Intersection);
+
+		if (Intersection.y + Intersection.h == c2->rect.y + c2->rect.h)
+		{
+			if (Intersection.w >= Intersection.h)
+			{
+				//Kill Snake/Bat
+				GotDunkedOn = true;
+				/*Entity_Collider->to_delete = true;
+
+				dead = true;*/
+			}
+		}
+	}
 }
 
 bool j1Snake::Load(pugi::xml_node &config)
