@@ -22,7 +22,7 @@ The game includes two levels and basic mechanics.
 
 - S: Fall down when on platform.
 
--You can Wall-Slide and Wall-Jump using the game walls, just need to use SPACE in a walla or let the Player Slide 
+-You can Wall-Slide and Wall-Jump using the game walls, just need to use SPACE in a wall or let the Player Slide 
 
 ### Debug keys:
 - F1: Start First level
@@ -44,6 +44,7 @@ github: https://github.com/Megaoski
 
 
 ## Website Link
+https://megaoski.github.io/Jungle-Madness/
 
 ## Project Github
 
@@ -57,7 +58,7 @@ We do not own any of the Sprites, Tilesets, Images or Music presented in this ga
 https://rvros.itch.io/animated-pixel-hero
 
 - Tileset:
-https://jesse-m.itch.io/jungle-pack
+https://www.openpixelproject.com/
 
 - Parallax:
 https://edermunizz.itch.io/free-pixel-art-forest
