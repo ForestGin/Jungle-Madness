@@ -44,6 +44,10 @@ This game is a simple platformer where you can use the character movements like 
       https://github.com/Megaoski/Jungle-Madness
 
 ## Latest Release
+ 
+Link to the latest version of our game:
+
+[LINK](https://github.com/Megaoski/Jungle-Madness/releases/tag/v0.3)
 
 ## Controls and Gameplay
 
