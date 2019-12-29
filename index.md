@@ -62,15 +62,15 @@ Licensed under the [MIT License](https://github.com/Megaoski/Jungle-Madness/blob
 
 We do not own any of the Sprites, Tilesets, Images or Music presented in this game. Credits:
 
-- [Player sprites:](https://rvros.itch.io/animated-pixel-hero)
+- [Player sprites](https://rvros.itch.io/animated-pixel-hero)
 
 
-- [Tileset:]https://jesse-m.itch.io/jungle-pack
+- [Tileset](https://jesse-m.itch.io/jungle-pack)
 
 
-- [Parallax:]https://edermunizz.itch.io/free-pixel-art-forest
+- [Parallax:](https://edermunizz.itch.io/free-pixel-art-forest)
 
 - Songs:
-http://www.tannerhelland.com/7/surreptitious/
-https://patrickdearteaga.com/audio/
+(http://www.tannerhelland.com/7/surreptitious/)
+(https://patrickdearteaga.com/audio/)
 
