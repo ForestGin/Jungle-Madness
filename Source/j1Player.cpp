@@ -596,6 +596,12 @@ void j1Player::StandingModeMovement(float dt)
 		score += 250;
 	}
 
+	//---- Headbutting ceiling ----
+	/*if (OnCeiling == true || LandedOnCeiling == true)
+	{
+		Current_Velocity.y = 0;
+	}*/
+
 	// ---- FALLING DOWN PLATFORM ----
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && OnPlatform)
 	{
@@ -1184,6 +1190,8 @@ void j1Player::UpLeft_Collision(Collider * entitycollider, Collider * to_check)
 				Future_Position.y = entitycollider->rect.y;
 
 				LandedOnCeiling = true;
+
+				Current_Velocity.y = 0;
 			}
 			else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
 			{
@@ -1193,6 +1201,8 @@ void j1Player::UpLeft_Collision(Collider * entitycollider, Collider * to_check)
 				Future_Position.y = entitycollider->rect.y;
 
 				LandedOnCeiling = true;
+
+				Current_Velocity.y = 0;
 			}
 		}
 		
@@ -1215,6 +1225,8 @@ void j1Player::Up_Collision(Collider * entitycollider, Collider * to_check)
 		Future_Position.y = entitycollider->rect.y;
 
 		LandedOnCeiling = true;
+
+		Current_Velocity.y = 0;
 
 		break;
 	default:
@@ -1264,6 +1276,7 @@ void j1Player::UpRight_Collision(Collider * entitycollider, Collider * to_check)
 
 				LandedOnCeiling = true;
 
+				Current_Velocity.y = 0;
 			}
 			else if (Intersection.w >= Intersection.h) //By using ">=" means that when colliding exactly at the corner (w==h) it will prefer to go sideways.
 			{
@@ -1274,6 +1287,7 @@ void j1Player::UpRight_Collision(Collider * entitycollider, Collider * to_check)
 
 				LandedOnCeiling = true;
 
+				Current_Velocity.y = 0;
 			}
 		}
 
