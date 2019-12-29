@@ -161,7 +161,7 @@ bool j1Coin::Save(pugi::xml_node &config) const
 	if (ID == Coininfo.coinID)
 	{
 		config.append_child("Coin1").append_child("touched").append_attribute("value") = touched;
-		config.append_child("Coin1").append_child("active").append_attribute("value") = active;
+		config.child("Coin1").append_child("active").append_attribute("value") = active;
 		config.child("Coin1").append_child("x").append_attribute("value") = Position.x;
 		config.child("Coin1").append_child("y").append_attribute("value") = Position.y;
 
@@ -169,7 +169,7 @@ bool j1Coin::Save(pugi::xml_node &config) const
 	else if (ID == Coininfo.coinID2)
 	{
 		config.append_child("Coin2").append_child("touched").append_attribute("value") = touched;
-		config.append_child("Coin2").append_child("active").append_attribute("value") = active;
+		config.child("Coin2").append_child("active").append_attribute("value") = active;
 		config.child("Coin2").append_child("x").append_attribute("value") = Position.x;
 		config.child("Coin2").append_child("y").append_attribute("value") = Position.y;
 
@@ -177,7 +177,7 @@ bool j1Coin::Save(pugi::xml_node &config) const
 	else if (ID == Coininfo.coinID3)
 	{
 		config.append_child("Coin3").append_child("touched").append_attribute("value") = touched;
-		config.append_child("Coin3").append_child("active").append_attribute("value") = active;
+		config.child("Coin3").append_child("active").append_attribute("value") = active;
 		config.child("Coin3").append_child("x").append_attribute("value") = Position.x;
 		config.child("Coin3").append_child("y").append_attribute("value") = Position.y;
 
